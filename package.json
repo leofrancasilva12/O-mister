@@ -1,0 +1,14 @@
+{
+  "name": "o-mister",
+  "version": "1.0.0",
+  "description": "Assistente tecnico de normas API de roscas e tubos",
+  "type": "module",
+  "private": true,
+  "scripts": {
+    "dev": "vercel dev",
+    "deploy": "vercel --prod"
+  },
+  "engines": {
+    "node": ">=18"
+  }
+}
