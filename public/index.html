@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+  <title>O Mister</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<div id="app">
+  <aside id="sidebar">
+    <div class="sidebar-header">
+      <div class="brand">
+        <div class="brand-logo">
+          <img src="logo.png" alt="O Mister">
+        </div>
+        <span class="brand-name">O Mister</span>
+      </div>
+      <button id="close-sidebar" aria-label="Fechar menu">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+      </button>
+    </div>
+
+    <button id="new-chat">
+      <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+      Nova conversa
+    </button>
+
+    <div class="kb-section">
+      <p class="kb-label">Base de conhecimento</p>
+      <div class="kb-file" title="normas-api-roscas-e-tubos.md">
+        <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>
+        <span>Normas API</span>
+      </div>
+      <div class="kb-file" title="glossario-roscas-api.md">
+        <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>
+        <span>Glossário de roscas</span>
+      </div>
+      <div class="kb-file" title="roteamento-normas-api-roscas-tubos.md">
+        <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>
+        <span>Roteamento de normas</span>
+      </div>
+    </div>
+
+    <div class="sidebar-footer">
+      Resumos de apoio. Não substituem o texto oficial das normas API.
+    </div>
+  </aside>
+
+  <div id="overlay"></div>
+
+  <div id="main">
+    <header id="mobile-header">
+      <button id="open-sidebar" aria-label="Abrir menu">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="18" x2="21" y2="18"/></svg>
+      </button>
+      <span style="font-size:13px; color:var(--text-fainter);">O Mister</span>
+    </header>
+
+    <div id="chat-scroll">
+      <div id="chat-inner">
+        <div id="empty-state">
+          <div class="empty-logo">
+            <img src="logo.png" alt="O Mister">
+          </div>
+          <h1>Como o Mister pode te ajudar hoje?</h1>
+          <p>Pergunte sobre normas, tolerâncias, torque ou tipos de rosca. Respostas baseadas nos documentos de referência.</p>
+        </div>
+        <div id="messages" style="display:none;"></div>
+      </div>
+    </div>
+
+    <div id="input-area">
+      <form id="input-form">
+        <textarea id="chat-input" rows="1" placeholder="Pergunte ao Mister sobre roscas API..."></textarea>
+        <button type="submit" id="send-btn" aria-label="Enviar" disabled>
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/></svg>
+        </button>
+      </form>
+      <p id="disclaimer">O Mister pode cometer erros. Confira sempre a norma original.</p>
+    </div>
+  </div>
+</div>
+
+<script src="app.js"></script>
+</body>
+</html>
