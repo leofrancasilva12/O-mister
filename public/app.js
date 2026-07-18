@@ -88,6 +88,11 @@ const sendBtn = document.getElementById("send-btn");
 const accountEl = document.getElementById("account");
 const accountEmailEl = document.getElementById("account-email");
 const logoutBtn = document.getElementById("logout-btn");
+const imageInput = document.getElementById("image-input");
+const uploadBtn = document.getElementById("upload-btn");
+const imagePreview = document.getElementById("image-preview");
+
+let selectedImage = null; // { data: base64, type: 'image/jpeg', name: 'file.jpg' }
 
 function createTypingRow() {
   const row = document.createElement("div");
@@ -301,7 +306,7 @@ function renderMessages() {
   messagesEl.style.display = "flex";
   chat.messages.forEach((m, idx) => {
     if (m.role === "user") {
-      addUserMessage(m.content);
+      addUserMessage(m.content, m.image || null);
     } else {
       const { content } = createAssistantMessage(idx);
       content.innerHTML = renderMarkdown(m.content);
@@ -317,12 +322,26 @@ function scrollToBottom(smooth = true) {
   });
 }
 
-function addUserMessage(text) {
+function addUserMessage(text, image = null) {
   const row = document.createElement("div");
   row.className = "msg-row-user";
   const bubble = document.createElement("div");
   bubble.className = "bubble-user";
-  bubble.textContent = text;
+
+  if (image) {
+    const img = document.createElement("img");
+    img.src = image.data;
+    img.alt = image.name || "uploaded image";
+    img.className = "msg-image";
+    bubble.appendChild(img);
+  }
+
+  if (text) {
+    const textDiv = document.createElement("div");
+    textDiv.textContent = text;
+    bubble.appendChild(textDiv);
+  }
+
   row.appendChild(bubble);
   messagesEl.appendChild(row);
 }
@@ -582,6 +601,65 @@ form.addEventListener("submit", (e) => {
 });
 
 /* =========================================================
+   Upload de imagens
+   ========================================================= */
+function renderImagePreview() {
+  imagePreview.innerHTML = "";
+  if (selectedImage) {
+    const container = document.createElement("div");
+    container.className = "image-preview-item";
+
+    const img = document.createElement("img");
+    img.src = selectedImage.data;
+    img.alt = selectedImage.name;
+    container.appendChild(img);
+
+    const removeBtn = document.createElement("button");
+    removeBtn.type = "button";
+    removeBtn.className = "image-remove-btn";
+    removeBtn.setAttribute("aria-label", "Remover imagem");
+    removeBtn.innerHTML = '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>';
+    removeBtn.addEventListener("click", (e) => {
+      e.preventDefault();
+      selectedImage = null;
+      renderImagePreview();
+      updateSendState();
+    });
+    container.appendChild(removeBtn);
+
+    imagePreview.appendChild(container);
+  }
+}
+
+uploadBtn.addEventListener("click", (e) => {
+  e.preventDefault();
+  imageInput.click();
+});
+
+imageInput.addEventListener("change", async (e) => {
+  const file = e.target.files?.[0];
+  if (!file) return;
+
+  if (!file.type.startsWith("image/")) {
+    alert("Por favor, selecione uma imagem.");
+    return;
+  }
+
+  const reader = new FileReader();
+  reader.onload = (ev) => {
+    selectedImage = {
+      data: ev.target.result,
+      type: file.type,
+      name: file.name
+    };
+    renderImagePreview();
+    updateSendState();
+  };
+  reader.readAsDataURL(file);
+  imageInput.value = ""; // limpa input para permitir selecionar o mesmo arquivo novamente
+});
+
+/* =========================================================
    Envio + streaming
    ========================================================= */
 async function sendMessage(rawText) {
@@ -608,14 +686,18 @@ async function sendMessage(rawText) {
   emptyState.style.display = "none";
   messagesEl.style.display = "flex";
 
-  addUserMessage(text);
-  chat.messages.push({ role: "user", content: text });
+  addUserMessage(text, selectedImage);
+  const userMsg = { role: "user", content: text };
+  if (selectedImage) userMsg.image = selectedImage;
+  chat.messages.push(userMsg);
   chat.updatedAt = Date.now();
   saveChat(chat);
   renderChatList();
 
   input.value = "";
   input.style.height = "auto";
+  selectedImage = null;
+  renderImagePreview();
   updateSendState();
   scrollToBottom();
 
@@ -638,10 +720,31 @@ async function sendMessage(rawText) {
       }
     }
 
+    // Transforma mensagens para formato OpenRouter (vision compatible)
+    const formattedMessages = chat.messages.map((m) => {
+      if (m.role === "user" && m.image) {
+        return {
+          role: "user",
+          content: [
+            m.content ? { type: "text", text: m.content } : null,
+            {
+              type: "image",
+              source: {
+                type: "base64",
+                media_type: m.image.type,
+                data: m.image.data.split(",")[1], // remove data:image/jpeg;base64, prefix
+              },
+            },
+          ].filter(Boolean),
+        };
+      }
+      return m;
+    });
+
     const res = await fetch("/api/chat", {
       method: "POST",
       headers,
-      body: JSON.stringify({ messages: chat.messages }),
+      body: JSON.stringify({ messages: formattedMessages }),
       signal: streamAbort.signal,
     });
 

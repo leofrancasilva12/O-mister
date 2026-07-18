@@ -36,10 +36,24 @@ export default async function handler(req, res) {
   }
 
   // Mantém apenas as últimas trocas para não crescer o contexto sem limite.
-  const history = messages.slice(-MAX_HISTORY).map(({ role, content }) => ({
-    role: role === "assistant" ? "assistant" : "user",
-    content: String(content ?? "").slice(0, 4000),
-  }));
+  // Suporta tanto texto puro quanto arrays (visão).
+  const history = messages.slice(-MAX_HISTORY).map(({ role, content }) => {
+    const msg = { role: role === "assistant" ? "assistant" : "user" };
+
+    // Se content é array (visão com imagens), passa como está; senão normaliza como texto
+    if (Array.isArray(content)) {
+      msg.content = content.map((part) => {
+        if (part.type === "text") {
+          return { type: "text", text: String(part.text ?? "").slice(0, 4000) };
+        }
+        return part; // imagens passam como estão
+      });
+    } else {
+      msg.content = String(content ?? "").slice(0, 4000);
+    }
+
+    return msg;
+  });
 
   try {
     const upstream = await fetch("https://openrouter.ai/api/v1/chat/completions", {
