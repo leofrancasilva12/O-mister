@@ -38,6 +38,7 @@ export default async function handler(req, res) {
       body: JSON.stringify({
         model: MODEL,
         stream: true,
+        max_tokens: 1024, // respostas concisas e diretas
         temperature: 0.3, // baixa: contexto técnico premia consistência
         messages: [
           { role: "system", content: buildSystemPrompt() },
