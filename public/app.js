@@ -12,6 +12,7 @@ let activeId = localStorage.getItem(ACTIVE_KEY) || null;
 let isStreaming = false;
 let useCloud = false;
 let user = null;
+let streamAbort = null; // controlar cancelamento de streaming
 
 function newId() {
   if (window.crypto && crypto.randomUUID) return crypto.randomUUID();
@@ -88,10 +89,21 @@ const accountEl = document.getElementById("account");
 const accountEmailEl = document.getElementById("account-email");
 const logoutBtn = document.getElementById("logout-btn");
 
-const typingRow = document.createElement("div");
-typingRow.id = "typing";
-typingRow.innerHTML =
-  '<span class="dot"></span><span class="dot"></span><span class="dot"></span>';
+function createTypingRow() {
+  const row = document.createElement("div");
+  row.id = "typing";
+  row.className = "typing-row";
+  row.innerHTML = '<span class="dot"></span><span class="dot"></span><span class="dot"></span>';
+  const stopBtn = document.createElement("button");
+  stopBtn.className = "typing-stop";
+  stopBtn.setAttribute("aria-label", "Parar");
+  stopBtn.innerHTML = '<svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><rect x="6" y="4" width="4" height="16"/><rect x="14" y="4" width="4" height="16"/></svg>';
+  stopBtn.addEventListener("click", () => {
+    if (streamAbort) streamAbort.abort();
+  });
+  row.appendChild(stopBtn);
+  return row;
+}
 
 const isMobile = () => window.matchMedia("(max-width: 820px)").matches;
 
@@ -287,14 +299,14 @@ function renderMessages() {
 
   emptyState.style.display = "none";
   messagesEl.style.display = "flex";
-  for (const m of chat.messages) {
+  chat.messages.forEach((m, idx) => {
     if (m.role === "user") {
       addUserMessage(m.content);
     } else {
-      const bubble = createAssistantMessage();
-      bubble.innerHTML = renderMarkdown(m.content);
+      const { content } = createAssistantMessage(idx);
+      content.innerHTML = renderMarkdown(m.content);
     }
-  }
+  });
   scrollToBottom(false);
 }
 
@@ -315,11 +327,72 @@ function addUserMessage(text) {
   messagesEl.appendChild(row);
 }
 
-function createAssistantMessage() {
+function createAssistantMessage(messageIndex = null) {
   const wrap = document.createElement("div");
   wrap.className = "msg-assistant";
+
+  const content = document.createElement("div");
+  content.className = "msg-content";
+  wrap.appendChild(content);
+
+  const toolbar = document.createElement("div");
+  toolbar.className = "msg-toolbar";
+
+  const copyBtn = document.createElement("button");
+  copyBtn.className = "msg-btn msg-copy";
+  copyBtn.setAttribute("aria-label", "Copiar");
+  copyBtn.title = "Copiar";
+  copyBtn.innerHTML = '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>';
+  copyBtn.addEventListener("click", () => {
+    const text = content.innerText || content.textContent;
+    navigator.clipboard.writeText(text).catch(() => alert("Erro ao copiar"));
+  });
+  toolbar.appendChild(copyBtn);
+
+  const regenerateBtn = document.createElement("button");
+  regenerateBtn.className = "msg-btn msg-regenerate";
+  regenerateBtn.setAttribute("aria-label", "Regenerar");
+  regenerateBtn.title = "Regenerar";
+  regenerateBtn.innerHTML = '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="1 4 1 10 7 10"/><path d="M3.51 15a9 9 0 1 0 2.13-9.36L1 10"/></svg>';
+  regenerateBtn.addEventListener("click", () => {
+    if (!isStreaming) {
+      const chat = activeChat();
+      if (chat && messageIndex !== null && messageIndex > 0) {
+        const prevMsg = chat.messages[messageIndex - 1];
+        if (prevMsg && prevMsg.role === "user") {
+          sendMessage(prevMsg.content);
+        }
+      }
+    }
+  });
+  toolbar.appendChild(regenerateBtn);
+
+  const deleteBtn = document.createElement("button");
+  deleteBtn.className = "msg-btn msg-delete";
+  deleteBtn.setAttribute("aria-label", "Deletar");
+  deleteBtn.title = "Deletar";
+  deleteBtn.innerHTML = '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="3 6 5 6 21 6"/><path d="M19 6l-1 14a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2L5 6"/><line x1="10" y1="11" x2="10" y2="17"/><line x1="14" y1="11" x2="14" y2="17"/></svg>';
+  deleteBtn.addEventListener("click", () => {
+    const chat = activeChat();
+    if (chat && messageIndex !== null) {
+      showModal(
+        "Deletar mensagem?",
+        "Esta ação não pode ser desfeita.",
+        "Deletar",
+        () => {
+          chat.messages.splice(messageIndex, 1);
+          chat.updatedAt = Date.now();
+          saveChat(chat);
+          renderMessages();
+        }
+      );
+    }
+  });
+  toolbar.appendChild(deleteBtn);
+
+  wrap.appendChild(toolbar);
   messagesEl.appendChild(wrap);
-  return wrap;
+  return { content, wrap };
 }
 
 /* Markdown mínimo — escapa HTML e aplica formatação com segurança */
@@ -331,52 +404,145 @@ function escapeHtml(str) {
 }
 
 function renderMarkdown(md) {
-  const lines = escapeHtml(md).split("\n");
   let html = "";
-  let inList = false;
+  let i = 0;
 
-  const inline = (s) =>
-    s
-      .replace(/\*\*(.+?)\*\*/g, "<strong>$1</strong>")
-      .replace(/(^|[^*])\*(?!\s)([^*]+?)\*(?!\*)/g, "$1<em>$2</em>")
-      .replace(/`([^`]+?)`/g, "<code>$1</code>");
-
-  const closeList = () => {
-    if (inList) {
-      html += "</ul>";
-      inList = false;
-    }
-  };
-
-  for (const line of lines) {
-    const trimmed = line.trim();
-    if (!trimmed) {
-      closeList();
-      continue;
-    }
-
-    const bullet = trimmed.match(/^[-*•]\s+(.*)$/);
-    if (bullet) {
-      if (!inList) {
-        html += "<ul>";
-        inList = true;
+  while (i < md.length) {
+    // Blocos de código (```)
+    if (md.slice(i, i + 3) === "```") {
+      const end = md.indexOf("```", i + 3);
+      if (end !== -1) {
+        const code = md.slice(i + 3, end);
+        const [langLine, ...codeLines] = code.split("\n");
+        const lang = langLine.trim().match(/^[a-z]+/)?.[0] || "";
+        const codeBody = codeLines.join("\n").trim();
+        html += '<pre class="code-block"><code class="language-' + escapeHtml(lang) + '">' + escapeHtml(codeBody) + "</code></pre>";
+        i = end + 3;
+        continue;
       }
-      html += "<li>" + inline(bullet[1]) + "</li>";
+    }
+
+    // Linhas normais (parágrafo, lista, tabela, etc.)
+    const lineEnd = md.indexOf("\n", i);
+    const nextBreak = lineEnd === -1 ? md.length : lineEnd;
+    const line = md.slice(i, nextBreak);
+    const trimmed = line.trim();
+
+    if (!trimmed) {
+      html += "<p></p>";
+      i = nextBreak + 1;
       continue;
     }
 
-    const heading = trimmed.match(/^(#{1,4})\s+(.*)$/);
-    if (heading) {
-      closeList();
-      html += "<h4>" + inline(heading[2]) + "</h4>";
+    // Tabelas (|col1|col2|)
+    if (trimmed.startsWith("|")) {
+      html += renderTable(md, i);
+      let tableEnd = i;
+      while (tableEnd < md.length && md[tableEnd] !== "\n") tableEnd++;
+      while (tableEnd < md.length && md[tableEnd + 1] === "|") {
+        tableEnd = md.indexOf("\n", tableEnd + 1);
+        if (tableEnd === -1) { tableEnd = md.length; break; }
+      }
+      i = tableEnd + 1;
       continue;
     }
 
-    closeList();
-    html += "<p>" + inline(trimmed) + "</p>";
+    // Headings
+    const headingMatch = trimmed.match(/^(#{1,6})\s+(.*)$/);
+    if (headingMatch) {
+      const level = Math.min(headingMatch[1].length, 4);
+      html += "<h" + level + ">" + renderInline(headingMatch[2]) + "</h" + level + ">";
+      i = nextBreak + 1;
+      continue;
+    }
+
+    // Listas não-ordenadas
+    const bulletMatch = trimmed.match(/^[-*•]\s+(.*)$/);
+    if (bulletMatch) {
+      html += "<ul>";
+      while (i < md.length) {
+        const lineEnd = md.indexOf("\n", i);
+        const line = md.slice(i, lineEnd === -1 ? md.length : lineEnd).trim();
+        const bullet = line.match(/^[-*•]\s+(.*)$/);
+        if (!bullet) break;
+        html += "<li>" + renderInline(bullet[1]) + "</li>";
+        i = (lineEnd === -1 ? md.length : lineEnd) + 1;
+      }
+      html += "</ul>";
+      continue;
+    }
+
+    // Listas numeradas
+    const numMatch = trimmed.match(/^\d+\.\s+(.*)$/);
+    if (numMatch) {
+      html += "<ol>";
+      while (i < md.length) {
+        const lineEnd = md.indexOf("\n", i);
+        const line = md.slice(i, lineEnd === -1 ? md.length : lineEnd).trim();
+        const num = line.match(/^\d+\.\s+(.*)$/);
+        if (!num) break;
+        html += "<li>" + renderInline(num[1]) + "</li>";
+        i = (lineEnd === -1 ? md.length : lineEnd) + 1;
+      }
+      html += "</ol>";
+      continue;
+    }
+
+    // Parágrafo padrão
+    html += "<p>" + renderInline(trimmed) + "</p>";
+    i = nextBreak + 1;
   }
 
-  closeList();
+  return html;
+}
+
+function renderInline(text) {
+  text = escapeHtml(text);
+  // Links [text](url)
+  text = text.replace(/\[([^\]]+)\]\(([^)]+)\)/g, '<a href="$2" target="_blank" rel="noopener">$1</a>');
+  // Negrito **text**
+  text = text.replace(/\*\*([^*]+)\*\*/g, "<strong>$1</strong>");
+  // Itálico *text* (não seguido de *)
+  text = text.replace(/(\s|^)\*([^*\s][^*]*[^*\s])\*(\s|$)/g, "$1<em>$2</em>$3");
+  // Código `text`
+  text = text.replace(/`([^`]+)`/g, "<code>$1</code>");
+  return text;
+}
+
+function renderTable(md, start) {
+  const lines = [];
+  let i = start;
+  while (i < md.length) {
+    const lineEnd = md.indexOf("\n", i);
+    const line = md.slice(i, lineEnd === -1 ? md.length : lineEnd).trim();
+    if (!line.startsWith("|")) break;
+    lines.push(line);
+    i = (lineEnd === -1 ? md.length : lineEnd) + 1;
+  }
+
+  if (lines.length < 2) return "";
+
+  const rows = lines.map((l) =>
+    l
+      .split("|")
+      .slice(1, -1)
+      .map((cell) => cell.trim())
+  );
+
+  let html = "<table><thead><tr>";
+  rows[0].forEach((cell) => {
+    html += "<th>" + renderInline(cell) + "</th>";
+  });
+  html += "</tr></thead><tbody>";
+  rows.slice(2).forEach((row) => {
+    html += "<tr>";
+    row.forEach((cell) => {
+      html += "<td>" + renderInline(cell) + "</td>";
+    });
+    html += "</tr>";
+  });
+  html += "</tbody></table>";
+
   return html;
 }
 
@@ -453,18 +619,30 @@ async function sendMessage(rawText) {
   updateSendState();
   scrollToBottom();
 
-  messagesEl.appendChild(typingRow);
-  typingRow.classList.add("visible");
+  const typingEl = createTypingRow();
+  messagesEl.appendChild(typingEl);
+  typingEl.classList.add("visible");
   scrollToBottom();
 
   let bubble = null;
   let answer = "";
+  streamAbort = new AbortController();
 
   try {
+    const headers = { "Content-Type": "application/json" };
+    // Envia token JWT do Supabase se logado (autenticação do endpoint)
+    if (useCloud && user) {
+      const session = await OMISTER.auth.getSession();
+      if (session?.data?.session?.access_token) {
+        headers["Authorization"] = `Bearer ${session.data.session.access_token}`;
+      }
+    }
+
     const res = await fetch("/api/chat", {
       method: "POST",
-      headers: { "Content-Type": "application/json" },
+      headers,
       body: JSON.stringify({ messages: chat.messages }),
+      signal: streamAbort.signal,
     });
 
     if (!res.ok) {
@@ -496,9 +674,11 @@ async function sendMessage(rawText) {
           if (!delta) continue;
 
           if (!bubble) {
-            typingRow.classList.remove("visible");
-            typingRow.remove();
-            bubble = createAssistantMessage();
+            typingEl.classList.remove("visible");
+            typingEl.remove();
+            const msgIdx = chat.messages.length;
+            const created = createAssistantMessage(msgIdx);
+            bubble = created.content;
           }
 
           answer += delta;
@@ -519,11 +699,24 @@ async function sendMessage(rawText) {
       throw new Error("A resposta voltou vazia. Tente reformular a pergunta.");
     }
   } catch (err) {
-    typingRow.classList.remove("visible");
-    typingRow.remove();
-    if (bubble && !answer.trim()) bubble.remove();
-    showError(err.message || "Não foi possível falar com o Mister agora.");
+    if (err.name === "AbortError") {
+      // Usuário parou a resposta — mantém o que foi gerado
+      if (answer.trim()) {
+        chat.messages.push({ role: "assistant", content: answer });
+        chat.updatedAt = Date.now();
+        saveChat(chat);
+        renderChatList();
+      }
+    } else {
+      typingEl.classList.remove("visible");
+      typingEl.remove();
+      if (bubble && !answer.trim()) bubble.parentElement.remove();
+      showError(err.message || "Não foi possível falar com o Mister agora.");
+    }
   } finally {
+    typingEl.classList.remove("visible");
+    if (typingEl.parentElement) typingEl.remove();
+    streamAbort = null;
     isStreaming = false;
     updateSendState();
   }
