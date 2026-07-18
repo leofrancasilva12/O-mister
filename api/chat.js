@@ -1,6 +1,6 @@
 import { buildSystemPrompt } from "../lib/system-prompt.js";
 
-const MODEL = process.env.OPENROUTER_MODEL || "anthropic/claude-3-5-haiku";
+const MODEL = process.env.OPENROUTER_MODEL || "anthropic/claude-haiku-4.5";
 const MAX_HISTORY = 20; // pares de mensagens mantidos no contexto
 
 export default async function handler(req, res) {

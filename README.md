@@ -70,7 +70,7 @@ Depois cadastre as variáveis de ambiente no painel da Vercel, em **Settings →
 | Variável | Obrigatória | Observação |
 |---|---|---|
 | `OPENROUTER_API_KEY` | sim | Sua chave da OpenRouter |
-| `OPENROUTER_MODEL` | não | Padrão: `anthropic/claude-3-5-haiku` |
+| `OPENROUTER_MODEL` | não | Padrão: `anthropic/claude-haiku-4.5` |
 | `SITE_URL` | não | A URL pública do projeto |
 
 O `.env` está no `.gitignore`. A chave nunca chega ao navegador — todas as chamadas passam pela função serverless.
@@ -83,7 +83,7 @@ O padrão é **Claude 3.5 Haiku**. Para mudar, edite a variável de ambiente:
 
 ```bash
 # Na Vercel Settings → Environment Variables:
-OPENROUTER_MODEL=anthropic/claude-3-5-haiku    # Padrão atual (rápido, barato)
+OPENROUTER_MODEL=anthropic/claude-haiku-4.5    # Padrão atual (rápido, barato)
 OPENROUTER_MODEL=anthropic/claude-opus-4-6     # Mais preciso, mais caro
 OPENROUTER_MODEL=google/gemini-flash-1.5       # Alternativa rápida
 ```
