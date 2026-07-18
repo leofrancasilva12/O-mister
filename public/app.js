@@ -96,6 +96,41 @@ typingRow.innerHTML =
 const isMobile = () => window.matchMedia("(max-width: 820px)").matches;
 
 /* =========================================================
+   Modal de confirmação (estilo Claude)
+   ========================================================= */
+const modalOverlay = document.getElementById("modal-overlay");
+const modalText = document.getElementById("modal-text");
+const modalCancel = document.getElementById("modal-cancel");
+const modalConfirm = document.getElementById("modal-confirm");
+
+let modalCallback = null;
+
+function showModal(title, text, confirmText = "Excluir", onConfirm = null) {
+  document.getElementById("modal-title").textContent = title;
+  modalText.innerHTML = text;
+  modalConfirm.textContent = confirmText;
+  modalCallback = onConfirm;
+  modalOverlay.hidden = false;
+}
+
+function closeModal() {
+  modalOverlay.hidden = true;
+  modalCallback = null;
+}
+
+modalCancel.addEventListener("click", closeModal);
+modalOverlay.addEventListener("click", (e) => {
+  if (e.target === modalOverlay) closeModal();
+});
+modalConfirm.addEventListener("click", () => {
+  if (modalCallback) modalCallback();
+  closeModal();
+});
+document.addEventListener("keydown", (e) => {
+  if (e.key === "Escape" && !modalOverlay.hidden) closeModal();
+});
+
+/* =========================================================
    Autenticação
    ========================================================= */
 let redirected = false;
@@ -204,17 +239,23 @@ function deleteChat(id) {
   if (isStreaming) return;
   const chat = chats.find((c) => c.id === id);
   if (!chat) return;
-  if (!confirm(`Excluir a conversa "${chatTitle(chat)}"?`)) return;
 
-  chats = chats.filter((c) => c.id !== id);
-  if (activeId === id) activeId = null;
+  showModal(
+    "Excluir conversa?",
+    `Tem certeza que deseja excluir a conversa <strong>"${chatTitle(chat)}"</strong>? Essa ação não pode ser desfeita.`,
+    "Excluir",
+    () => {
+      chats = chats.filter((c) => c.id !== id);
+      if (activeId === id) activeId = null;
 
-  if (useCloud) OMISTER.cloudDelete(id).catch((e) => console.error("Supabase:", e));
-  else saveLocal();
-  persistActive();
+      if (useCloud) OMISTER.cloudDelete(id).catch((e) => console.error("Supabase:", e));
+      else saveLocal();
+      persistActive();
 
-  renderChatList();
-  renderMessages();
+      renderChatList();
+      renderMessages();
+    }
+  );
 }
 
 function startNewChat() {
