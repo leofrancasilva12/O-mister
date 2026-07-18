@@ -1,6 +1,6 @@
 import { buildSystemPrompt } from "../lib/system-prompt.js";
 
-const MODEL = process.env.OPENROUTER_MODEL || "openai/gpt-4o-mini";
+const MODEL = process.env.OPENROUTER_MODEL || "anthropic/claude-3-5-haiku";
 const MAX_HISTORY = 20; // pares de mensagens mantidos no contexto
 
 export default async function handler(req, res) {

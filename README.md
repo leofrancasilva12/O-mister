@@ -1,14 +1,14 @@
 # O Mister
 
-Assistente técnico de normas API de roscas, tubos e conexões para a indústria de petróleo e gás.
+Assistente técnico especializado em normas API de roscas, tubos, conexões e Quality Management System para a indústria de petróleo e gás.
 
-Interface de chat minimalista sobre uma base de conhecimento de três documentos, servida por uma função serverless que conversa com a OpenRouter.
+Interface de chat minimalista sobre uma base de conhecimento consolidada (API 5B, 5CT, 5L, 7-1, 7-2, 7G-2, 11B, 6A, Q1), servida por uma função serverless que conversa com Claude 3.5 Haiku via OpenRouter.
 
 ---
 
 ## Por que não tem RAG
 
-A base inteira tem cerca de **11 mil tokens**. A janela de contexto do GPT-4o mini tem **128 mil**. Cabe tudo no prompt com folga de mais de 90%.
+A base inteira tem cerca de **10.9 mil tokens**. A janela de contexto do Claude 3.5 Haiku tem **200 mil**. Cabe tudo no prompt com folga de mais de 95%.
 
 Construir retrieval aqui traria só desvantagens:
 
@@ -25,18 +25,19 @@ Se um dia a base crescer para megabytes (normas completas, catálogos de fabrica
 ```
 o-mister/
 ├── api/
-│   └── chat.js           Endpoint serverless: recebe a pergunta, chama a OpenRouter, devolve streaming
+│   └── chat.js                    Endpoint serverless: recebe a pergunta, chama OpenRouter, devolve streaming
 ├── lib/
-│   ├── persona.md        Persona do Mister e regras de segurança técnica
-│   └── system-prompt.js  Junta persona + base de conhecimento num prompt só
+│   ├── persona.md                 Persona do Mister: tom, regras de segurança, casos de teste
+│   └── system-prompt.js           Junta persona + base de conhecimento consolidada
 ├── knowledge/
-│   ├── normas-api-roscas-e-tubos.md
-│   ├── glossario-roscas-api.md
-│   └── roteamento-normas-api-roscas-tubos.md
+│   └── api-normas-completas.md    BASE ÚNICA: normas API + QMS + glossário + roteamento integrados
 ├── public/
-│   └── index.html        Interface completa: HTML, CSS e JS num arquivo só
-├── vercel.json
-└── package.json
+│   ├── index.html                 Interface minimalista (HTML + CSS + JS)
+│   ├── style.css                  Estilos Apple-minimalist, dark/light mode
+│   └── app.js                     Frontend: chat, streaming, markdown renderer
+├── vercel.json                    Config Vercel: maxDuration, includeFiles
+├── package.json                   Scripts: dev, deploy
+└── README.md                       Este arquivo
 ```
 
 Sem build step, sem dependências. Node 18+ já tem tudo que o projeto usa.
@@ -69,7 +70,7 @@ Depois cadastre as variáveis de ambiente no painel da Vercel, em **Settings →
 | Variável | Obrigatória | Observação |
 |---|---|---|
 | `OPENROUTER_API_KEY` | sim | Sua chave da OpenRouter |
-| `OPENROUTER_MODEL` | não | Padrão: `openai/gpt-4o-mini` |
+| `OPENROUTER_MODEL` | não | Padrão: `anthropic/claude-3-5-haiku` |
 | `SITE_URL` | não | A URL pública do projeto |
 
 O `.env` está no `.gitignore`. A chave nunca chega ao navegador — todas as chamadas passam pela função serverless.
@@ -78,42 +79,49 @@ O `.env` está no `.gitignore`. A chave nunca chega ao navegador — todas as ch
 
 ## Trocar de modelo
 
-Muda uma variável de ambiente e pronto. É a vantagem de usar OpenRouter.
+O padrão é **Claude 3.5 Haiku**. Para mudar, edite a variável de ambiente:
 
 ```bash
-OPENROUTER_MODEL=anthropic/claude-3.5-haiku
-OPENROUTER_MODEL=google/gemini-flash-1.5
-OPENROUTER_MODEL=openai/gpt-4o-mini
+# Na Vercel Settings → Environment Variables:
+OPENROUTER_MODEL=anthropic/claude-3-5-haiku    # Padrão atual (rápido, barato)
+OPENROUTER_MODEL=anthropic/claude-opus-4-6     # Mais preciso, mais caro
+OPENROUTER_MODEL=google/gemini-flash-1.5       # Alternativa rápida
 ```
 
-Vale testar mais de um. O roteamento de normas exige um raciocínio que alguns modelos fazem melhor que outros, e os preços na faixa econômica são parecidos. Confira os valores atuais em [openrouter.ai/models](https://openrouter.ai/models).
+O roteamento de normas API exige precisão — Claude 3.5 Haiku foi testado e aprovado para essa tarefa. Outros modelos podem funcionar, mas teste antes de mudar em produção. Confira preços em [openrouter.ai/models](https://openrouter.ai/models).
 
 ---
 
 ## Editar a base de conhecimento
 
-Mexa nos `.md` dentro de `knowledge/` e faça deploy. Nada de reindexar, nada de reprocessar.
+A base está consolidada em um único arquivo: `knowledge/api-normas-completas.md`.
 
-Para incluir um documento novo, adicione-o na lista de `lib/system-prompt.js`:
+Para atualizar: edite este arquivo e faça deploy. Nada de reindexar, nada de reprocessar.
 
-```js
-const KNOWLEDGE_FILES = [
-  // ...
-  { file: "novo-documento.md", title: "DOCUMENTO 4 — Título aqui" },
-];
-```
+**Estrutura do arquivo:**
+- Seção 1: Visão geral das normas API
+- Seção 2: API Specification Q1 (Quality Management System)
+- Seção 3: Normas de roscas e tubos (5B, 5CT, 5L, 7-1, 7-2, 7G-2, 11B)
+- Seção 4: Glossário técnico integrado
+- Seção 5: Roteamento de perguntas → normas
+- Seção 6: Tabelas de roteamento rápido
 
-Fique de olho no total. Até uns 30 mil tokens a coisa segue confortável. Passando disso, reavalie.
+**Tamanho atual:** ~33KB (~10.9k tokens). Até uns 30 mil tokens a coisa segue confortável na janela de contexto do Claude 3.5 Haiku (200k). Passando disso, considere splitting novamente.
 
 ---
 
 ## Ajustar o comportamento
 
-O `lib/persona.md` define quem é o Mister: tom, raciocínio de roteamento e as regras de segurança técnica.
+O `lib/persona.md` define quem é o Mister: identidade, tom de voz, regras de segurança técnica, exemplos de respostas boas vs ruins, e casos de teste.
 
-**As regras de segurança são o ponto mais importante do projeto.** O Mister é instruído a nunca inventar torque, dimensão, tolerância ou resistência — dados que vivem em tabelas oficiais e que, errados, viram acidente ou peça rejeitada. Ele também não confirma compatibilidade de conexão pelo nome.
+**As regras de segurança são inegociáveis.** O Mister nunca inventaria:
+- Valores numéricos (torques, dimensões, tolerâncias, resistências)
+- Compatibilidade de conexões apenas por semelhança de nome
+- Propriedades de produtos sem consultar tabelas oficiais
 
-Se for afrouxar alguma dessas regras, pense duas vezes. Elas são o que separa um assistente útil de um passivo.
+Se a pergunta exige um número que está em tabela, o Mister explica o conceito, remete à norma, pede dados essenciais e cita onde achar o valor exato. Isso é segurança técnica, não incompetência.
+
+**Casos de teste:** A persona inclui 5+ exemplos de respostas corretas vs incorretas para garantir que o modelo não perca a calibração. Vale revisar esses casos antes de mudar a persona.
 
 ---
 
@@ -127,7 +135,9 @@ Se for afrouxar alguma dessas regras, pense duas vezes. Elas são o que separa u
 
 **Markdown.** Renderizado por uma função mínima que escapa o HTML antes de formatar — nada vindo do modelo consegue injetar marcação na página.
 
-**Cache de prompt.** O system prompt é idêntico em toda requisição. Modelos da OpenAI fazem cache automático de prompts acima de ~1024 tokens, o que derruba bastante o custo. Modelos da Anthropic precisam de configuração explícita de `cache_control`, hoje não implementada aqui.
+**Modelo:** Claude 3.5 Haiku via OpenRouter. Rápido, preciso para roteamento técnico, 40% mais barato que Sonnet 4.6.
+
+**Cache de prompt.** O system prompt (~10.9k tokens) é idêntico em toda requisição. Modelos da Anthropic (como Claude 3.5 Haiku) suportam prompt caching que reduz custos de input em ~90% para requisições repetidas.
 
 ---
 
