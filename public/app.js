@@ -14,6 +14,63 @@ let useCloud = false;
 let user = null;
 let streamAbort = null; // controlar cancelamento de streaming
 let currentAudio = null; // controlar áudio sendo tocado
+let isListening = false; // controlar status da gravação
+let recognition = null; // Web Speech API
+
+/* =========================================================
+   STT (Speech-to-Text) — Gravação de voz
+   ========================================================= */
+function initSpeechRecognition() {
+  const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+  if (!SpeechRecognition) {
+    alert("Seu navegador não suporta gravação de voz.");
+    return null;
+  }
+
+  const rec = new SpeechRecognition();
+  rec.lang = "pt-BR";
+  rec.interimResults = true;
+  rec.continuous = false;
+
+  rec.onstart = () => {
+    isListening = true;
+    voiceBtn.classList.add("listening");
+  };
+
+  rec.onresult = (event) => {
+    let transcript = "";
+    for (let i = event.resultIndex; i < event.results.length; i++) {
+      transcript += event.results[i][0].transcript;
+    }
+    input.value = transcript;
+    updateSendState();
+  };
+
+  rec.onerror = (event) => {
+    console.error("Erro na gravação:", event.error);
+  };
+
+  rec.onend = () => {
+    isListening = false;
+    voiceBtn.classList.remove("listening");
+  };
+
+  return rec;
+}
+
+const voiceBtn = document.getElementById("voice-btn");
+voiceBtn.addEventListener("click", (e) => {
+  e.preventDefault();
+  if (!recognition) recognition = initSpeechRecognition();
+  if (recognition) {
+    if (isListening) {
+      recognition.stop();
+    } else {
+      input.focus();
+      recognition.start();
+    }
+  }
+});
 
 /* =========================================================
    TTS (Text-to-Speech) com ElevenLabs
