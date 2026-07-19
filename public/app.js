@@ -1128,7 +1128,8 @@ async function sendMessage(rawText) {
 
     if (!res.ok) {
       const info = await res.json().catch(() => ({}));
-      throw new Error(info.error || "O servidor não respondeu como esperado.");
+      console.error("Erro da API:", res.status, info);
+      throw new Error(info.error || `Status ${res.status}: O servidor não respondeu como esperado.`);
     }
 
     const reader = res.body.getReader();
