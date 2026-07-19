@@ -200,6 +200,8 @@ const logoutBtn = document.getElementById("logout-btn");
 const imageInput = document.getElementById("image-input");
 const uploadBtn = document.getElementById("upload-btn");
 const imagePreview = document.getElementById("image-preview");
+const pdfInput = document.getElementById("pdf-input");
+const pdfBtn = document.getElementById("pdf-btn");
 const settingsBtn = document.getElementById("settings-btn");
 const settingsModal = document.getElementById("settings-modal");
 const settingsCloseBtn = document.getElementById("settings-close");
@@ -207,6 +209,7 @@ const settingsSaveBtn = document.getElementById("settings-save");
 const elevenLabsInput = document.getElementById("elevenlabs-input");
 
 let selectedImage = null; // { data: base64, type: 'image/jpeg', name: 'file.jpg' }
+let selectedPdf = null; // { data: base64, name: 'file.pdf' }
 
 function createTypingRow() {
   const row = document.createElement("div");
@@ -814,6 +817,85 @@ imageInput.addEventListener("change", async (e) => {
   imageInput.value = ""; // limpa input para permitir selecionar o mesmo arquivo novamente
 });
 
+/* PDF Upload */
+function renderPdfPreview() {
+  imagePreview.innerHTML = "";
+  if (selectedImage) {
+    const container = document.createElement("div");
+    container.className = "image-preview-item";
+    const img = document.createElement("img");
+    img.src = selectedImage.data;
+    img.alt = selectedImage.name;
+    container.appendChild(img);
+    const removeBtn = document.createElement("button");
+    removeBtn.type = "button";
+    removeBtn.className = "image-remove-btn";
+    removeBtn.setAttribute("aria-label", "Remover imagem");
+    removeBtn.innerHTML = '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>';
+    removeBtn.addEventListener("click", (e) => {
+      e.preventDefault();
+      selectedImage = null;
+      renderImagePreview();
+      updateSendState();
+    });
+    container.appendChild(removeBtn);
+    imagePreview.appendChild(container);
+  }
+  if (selectedPdf) {
+    const container = document.createElement("div");
+    container.className = "pdf-preview-item";
+    const icon = document.createElement("div");
+    icon.className = "pdf-icon";
+    icon.innerHTML = "📄";
+    const name = document.createElement("span");
+    name.className = "pdf-name";
+    name.textContent = selectedPdf.name;
+    container.appendChild(icon);
+    container.appendChild(name);
+    const removeBtn = document.createElement("button");
+    removeBtn.type = "button";
+    removeBtn.className = "image-remove-btn";
+    removeBtn.setAttribute("aria-label", "Remover PDF");
+    removeBtn.innerHTML = '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>';
+    removeBtn.addEventListener("click", (e) => {
+      e.preventDefault();
+      selectedPdf = null;
+      renderPdfPreview();
+      updateSendState();
+    });
+    container.appendChild(removeBtn);
+    imagePreview.appendChild(container);
+  }
+}
+
+pdfBtn.addEventListener("click", (e) => {
+  e.preventDefault();
+  pdfInput.click();
+});
+
+pdfInput.addEventListener("change", async (e) => {
+  const file = e.target.files?.[0];
+  if (!file) return;
+
+  if (file.type !== "application/pdf") {
+    alert("Por favor, selecione um arquivo PDF.");
+    return;
+  }
+
+  const reader = new FileReader();
+  reader.onload = (ev) => {
+    selectedPdf = {
+      data: ev.target.result,
+      type: "application/pdf",
+      name: file.name
+    };
+    renderPdfPreview();
+    updateSendState();
+  };
+  reader.readAsDataURL(file);
+  pdfInput.value = "";
+});
+
 /* =========================================================
    Envio + streaming
    ========================================================= */
@@ -844,6 +926,7 @@ async function sendMessage(rawText) {
   addUserMessage(text, selectedImage);
   const userMsg = { role: "user", content: text };
   if (selectedImage) userMsg.image = selectedImage;
+  if (selectedPdf) userMsg.pdf = selectedPdf;
   chat.messages.push(userMsg);
   chat.updatedAt = Date.now();
   saveChat(chat);
@@ -852,7 +935,8 @@ async function sendMessage(rawText) {
   input.value = "";
   input.style.height = "auto";
   selectedImage = null;
-  renderImagePreview();
+  selectedPdf = null;
+  renderPdfPreview();
   updateSendState();
   scrollToBottom();
 
@@ -877,21 +961,30 @@ async function sendMessage(rawText) {
 
     // Transforma mensagens para formato OpenRouter (vision compatible)
     const formattedMessages = chat.messages.map((m) => {
-      if (m.role === "user" && m.image) {
-        return {
-          role: "user",
-          content: [
-            m.content ? { type: "text", text: m.content } : null,
-            {
-              type: "image",
-              source: {
-                type: "base64",
-                media_type: m.image.type,
-                data: m.image.data.split(",")[1], // remove data:image/jpeg;base64, prefix
-              },
+      if (m.role === "user" && (m.image || m.pdf)) {
+        const contentArray = [];
+        if (m.content) contentArray.push({ type: "text", text: m.content });
+        if (m.image) {
+          contentArray.push({
+            type: "image",
+            source: {
+              type: "base64",
+              media_type: m.image.type,
+              data: m.image.data.split(",")[1],
             },
-          ].filter(Boolean),
-        };
+          });
+        }
+        if (m.pdf) {
+          contentArray.push({
+            type: "document",
+            source: {
+              type: "base64",
+              media_type: "application/pdf",
+              data: m.pdf.data.split(",")[1],
+            },
+          });
+        }
+        return { role: "user", content: contentArray };
       }
       return m;
     });

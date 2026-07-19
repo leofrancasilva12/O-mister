@@ -981,14 +981,17 @@ html, body {
 
 .input-actions {
   display: flex;
-  align-items: flex-end;
-  gap: 8px;
+  align-items: center;
+  gap: 6px;
   width: 100%;
 }
 
-#upload-btn {
+#upload-btn,
+#voice-btn {
   flex-shrink: 0;
-  padding: 4px;
+  width: 32px;
+  height: 32px;
+  padding: 0;
   background: none;
   border: none;
   color: var(--text-faint);
@@ -996,10 +999,15 @@ html, body {
   display: flex;
   align-items: center;
   justify-content: center;
-  transition: color 0.15s ease;
+  border-radius: 6px;
+  transition: color 0.15s ease, background-color 0.15s ease;
 }
 
-#upload-btn:hover { color: var(--text); }
+#upload-btn:hover,
+#voice-btn:hover {
+  color: var(--text);
+  background-color: var(--sidebar-hover);
+}
 
 #voice-btn {
   transition: color 0.15s ease;
@@ -1031,6 +1039,32 @@ html, body {
   height: auto;
   border-radius: 8px;
   display: block;
+}
+
+/* PDF Preview */
+.pdf-preview-item {
+  position: relative;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 10px;
+  border-radius: 8px;
+  border: 1px solid var(--sidebar-border);
+  background: var(--white);
+  max-width: 200px;
+}
+
+.pdf-icon {
+  font-size: 20px;
+  flex-shrink: 0;
+}
+
+.pdf-name {
+  font-size: 12px;
+  color: var(--text);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 
 /* Botão de áudio TTS */
