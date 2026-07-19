@@ -9,6 +9,7 @@ create table if not exists public.conversations (
   user_id    uuid not null references auth.users (id) on delete cascade,
   title      text,
   messages   jsonb not null default '[]'::jsonb,
+  deleted_at timestamptz,
   created_at timestamptz not null default now(),
   updated_at timestamptz not null default now()
 );
@@ -24,8 +25,15 @@ create policy "conversas do proprio usuario"
   on public.conversations
   for all
   to authenticated
-  using (auth.uid() = user_id)
+  using (auth.uid() = user_id AND deleted_at IS NULL)
   with check (auth.uid() = user_id);
+
+drop policy if exists "conversas deletadas do usuario" on public.conversations;
+create policy "conversas deletadas do usuario"
+  on public.conversations
+  for select
+  to authenticated
+  using (auth.uid() = user_id AND deleted_at IS NOT NULL);
 
 -- Tabela de perfis: sincroniza dados do usuário entre dispositivos
 create table if not exists public.user_profiles (

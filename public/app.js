@@ -741,7 +741,7 @@ function renderMessages() {
       addUserMessage(m.content, m.image || null);
     } else {
       const { content } = createAssistantMessage(idx);
-      content.innerHTML = renderMarkdown(m.content);
+      content.innerHTML = renderMarkdownSafe(m.content);
     }
   });
   scrollToBottom(false);
@@ -863,6 +863,38 @@ function escapeHtml(str) {
     .replace(/&/g, "&amp;")
     .replace(/</g, "&lt;")
     .replace(/>/g, "&gt;");
+}
+
+function renderMarkdownSafe(md) {
+  const html = renderMarkdown(md);
+  // DOMPurify remove tags perigosas, mas permite tags estruturais de markdown
+  return DOMPurify.sanitize(html, {
+    ALLOWED_TAGS: [
+      "p",
+      "h1",
+      "h2",
+      "h3",
+      "h4",
+      "h5",
+      "h6",
+      "ul",
+      "ol",
+      "li",
+      "code",
+      "pre",
+      "a",
+      "strong",
+      "em",
+      "table",
+      "thead",
+      "tbody",
+      "tr",
+      "th",
+      "td",
+    ],
+    ALLOWED_ATTR: ["href", "target", "rel", "class"],
+    ALLOW_DATA_ATTR: false,
+  });
 }
 
 function renderMarkdown(md) {
@@ -1074,6 +1106,25 @@ function renderImagePreview() {
   }
 }
 
+// Magic bytes validation (previne arquivos malformados)
+async function validateFileMagicBytes(file) {
+  const header = await file.slice(0, 8).arrayBuffer();
+  const view = new Uint8Array(header);
+
+  // JPG: FF D8 FF
+  if (view[0] === 0xFF && view[1] === 0xD8 && view[2] === 0xFF) return true;
+  // PNG: 89 50 4E 47
+  if (view[0] === 0x89 && view[1] === 0x50 && view[2] === 0x4E && view[3] === 0x47) return true;
+  // GIF: 47 49 46 38
+  if (view[0] === 0x47 && view[1] === 0x49 && view[2] === 0x46 && view[3] === 0x38) return true;
+  // WebP: RIFF ... WEBP
+  if (view[0] === 0x52 && view[1] === 0x49 && view[2] === 0x46 && view[3] === 0x46) return true;
+  // PDF: 25 50 44 46 (% P D F)
+  if (view[0] === 0x25 && view[1] === 0x50 && view[2] === 0x44 && view[3] === 0x46) return true;
+
+  return false;
+}
+
 uploadBtn.addEventListener("click", (e) => {
   e.preventDefault();
   imageInput.click();
@@ -1084,7 +1135,18 @@ imageInput.addEventListener("change", async (e) => {
   if (!file) return;
 
   if (!file.type.startsWith("image/")) {
-    alert("Por favor, selecione uma imagem.");
+    alert("Por favor, selecione uma imagem válida.");
+    return;
+  }
+
+  if (file.size > 10 * 1024 * 1024) {
+    alert("Imagem muito grande (máximo 10 MB).");
+    return;
+  }
+
+  const isValidMagic = await validateFileMagicBytes(file);
+  if (!isValidMagic) {
+    alert("Arquivo de imagem inválido (assinatura não reconhecida).");
     return;
   }
 
@@ -1099,7 +1161,7 @@ imageInput.addEventListener("change", async (e) => {
     updateSendState();
   };
   reader.readAsDataURL(file);
-  imageInput.value = ""; // limpa input para permitir selecionar o mesmo arquivo novamente
+  imageInput.value = "";
 });
 
 /* PDF Upload */
@@ -1163,7 +1225,18 @@ pdfInput.addEventListener("change", async (e) => {
   if (!file) return;
 
   if (file.type !== "application/pdf") {
-    alert("Por favor, selecione um arquivo PDF.");
+    alert("Por favor, selecione um arquivo PDF válido.");
+    return;
+  }
+
+  if (file.size > 50 * 1024 * 1024) {
+    alert("PDF muito grande (máximo 50 MB).");
+    return;
+  }
+
+  const isValidPdf = await validateFileMagicBytes(file);
+  if (!isValidPdf) {
+    alert("Arquivo PDF inválido (assinatura não reconhecida).");
     return;
   }
 
@@ -1327,7 +1400,7 @@ async function sendMessage(rawText) {
           }
 
           answer += delta;
-          bubble.innerHTML = renderMarkdown(answer);
+          bubble.innerHTML = renderMarkdownSafe(answer);
           scrollToBottom();
         } catch {
           /* fragmento incompleto: ignora */

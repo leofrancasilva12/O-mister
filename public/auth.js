@@ -38,7 +38,13 @@
   function getClient() {
     if (!clientPromise) {
       clientPromise = loadLib().then(function () {
-        return window.supabase.createClient(cfg.SUPABASE_URL, cfg.SUPABASE_ANON_KEY);
+        return window.supabase.createClient(cfg.SUPABASE_URL, cfg.SUPABASE_ANON_KEY, {
+          auth: {
+            storage: sessionStorage,
+            persistSession: true,
+            autoRefreshToken: true,
+          },
+        });
       });
     }
     return clientPromise;
@@ -105,7 +111,10 @@
     cloudDelete: function (id) {
       return getClient()
         .then(function (c) {
-          return c.from("conversations").delete().eq("id", id);
+          // Soft delete: marca com deleted_at ao invés de remover
+          return c.from("conversations").update({
+            deleted_at: new Date().toISOString(),
+          }).eq("id", id);
         })
         .then(function (res) {
           if (res.error) throw res.error;
