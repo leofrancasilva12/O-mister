@@ -111,10 +111,8 @@
     cloudDelete: function (id) {
       return getClient()
         .then(function (c) {
-          // Soft delete: marca com deleted_at ao invés de remover
-          return c.from("conversations").update({
-            deleted_at: new Date().toISOString(),
-          }).eq("id", id);
+          // Hard delete: remove conversa completamente
+          return c.from("conversations").delete().eq("id", id);
         })
         .then(function (res) {
           if (res.error) throw res.error;
