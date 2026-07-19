@@ -167,8 +167,11 @@
     <div class="settings-form">
       <label>Foto de Perfil</label>
       <input type="file" id="profile-photo-input" accept="image/*" class="settings-file-input" />
-      <div id="profile-photo-preview" style="width: 80px; height: 80px; margin-top: 8px; border-radius: 12px; background: var(--sidebar-hover); display: flex; align-items: center; justify-content: center;">
+      <div id="profile-photo-preview" class="profile-photo-preview-container">
         <span style="font-size: 32px;">👤</span>
+        <button type="button" id="profile-photo-remove" class="profile-photo-remove-btn" aria-label="Remover foto" title="Remover foto" hidden>
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2.5"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+        </button>
       </div>
     </div>
 

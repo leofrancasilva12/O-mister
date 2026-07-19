@@ -353,17 +353,19 @@ function updateProfileUI() {
 }
 
 function openSettings() {
-  // Carrega perfil do usuário
-  const profile = JSON.parse(localStorage.getItem("user_profile") || "{}");
+  // Carrega perfil do usuário (usa chave correta por user.id)
+  const key = getProfileKey();
+  const profile = JSON.parse(localStorage.getItem(key) || "{}");
   profileNameInput.value = profile.name || "";
   profileCompanyInput.value = profile.company || "";
 
   if (profile.photo) {
-    profilePhotoPreview.innerHTML = `<img src="${profile.photo}" style="width: 100%; height: 100%; object-fit: cover; border-radius: 12px;" alt="Perfil">`;
+    profilePhotoPreview.innerHTML = `<img src="${profile.photo}" alt="Perfil">`;
   } else {
     profilePhotoPreview.innerHTML = '<span style="font-size: 32px;">👤</span>';
   }
 
+  updatePhotoRemoveButton();
   settingsModal.hidden = false;
 }
 
@@ -405,6 +407,13 @@ settingsSaveBtn.addEventListener("click", async () => {
 });
 
 // Upload de foto de perfil
+const profilePhotoRemoveBtn = document.getElementById("profile-photo-remove");
+
+function updatePhotoRemoveButton() {
+  const hasPhoto = profilePhotoPreview.querySelector("img");
+  profilePhotoRemoveBtn.hidden = !hasPhoto;
+}
+
 profilePhotoInput.addEventListener("change", (e) => {
   const file = e.target.files?.[0];
   if (!file) return;
@@ -416,9 +425,17 @@ profilePhotoInput.addEventListener("change", (e) => {
 
   const reader = new FileReader();
   reader.onload = (ev) => {
-    profilePhotoPreview.innerHTML = `<img src="${ev.target.result}" style="width: 100%; height: 100%; object-fit: cover; border-radius: 8px;" alt="Perfil">`;
+    profilePhotoPreview.innerHTML = `<img src="${ev.target.result}" alt="Perfil">`;
+    updatePhotoRemoveButton();
   };
   reader.readAsDataURL(file);
+});
+
+profilePhotoRemoveBtn.addEventListener("click", (e) => {
+  e.preventDefault();
+  profilePhotoPreview.innerHTML = '<span style="font-size: 32px;">👤</span>';
+  profilePhotoInput.value = "";
+  updatePhotoRemoveButton();
 });
 
 /* =========================================================
