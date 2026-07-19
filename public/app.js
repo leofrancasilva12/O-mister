@@ -435,8 +435,13 @@ async function deleteAccount() {
     });
 
     if (!res.ok) {
-      const error = await res.json();
-      throw new Error(error.error || "Erro desconhecido");
+      const text = await res.text();
+      try {
+        const error = JSON.parse(text);
+        throw new Error(error.error || "Erro desconhecido");
+      } catch {
+        throw new Error(text || "Erro ao deletar conta no servidor");
+      }
     }
 
     // Faz logout
@@ -444,6 +449,7 @@ async function deleteAccount() {
     window.location.replace("login.html");
   } catch (err) {
     alert("Erro ao deletar conta: " + err.message);
+    console.error("Erro detalhado:", err);
   }
 }
 
