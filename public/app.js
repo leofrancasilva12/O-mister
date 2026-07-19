@@ -268,9 +268,10 @@ const profileCompanyInput = document.getElementById("profile-company-input");
 const mobileProfilePhoto = document.getElementById("mobile-profile-photo");
 const mobileProfileName = document.getElementById("mobile-profile-name");
 const mobileProfileCompany = document.getElementById("mobile-profile-company");
-const desktopProfilePhoto = document.getElementById("desktop-profile-photo");
-const desktopProfileName = document.getElementById("desktop-profile-name");
-const desktopProfileCompany = document.getElementById("desktop-profile-company");
+const sidebarProfilePhoto = document.getElementById("sidebar-profile-photo");
+const sidebarProfileName = document.getElementById("sidebar-profile-name");
+const sidebarProfileEmail = document.getElementById("sidebar-profile-email");
+const accountEmailEl = sidebarProfileEmail; // alias para compatibilidade
 
 let selectedImage = null; // { data: base64, type: 'image/jpeg', name: 'file.jpg' }
 let selectedPdf = null; // { data: base64, name: 'file.pdf' }
@@ -341,18 +342,16 @@ function updateProfileUI() {
   const key = getProfileKey();
   const profile = JSON.parse(localStorage.getItem(key) || "{}");
   const name = profile.name || "O Mister";
-  const company = profile.company || "";
   const photoHTML = profile.photo ? `<img src="${profile.photo}" alt="Perfil">` : '👤';
 
   // Atualiza header mobile
   mobileProfileName.textContent = name;
-  mobileProfileCompany.textContent = company;
+  mobileProfileCompany.textContent = profile.company || "";
   mobileProfilePhoto.innerHTML = photoHTML;
 
-  // Atualiza desktop profile
-  desktopProfileName.textContent = name;
-  desktopProfileCompany.textContent = company;
-  desktopProfilePhoto.innerHTML = photoHTML;
+  // Atualiza sidebar profile (rodapé do sidebar)
+  sidebarProfileName.textContent = name;
+  sidebarProfilePhoto.innerHTML = photoHTML;
 }
 
 function openSettings() {
@@ -435,7 +434,7 @@ async function initAuth() {
   useCloud = true;
   updateProfileUI(); // Recarrega perfil com a chave correta do usuário
 
-  accountEmailEl.textContent = user.email || "Conectado";
+  sidebarProfileEmail.textContent = user.email || "Conectado";
   accountEl.hidden = false;
   logoutBtn.addEventListener("click", async () => {
     await OMISTER.auth.signOut();
