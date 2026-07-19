@@ -81,7 +81,13 @@
       <button id="open-sidebar" class="icon-btn" aria-label="Abrir menu">
         <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="18" x2="21" y2="18"/></svg>
       </button>
-      <span style="font-size:13px; color:var(--text-fainter);">O Mister</span>
+      <div id="mobile-profile" class="mobile-profile">
+        <div id="mobile-profile-photo" class="mobile-profile-photo">👤</div>
+        <div class="mobile-profile-info">
+          <div id="mobile-profile-name" class="mobile-profile-name">O Mister</div>
+          <div id="mobile-profile-company" class="mobile-profile-company"></div>
+        </div>
+      </div>
     </header>
 
     <div id="chat-scroll">
@@ -149,25 +155,13 @@
 
 <div id="settings-modal" class="modal-overlay" hidden>
   <div class="modal" role="dialog" aria-modal="true">
-    <h2 class="modal-title">Configurações</h2>
-
-    <div class="settings-form">
-      <label>Chave ElevenLabs (para áudio)</label>
-      <input type="password" id="elevenlabs-input" placeholder="sk_..." />
-      <p style="font-size: 12px; color: var(--text-fainter); margin-top: 4px;">
-        Pegue em: https://elevenlabs.io/api/keys
-      </p>
-    </div>
-
-    <hr style="margin: 20px 0; border: none; border-top: 1px solid var(--border);">
-
-    <h3 style="font-size: 14px; font-weight: 600; margin: 0 0 12px 0;">Seu Perfil</h3>
+    <h2 class="modal-title">Seu Perfil</h2>
 
     <div class="settings-form">
       <label>Foto de Perfil</label>
       <input type="file" id="profile-photo-input" accept="image/*" class="settings-file-input" />
-      <div id="profile-photo-preview" style="width: 60px; height: 60px; margin-top: 8px; border-radius: 8px; background: var(--sidebar-hover); display: flex; align-items: center; justify-content: center;">
-        <span style="font-size: 24px;">📷</span>
+      <div id="profile-photo-preview" style="width: 80px; height: 80px; margin-top: 8px; border-radius: 12px; background: var(--sidebar-hover); display: flex; align-items: center; justify-content: center;">
+        <span style="font-size: 32px;">👤</span>
       </div>
     </div>
 
@@ -179,6 +173,18 @@
     <div class="settings-form">
       <label>Empresa</label>
       <input type="text" id="profile-company-input" placeholder="Sua empresa" />
+    </div>
+
+    <hr style="margin: 20px 0; border: none; border-top: 1px solid var(--border);">
+
+    <h3 style="font-size: 14px; font-weight: 600; margin: 0 0 12px 0;">Integração</h3>
+
+    <div class="settings-form">
+      <label>Chave ElevenLabs (para áudio)</label>
+      <input type="password" id="elevenlabs-input" placeholder="sk_..." />
+      <p style="font-size: 12px; color: var(--text-fainter); margin-top: 4px;">
+        Pegue em: https://elevenlabs.io/api/keys
+      </p>
     </div>
 
     <div class="modal-actions">

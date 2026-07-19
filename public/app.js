@@ -266,6 +266,9 @@ const profilePhotoInput = document.getElementById("profile-photo-input");
 const profilePhotoPreview = document.getElementById("profile-photo-preview");
 const profileNameInput = document.getElementById("profile-name-input");
 const profileCompanyInput = document.getElementById("profile-company-input");
+const mobileProfilePhoto = document.getElementById("mobile-profile-photo");
+const mobileProfileName = document.getElementById("mobile-profile-name");
+const mobileProfileCompany = document.getElementById("mobile-profile-company");
 
 let selectedImage = null; // { data: base64, type: 'image/jpeg', name: 'file.jpg' }
 let selectedPdf = null; // { data: base64, name: 'file.pdf' }
@@ -327,6 +330,20 @@ document.addEventListener("keydown", (e) => {
 /* =========================================================
    Modal de Configurações
    ========================================================= */
+function updateProfileUI() {
+  const profile = JSON.parse(localStorage.getItem("user_profile") || "{}");
+
+  // Atualiza header mobile
+  mobileProfileName.textContent = profile.name || "O Mister";
+  mobileProfileCompany.textContent = profile.company || "";
+
+  if (profile.photo) {
+    mobileProfilePhoto.innerHTML = `<img src="${profile.photo}" alt="Perfil">`;
+  } else {
+    mobileProfilePhoto.innerHTML = '👤';
+  }
+}
+
 function openSettings() {
   elevenLabsInput.value = localStorage.getItem("elevenlabs_key") || "";
 
@@ -336,9 +353,9 @@ function openSettings() {
   profileCompanyInput.value = profile.company || "";
 
   if (profile.photo) {
-    profilePhotoPreview.innerHTML = `<img src="${profile.photo}" style="width: 100%; height: 100%; object-fit: cover; border-radius: 8px;" alt="Perfil">`;
+    profilePhotoPreview.innerHTML = `<img src="${profile.photo}" style="width: 100%; height: 100%; object-fit: cover; border-radius: 12px;" alt="Perfil">`;
   } else {
-    profilePhotoPreview.innerHTML = '<span style="font-size: 24px;">📷</span>';
+    profilePhotoPreview.innerHTML = '<span style="font-size: 32px;">👤</span>';
   }
 
   settingsModal.hidden = false;
@@ -368,6 +385,9 @@ settingsSaveBtn.addEventListener("click", () => {
     photo: profilePhotoPreview.querySelector("img")?.src || ""
   };
   localStorage.setItem("user_profile", JSON.stringify(profile));
+
+  // Atualiza UI com novo perfil
+  updateProfileUI();
 
   alert("Configurações salvas!");
   closeSettings();
@@ -1174,6 +1194,7 @@ async function sendMessage(rawText) {
    ========================================================= */
 (async function init() {
   initAudioPlayer();
+  updateProfileUI(); // Carrega perfil do usuário
 
   await initAuth();
   if (redirected) return; // indo para a tela de login
