@@ -73,6 +73,15 @@ function toggleTheme() {
 // Aplica o tema imediatamente (antes do DOM completo) para evitar flash
 initTheme();
 
+// A splash só aparece quando o usuário acabou de fazer login (não em refresh).
+// A decisão de exibir é feita por um script no <head> (classe no-splash);
+// aqui apenas limpamos a flag para valer só uma vez.
+let cameFromLogin = false;
+try {
+  cameFromLogin = sessionStorage.getItem("omister.justLoggedIn") === "1";
+  if (cameFromLogin) sessionStorage.removeItem("omister.justLoggedIn");
+} catch (e) {}
+
 /* =========================================================
    STT (Speech-to-Text) — Gravação de voz
    ========================================================= */
@@ -1917,12 +1926,12 @@ function showChatListSkeleton() {
 // Some com a tela de splash suavemente após o app carregar
 function hideSplash() {
   const splash = document.getElementById("splash-screen");
-  if (!splash) return;
+  if (!splash || splash.classList.contains("gone")) return;
   // Garante um tempo mínimo de exibição para a marca aparecer
   setTimeout(() => {
     splash.classList.add("hiding");
     setTimeout(() => splash.classList.add("gone"), 500);
-  }, 1400);
+  }, 1600);
 }
 
 // Failsafe: nunca deixa a splash travada mais de 6s

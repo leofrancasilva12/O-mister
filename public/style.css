@@ -60,16 +60,22 @@
 }
 .splash-screen.hiding { opacity: 0; }
 .splash-screen.gone { display: none; }
+/* Refresh normal (sem login): não mostra a splash */
+.no-splash .splash-screen { display: none; }
 .splash-inner {
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 28px;
+  gap: 24px;
   animation: splash-pop 0.5s ease;
   padding: 24px;
+  width: 100%;
+  height: 100%;
+  justify-content: center;
 }
 .splash-img {
-  width: min(360px, 74vw);
+  width: min(520px, 88vw);
+  max-height: 74vh;
   height: auto;
   object-fit: contain;
 }
@@ -1082,6 +1088,12 @@ html, body {
   #collapse-sidebar { display: none; }
   #open-rail { display: none !important; }
   #close-sidebar { display: flex; }
+
+  /* Botões de conta com mais área de toque e bem separados no mobile/tablet */
+  .account { padding: 14px 16px calc(14px + env(safe-area-inset-bottom)); }
+  .account-actions { gap: 12px; margin-top: 12px; }
+  .account-settings { width: 42px; height: 42px; }
+  .account-logout { height: 42px; padding: 0 16px; font-size: 13px; }
 }
 
 /* ================= Conta / sair (sidebar) ================= */
@@ -1158,9 +1170,11 @@ html, body {
   display: flex;
   align-items: center;
   gap: 10px;
-  justify-content: flex-end;
+  justify-content: space-between;
   margin-top: 8px;
 }
+/* Botões de ícone à esquerda, logout empurrado para a direita */
+.account-actions .account-logout { margin-left: auto; }
 
 /* ================= Modal de confirmação (estilo Claude) ================= */
 .modal-overlay {

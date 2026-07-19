@@ -30,6 +30,8 @@
     console.log("Auth state changed:", event, session);
     if (session) {
       console.log("Sessão criada! Entrando no app...");
+      // Marca que veio de um login → mostra a splash uma vez no app
+      try { sessionStorage.setItem("omister.justLoggedIn", "1"); } catch (e) {}
       window.location.replace("index.html");
     }
   });
