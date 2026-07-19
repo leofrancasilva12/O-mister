@@ -1242,13 +1242,19 @@ html, body {
   color: var(--text);
 }
 
-.settings-form input {
+.settings-form input,
+.settings-file-input {
   width: 100%;
   padding: 8px 12px;
   border: 1px solid var(--sidebar-border);
   border-radius: 8px;
-  font-family: monospace;
-  font-size: 12px;
+  font-family: inherit;
+  font-size: 13px;
   background: var(--white);
   color: var(--text);
+}
+
+.settings-file-input {
+  padding: 6px 8px;
+  cursor: pointer;
 }

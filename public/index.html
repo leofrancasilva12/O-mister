@@ -158,6 +158,7 @@
 <div id="settings-modal" class="modal-overlay" hidden>
   <div class="modal" role="dialog" aria-modal="true">
     <h2 class="modal-title">Configurações</h2>
+
     <div class="settings-form">
       <label>Chave ElevenLabs (para áudio)</label>
       <input type="password" id="elevenlabs-input" placeholder="sk_..." />
@@ -165,8 +166,31 @@
         Pegue em: https://elevenlabs.io/api/keys
       </p>
     </div>
+
+    <hr style="margin: 20px 0; border: none; border-top: 1px solid var(--border);">
+
+    <h3 style="font-size: 14px; font-weight: 600; margin: 0 0 12px 0;">Seu Perfil</h3>
+
+    <div class="settings-form">
+      <label>Foto de Perfil</label>
+      <input type="file" id="profile-photo-input" accept="image/*" class="settings-file-input" />
+      <div id="profile-photo-preview" style="width: 60px; height: 60px; margin-top: 8px; border-radius: 8px; background: var(--sidebar-hover); display: flex; align-items: center; justify-content: center;">
+        <span style="font-size: 24px;">📷</span>
+      </div>
+    </div>
+
+    <div class="settings-form">
+      <label>Nome</label>
+      <input type="text" id="profile-name-input" placeholder="Seu nome" />
+    </div>
+
+    <div class="settings-form">
+      <label>Empresa</label>
+      <input type="text" id="profile-company-input" placeholder="Sua empresa" />
+    </div>
+
     <div class="modal-actions">
-      <button id="settings-close" class="modal-btn modal-cancel" type="button">Fechar</button>
+      <button id="settings-close" class="modal-btn modal-cancel" type="button">Cancelar</button>
       <button id="settings-save" class="modal-btn" type="button">Salvar</button>
     </div>
   </div>

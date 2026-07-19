@@ -280,6 +280,10 @@ const settingsModal = document.getElementById("settings-modal");
 const settingsCloseBtn = document.getElementById("settings-close");
 const settingsSaveBtn = document.getElementById("settings-save");
 const elevenLabsInput = document.getElementById("elevenlabs-input");
+const profilePhotoInput = document.getElementById("profile-photo-input");
+const profilePhotoPreview = document.getElementById("profile-photo-preview");
+const profileNameInput = document.getElementById("profile-name-input");
+const profileCompanyInput = document.getElementById("profile-company-input");
 
 let selectedImage = null; // { data: base64, type: 'image/jpeg', name: 'file.jpg' }
 let selectedPdf = null; // { data: base64, name: 'file.pdf' }
@@ -343,6 +347,18 @@ document.addEventListener("keydown", (e) => {
    ========================================================= */
 function openSettings() {
   elevenLabsInput.value = localStorage.getItem("elevenlabs_key") || "";
+
+  // Carrega perfil do usuário
+  const profile = JSON.parse(localStorage.getItem("user_profile") || "{}");
+  profileNameInput.value = profile.name || "";
+  profileCompanyInput.value = profile.company || "";
+
+  if (profile.photo) {
+    profilePhotoPreview.innerHTML = `<img src="${profile.photo}" style="width: 100%; height: 100%; object-fit: cover; border-radius: 8px;" alt="Perfil">`;
+  } else {
+    profilePhotoPreview.innerHTML = '<span style="font-size: 24px;">📷</span>';
+  }
+
   settingsModal.hidden = false;
 }
 
@@ -360,11 +376,35 @@ settingsSaveBtn.addEventListener("click", () => {
   const key = elevenLabsInput.value.trim();
   if (key) {
     localStorage.setItem("elevenlabs_key", key);
-    alert("Configurações salvas!");
-    closeSettings();
-  } else {
-    alert("Cole a chave ElevenLabs");
   }
+
+  // Salva perfil
+  const profile = {
+    name: profileNameInput.value.trim(),
+    company: profileCompanyInput.value.trim(),
+    photo: profilePhotoPreview.querySelector("img")?.src || ""
+  };
+  localStorage.setItem("user_profile", JSON.stringify(profile));
+
+  alert("Configurações salvas!");
+  closeSettings();
+});
+
+// Upload de foto de perfil
+profilePhotoInput.addEventListener("change", (e) => {
+  const file = e.target.files?.[0];
+  if (!file) return;
+
+  if (!file.type.startsWith("image/")) {
+    alert("Por favor, selecione uma imagem.");
+    return;
+  }
+
+  const reader = new FileReader();
+  reader.onload = (ev) => {
+    profilePhotoPreview.innerHTML = `<img src="${ev.target.result}" style="width: 100%; height: 100%; object-fit: cover; border-radius: 8px;" alt="Perfil">`;
+  };
+  reader.readAsDataURL(file);
 });
 
 /* =========================================================
@@ -1157,6 +1197,15 @@ async function sendMessage(rawText) {
 
   chats = await loadChats();
   renderChatList();
+
+  // Auto-seleciona a última conversa
+  if (!activeId && chats.length > 0) {
+    const sorted = [...chats].sort((a, b) => (b.updatedAt || 0) - (a.updatedAt || 0));
+    activeId = sorted[0].id;
+    persistActive();
+    renderChatList();
+  }
+
   renderMessages();
   updateSendState();
 })();
