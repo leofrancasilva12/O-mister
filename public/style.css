@@ -841,10 +841,10 @@ html, body {
   width: 100%;
   max-width: 420px;
   background: var(--white);
-  border: 1px solid var(--border);
-  border-radius: 16px;
+  border: none;
+  border-radius: 12px;
   padding: 24px;
-  box-shadow: 0 12px 40px rgba(0, 0, 0, 0.18);
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.16);
   animation: modal-pop 0.14s ease;
 }
 .modal-title {
@@ -1385,12 +1385,12 @@ html, body {
   position: absolute;
   top: 4px;
   right: 4px;
-  width: 24px;
-  height: 24px;
-  background: rgba(0, 0, 0, 0.6);
+  width: 28px;
+  height: 28px;
+  background: rgba(0, 0, 0, 0.7);
   border: none;
   border-radius: 50%;
-  display: flex;
+  display: flex !important;
   align-items: center;
   justify-content: center;
   cursor: pointer;
@@ -1399,7 +1399,11 @@ html, body {
 }
 
 .profile-photo-remove-btn:hover {
-  background: rgba(0, 0, 0, 0.8);
+  background: rgba(0, 0, 0, 0.9);
+}
+
+.profile-photo-remove-btn[hidden] {
+  display: none !important;
 }
 
 .settings-form input,
