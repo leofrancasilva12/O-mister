@@ -332,8 +332,14 @@ document.addEventListener("keydown", (e) => {
 /* =========================================================
    Modal de Configurações
    ========================================================= */
+function getProfileKey() {
+  // Isola perfil por user.id se autenticado, senão usa chave genérica
+  return user && user.id ? `user_profile_${user.id}` : "user_profile";
+}
+
 function updateProfileUI() {
-  const profile = JSON.parse(localStorage.getItem("user_profile") || "{}");
+  const key = getProfileKey();
+  const profile = JSON.parse(localStorage.getItem(key) || "{}");
   const name = profile.name || "O Mister";
   const company = profile.company || "";
   const photoHTML = profile.photo ? `<img src="${profile.photo}" alt="Perfil">` : '👤';
@@ -382,7 +388,8 @@ settingsSaveBtn.addEventListener("click", () => {
     company: profileCompanyInput.value.trim(),
     photo: profilePhotoPreview.querySelector("img")?.src || ""
   };
-  localStorage.setItem("user_profile", JSON.stringify(profile));
+  const key = getProfileKey();
+  localStorage.setItem(key, JSON.stringify(profile));
 
   // Atualiza UI com novo perfil
   updateProfileUI();
@@ -426,6 +433,7 @@ async function initAuth() {
 
   user = data.session.user;
   useCloud = true;
+  updateProfileUI(); // Recarrega perfil com a chave correta do usuário
 
   accountEmailEl.textContent = user.email || "Conectado";
   accountEl.hidden = false;
