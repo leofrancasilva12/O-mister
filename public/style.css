@@ -1066,7 +1066,7 @@ html, body {
   color: var(--accent);
 }
 
-/* Audio Player */
+/* Audio Player — Simples */
 .audio-player {
   position: fixed;
   bottom: 0;
@@ -1074,20 +1074,17 @@ html, body {
   right: 0;
   background: var(--white);
   border-top: 1px solid var(--border);
-  padding: 12px 16px;
+  padding: 8px 16px;
   box-shadow: 0 -2px 8px rgba(0,0,0,0.08);
   z-index: 100;
-  display: flex;
-  justify-content: center;
 }
 
 .audio-controls {
   display: flex;
   align-items: center;
-  gap: 12px;
+  gap: 8px;
   max-width: 680px;
-  width: 100%;
-  flex-wrap: wrap;
+  margin: 0 auto;
 }
 
 .audio-btn {
@@ -1109,34 +1106,18 @@ html, body {
   background: var(--border);
 }
 
-#audio-close-btn {
-  width: 36px;
-  height: 36px;
+.audio-close {
   background: var(--user-bubble);
   color: var(--accent);
 }
 
-#audio-close-btn:hover {
+.audio-close:hover {
   background: #FFE8D1;
-}
-
-.audio-progress-container {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  flex: 1;
-}
-
-.audio-time,
-.audio-duration {
-  font-size: 12px;
-  color: var(--text-faint);
-  min-width: 32px;
 }
 
 .audio-progress {
   flex: 1;
-  height: 4px;
+  height: 3px;
   border-radius: 2px;
   background: var(--border);
   outline: none;
@@ -1148,72 +1129,20 @@ html, body {
 .audio-progress::-webkit-slider-thumb {
   -webkit-appearance: none;
   appearance: none;
-  width: 12px;
-  height: 12px;
+  width: 10px;
+  height: 10px;
   border-radius: 50%;
   background: var(--accent);
   cursor: pointer;
 }
 
 .audio-progress::-moz-range-thumb {
-  width: 12px;
-  height: 12px;
+  width: 10px;
+  height: 10px;
   border-radius: 50%;
   background: var(--accent);
   cursor: pointer;
   border: none;
-}
-
-.audio-speed {
-  flex-shrink: 0;
-  padding: 4px 8px;
-  border: 1px solid var(--border);
-  border-radius: 6px;
-  background: var(--white);
-  color: var(--text);
-  font-size: 12px;
-  cursor: pointer;
-  font-family: inherit;
-}
-
-/* Mobile — player responsivo */
-@media (max-width: 640px) {
-  .audio-player {
-    padding: 10px 12px;
-    bottom: auto;
-    top: auto;
-    position: fixed;
-    bottom: 0;
-  }
-
-  .audio-controls {
-    gap: 8px;
-    flex-direction: column;
-  }
-
-  .audio-progress-container {
-    width: 100%;
-    flex-direction: column;
-  }
-
-  .audio-progress {
-    width: 100%;
-  }
-
-  .audio-time,
-  .audio-duration {
-    align-self: flex-start;
-  }
-
-  .audio-speed {
-    width: 100%;
-    padding: 8px 12px;
-  }
-
-  #audio-close-btn {
-    width: 100%;
-    justify-self: flex-end;
-  }
 }
 
 /* Configurações */

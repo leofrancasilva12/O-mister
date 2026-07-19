@@ -82,19 +82,9 @@ function initAudioPlayer() {
   const audioEl = document.getElementById("audio-element");
   const playBtn = document.getElementById("audio-play-btn");
   const progressBar = document.getElementById("audio-progress");
-  const timeEl = document.querySelector(".audio-time");
-  const durationEl = document.querySelector(".audio-duration");
-  const speedSelect = document.getElementById("audio-speed");
   const closeBtn = document.getElementById("audio-close-btn");
 
   audioPlayerElement = audioEl;
-
-  function formatTime(seconds) {
-    if (!seconds || isNaN(seconds)) return "0:00";
-    const mins = Math.floor(seconds / 60);
-    const secs = Math.floor(seconds % 60);
-    return `${mins}:${secs.toString().padStart(2, "0")}`;
-  }
 
   playBtn.addEventListener("click", () => {
     if (audioEl.paused) {
@@ -108,11 +98,6 @@ function initAudioPlayer() {
 
   audioEl.addEventListener("timeupdate", () => {
     progressBar.value = (audioEl.currentTime / audioEl.duration) * 100 || 0;
-    timeEl.textContent = formatTime(audioEl.currentTime);
-  });
-
-  audioEl.addEventListener("loadedmetadata", () => {
-    durationEl.textContent = formatTime(audioEl.duration);
   });
 
   audioEl.addEventListener("ended", () => {
@@ -121,10 +106,6 @@ function initAudioPlayer() {
 
   progressBar.addEventListener("input", () => {
     audioEl.currentTime = (progressBar.value / 100) * audioEl.duration;
-  });
-
-  speedSelect.addEventListener("change", () => {
-    audioEl.playbackRate = parseFloat(speedSelect.value);
   });
 
   closeBtn.addEventListener("click", () => {
