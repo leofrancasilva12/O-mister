@@ -386,17 +386,18 @@ function closeWelcome() {
   welcomeModal.hidden = true;
 }
 
-welcomeCloseBtn.addEventListener("click", closeWelcome);
-welcomeModal.addEventListener("click", (e) => {
-  if (e.target === welcomeModal) closeWelcome();
-});
-
 const settingsDeleteAccountBtn = document.getElementById("settings-delete-account");
 
 settingsBtn?.addEventListener("click", openSettings);
 settingsCloseBtn.addEventListener("click", closeSettings);
 settingsModal.addEventListener("click", (e) => {
   if (e.target === settingsModal) closeSettings();
+});
+
+// Welcome modal listeners
+welcomeCloseBtn.addEventListener("click", closeWelcome);
+welcomeModal.addEventListener("click", (e) => {
+  if (e.target === welcomeModal) closeWelcome();
 });
 
 settingsDeleteAccountBtn.addEventListener("click", () => {
