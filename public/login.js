@@ -25,11 +25,16 @@
   }
 
   // Já logado? vai direto pro app.
-  OMISTER.auth.getSession().then(function (res) {
-    if (res && res.data && res.data.session) {
-      window.location.replace("index.html");
-    }
-  });
+  // Aguarda um pouco pra Supabase processar token da URL
+  setTimeout(function () {
+    OMISTER.auth.getSession().then(function (res) {
+      if (res && res.data && res.data.session) {
+        window.location.replace("index.html");
+      }
+    }).catch(function (err) {
+      console.error("Erro ao verificar session:", err);
+    });
+  }, 500);
 
   googleBtn.addEventListener("click", function () {
     googleBtn.disabled = true;
