@@ -400,16 +400,9 @@ settingsModal.addEventListener("click", (e) => {
 });
 
 settingsDeleteAccountBtn.addEventListener("click", () => {
-  const confirmed = confirm("⚠️ ATENÇÃO: Tem certeza que quer deletar sua conta?\n\nEsta ação é IRREVERSÍVEL e vai apagar:\n- Seu perfil\n- Todas as conversas\n- Todos os dados\n\nClique em OK para continuar com a deleção.");
+  const confirmed = confirm("⚠️ Tem certeza que quer deletar sua conta?\n\nEsta ação é irreversível.");
 
   if (!confirmed) return;
-
-  const doubleConfirm = prompt("Digite DELETAR para confirmar a exclusão permanente da sua conta:");
-
-  if (doubleConfirm?.toUpperCase() !== "DELETAR") {
-    alert("Deleção cancelada. Sua conta foi mantida.");
-    return;
-  }
 
   deleteAccount();
 });
