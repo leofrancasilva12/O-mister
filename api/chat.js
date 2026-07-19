@@ -48,28 +48,29 @@ function verifyToken(token) {
 }
 
 export default async function handler(req, res) {
-  // CORS: aceita apenas requisições do mesmo origin
-  const origin = req.headers.origin || "";
-  const allowedOrigins = [
-    "https://mister-intelligence.vercel.app",
-    "http://localhost:3000",
-    "http://localhost:5173",
-  ];
+  try {
+    // CORS: aceita apenas requisições do mesmo origin
+    const origin = req.headers.origin || "";
+    const allowedOrigins = [
+      "https://mister-intelligence.vercel.app",
+      "http://localhost:3000",
+      "http://localhost:5173",
+    ];
 
-  if (allowedOrigins.includes(origin)) {
-    res.setHeader("Access-Control-Allow-Origin", origin);
-    res.setHeader("Access-Control-Allow-Methods", "POST, OPTIONS");
-    res.setHeader("Access-Control-Allow-Headers", "Content-Type, Authorization");
-    res.setHeader("Access-Control-Max-Age", "3600");
-  }
+    if (allowedOrigins.includes(origin)) {
+      res.setHeader("Access-Control-Allow-Origin", origin);
+      res.setHeader("Access-Control-Allow-Methods", "POST, OPTIONS");
+      res.setHeader("Access-Control-Allow-Headers", "Content-Type, Authorization");
+      res.setHeader("Access-Control-Max-Age", "3600");
+    }
 
-  if (req.method === "OPTIONS") {
-    return res.status(200).end();
-  }
+    if (req.method === "OPTIONS") {
+      return res.status(200).end();
+    }
 
-  if (req.method !== "POST") {
-    return res.status(405).json({ error: "Método não permitido." });
-  }
+    if (req.method !== "POST") {
+      return res.status(405).json({ error: "Método não permitido." });
+    }
 
   const authHeader = req.headers.authorization || "";
   const token = authHeader.startsWith("Bearer ") ? authHeader.slice(7) : null;
@@ -237,9 +238,16 @@ export default async function handler(req, res) {
     res.write("data: [DONE]\n\n");
     res.end();
   } catch (err) {
-    console.error("Falha no endpoint de chat:", err);
+    console.error("ERRO NO /api/chat:", {
+      message: err.message,
+      stack: err.stack,
+      name: err.name
+    });
     if (!res.headersSent) {
-      res.status(500).json({ error: "Não foi possível gerar a resposta." });
+      return res.status(500).json({
+        error: "Não foi possível gerar a resposta.",
+        debug: err.message
+      });
     } else {
       res.end();
     }
