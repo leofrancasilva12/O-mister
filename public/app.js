@@ -19,19 +19,11 @@ let currentAudio = null; // controlar áudio sendo tocado
    TTS (Text-to-Speech) com ElevenLabs
    ========================================================= */
 async function speakWithElevenLabs(text) {
-  const cfg = window.OMISTER_CONFIG || {};
-  let apiKey = cfg.ELEVENLABS_API_KEY;
-
-  // Se vazio, tenta localStorage (dev local)
-  if (!apiKey) {
-    apiKey = localStorage.getItem("elevenlabs_key");
-  }
+  let apiKey = localStorage.getItem("elevenlabs_key");
 
   if (!apiKey) {
-    const key = prompt("Cole sua chave ElevenLabs (https://elevenlabs.io/api/keys):");
-    if (!key) return;
-    localStorage.setItem("elevenlabs_key", key);
-    apiKey = key;
+    alert("Configure ElevenLabs primeiro. Clique no ⚙️ no canto superior direito.");
+    return;
   }
 
   try {
@@ -150,6 +142,11 @@ const logoutBtn = document.getElementById("logout-btn");
 const imageInput = document.getElementById("image-input");
 const uploadBtn = document.getElementById("upload-btn");
 const imagePreview = document.getElementById("image-preview");
+const settingsBtn = document.getElementById("settings-btn");
+const settingsModal = document.getElementById("settings-modal");
+const settingsCloseBtn = document.getElementById("settings-close");
+const settingsSaveBtn = document.getElementById("settings-save");
+const elevenLabsInput = document.getElementById("elevenlabs-input");
 
 let selectedImage = null; // { data: base64, type: 'image/jpeg', name: 'file.jpg' }
 
@@ -204,6 +201,36 @@ modalConfirm.addEventListener("click", () => {
 });
 document.addEventListener("keydown", (e) => {
   if (e.key === "Escape" && !modalOverlay.hidden) closeModal();
+  if (e.key === "Escape" && !settingsModal.hidden) closeSettings();
+});
+
+/* =========================================================
+   Modal de Configurações
+   ========================================================= */
+function openSettings() {
+  elevenLabsInput.value = localStorage.getItem("elevenlabs_key") || "";
+  settingsModal.hidden = false;
+}
+
+function closeSettings() {
+  settingsModal.hidden = true;
+}
+
+settingsBtn?.addEventListener("click", openSettings);
+settingsCloseBtn.addEventListener("click", closeSettings);
+settingsModal.addEventListener("click", (e) => {
+  if (e.target === settingsModal) closeSettings();
+});
+
+settingsSaveBtn.addEventListener("click", () => {
+  const key = elevenLabsInput.value.trim();
+  if (key) {
+    localStorage.setItem("elevenlabs_key", key);
+    alert("Configurações salvas!");
+    closeSettings();
+  } else {
+    alert("Cole a chave ElevenLabs");
+  }
 });
 
 /* =========================================================
