@@ -403,17 +403,6 @@ html, body {
   gap: 8px;
   align-items: center;
   margin-top: 8px;
-  opacity: 0;
-  visibility: hidden;
-  transition: opacity 0.15s ease, visibility 0.15s ease;
-  pointer-events: none;
-}
-.msg-assistant:hover .msg-toolbar {
-  opacity: 1;
-  visibility: visible;
-  pointer-events: auto;
-}
-.msg-assistant:focus-within .msg-toolbar {
   opacity: 1;
   visibility: visible;
   pointer-events: auto;

@@ -77,7 +77,8 @@ voiceBtn.addEventListener("click", (e) => {
    ========================================================= */
 async function speakWithElevenLabs(text) {
   const cfg = window.OMISTER_CONFIG || {};
-  let apiKey = cfg.ELEVENLABS_API_KEY || localStorage.getItem("elevenlabs_key");
+  // Tenta: config.js → window vars (env-loader) → localStorage
+  let apiKey = cfg.ELEVENLABS_API_KEY || window.ELEVENLABS_API_KEY || localStorage.getItem("elevenlabs_key");
 
   if (!apiKey) {
     alert("Configure ElevenLabs primeiro. Clique no ⚙️ no canto superior direito.");
