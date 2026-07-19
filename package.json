@@ -11,6 +11,9 @@
   "engines": {
     "node": ">=18"
   },
+  "dependencies": {
+    "jsonwebtoken": "latest"
+  },
   "devDependencies": {
     "vercel": "^56.3.2"
   }
