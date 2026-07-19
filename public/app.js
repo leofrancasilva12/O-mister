@@ -379,7 +379,7 @@ settingsModal.addEventListener("click", (e) => {
   if (e.target === settingsModal) closeSettings();
 });
 
-settingsSaveBtn.addEventListener("click", () => {
+settingsSaveBtn.addEventListener("click", async () => {
   // Salva perfil
   const profile = {
     name: profileNameInput.value.trim(),
@@ -388,6 +388,15 @@ settingsSaveBtn.addEventListener("click", () => {
   };
   const key = getProfileKey();
   localStorage.setItem(key, JSON.stringify(profile));
+
+  // Salva na nuvem se logado
+  if (useCloud && user) {
+    try {
+      await OMISTER.cloudSaveProfile(user.id, profile);
+    } catch (e) {
+      console.error("Erro ao salvar perfil na nuvem:", e);
+    }
+  }
 
   // Atualiza UI com novo perfil
   updateProfileUI();
@@ -431,6 +440,16 @@ async function initAuth() {
 
   user = data.session.user;
   useCloud = true;
+
+  // Carrega perfil da nuvem
+  try {
+    const cloudProfile = await OMISTER.cloudLoadProfile(user.id);
+    const key = getProfileKey();
+    localStorage.setItem(key, JSON.stringify(cloudProfile));
+  } catch (e) {
+    console.error("Erro ao carregar perfil da nuvem:", e);
+  }
+
   updateProfileUI(); // Recarrega perfil com a chave correta do usuário
 
   sidebarProfileEmail.textContent = user.email || "Conectado";

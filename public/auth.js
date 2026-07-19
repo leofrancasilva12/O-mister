@@ -111,5 +111,32 @@
           if (res.error) throw res.error;
         });
     },
+
+    cloudLoadProfile: function (userId) {
+      return getClient()
+        .then(function (c) {
+          return c.from("user_profiles").select("*").eq("user_id", userId).single();
+        })
+        .then(function (res) {
+          if (res.error && res.status !== 406) throw res.error; // 406 = não encontrado
+          return res.data || { name: "", company: "", photo: "" };
+        });
+    },
+
+    cloudSaveProfile: function (userId, profile) {
+      return getClient()
+        .then(function (c) {
+          return c.from("user_profiles").upsert({
+            user_id: userId,
+            name: profile.name || "",
+            company: profile.company || "",
+            photo: profile.photo || "",
+            updated_at: new Date().toISOString(),
+          });
+        })
+        .then(function (res) {
+          if (res.error) throw res.error;
+        });
+    },
   };
 })();
