@@ -1077,6 +1077,8 @@ html, body {
   padding: 12px 16px;
   box-shadow: 0 -2px 8px rgba(0,0,0,0.08);
   z-index: 100;
+  display: flex;
+  justify-content: center;
 }
 
 .audio-controls {
@@ -1084,7 +1086,8 @@ html, body {
   align-items: center;
   gap: 12px;
   max-width: 680px;
-  margin: 0 auto;
+  width: 100%;
+  flex-wrap: wrap;
 }
 
 .audio-btn {
@@ -1171,6 +1174,46 @@ html, body {
   font-size: 12px;
   cursor: pointer;
   font-family: inherit;
+}
+
+/* Mobile — player responsivo */
+@media (max-width: 640px) {
+  .audio-player {
+    padding: 10px 12px;
+    bottom: auto;
+    top: auto;
+    position: fixed;
+    bottom: 0;
+  }
+
+  .audio-controls {
+    gap: 8px;
+    flex-direction: column;
+  }
+
+  .audio-progress-container {
+    width: 100%;
+    flex-direction: column;
+  }
+
+  .audio-progress {
+    width: 100%;
+  }
+
+  .audio-time,
+  .audio-duration {
+    align-self: flex-start;
+  }
+
+  .audio-speed {
+    width: 100%;
+    padding: 8px 12px;
+  }
+
+  #audio-close-btn {
+    width: 100%;
+    justify-self: flex-end;
+  }
 }
 
 /* Configurações */
