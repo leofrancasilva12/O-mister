@@ -542,6 +542,11 @@ let redirected = false;
 async function initAuth() {
   if (!OMISTER.isConfigured) return; // modo local: sem login
 
+  // Limpa tokens da URL (OAuth redirect)
+  if (window.location.hash) {
+    window.history.replaceState(null, "", window.location.pathname + window.location.search);
+  }
+
   const { data } = await OMISTER.auth.getSession();
   if (!data.session) {
     redirected = true;
