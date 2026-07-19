@@ -299,6 +299,9 @@ const modalOverlay = document.getElementById("modal-overlay");
 const modalText = document.getElementById("modal-text");
 const modalCancel = document.getElementById("modal-cancel");
 const modalConfirm = document.getElementById("modal-confirm");
+const welcomeModal = document.getElementById("welcome-modal");
+const welcomeName = document.getElementById("welcome-name");
+const welcomeCloseBtn = document.getElementById("welcome-close");
 
 let modalCallback = null;
 
@@ -389,9 +392,6 @@ welcomeModal.addEventListener("click", (e) => {
 });
 
 const settingsDeleteAccountBtn = document.getElementById("settings-delete-account");
-const welcomeModal = document.getElementById("welcome-modal");
-const welcomeName = document.getElementById("welcome-name");
-const welcomeCloseBtn = document.getElementById("welcome-close");
 
 settingsBtn?.addEventListener("click", openSettings);
 settingsCloseBtn.addEventListener("click", closeSettings);
