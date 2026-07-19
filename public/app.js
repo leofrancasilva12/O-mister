@@ -571,6 +571,7 @@ async function initAuth() {
             updateProfileUI();
             sidebarProfileEmail.textContent = user.email || "Conectado";
             accountEl.hidden = false;
+            console.log("Account element shown", accountEl);
 
             // Se não tem perfil, abre modal
             const finalProfile = JSON.parse(localStorage.getItem(key) || "{}");
