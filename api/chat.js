@@ -48,6 +48,12 @@ function verifyToken(token) {
 }
 
 export default async function handler(req, res) {
+  console.log("[CHAT] Requisição recebida:", {
+    method: req.method,
+    url: req.url,
+    hasAuth: !!req.headers.authorization,
+  });
+
   try {
     // CORS: aceita apenas requisições do mesmo origin
     const origin = req.headers.origin || "";
@@ -98,14 +104,21 @@ export default async function handler(req, res) {
     });
   }
 
+  console.log("[CHAT] Validações passadas, processando body...");
+
   const apiKey = process.env.OPENROUTER_API_KEY;
   if (!apiKey) {
+    console.error("[CHAT] ERRO: OPENROUTER_API_KEY não configurada");
     return res.status(500).json({
       error: "OPENROUTER_API_KEY não configurada no ambiente.",
     });
   }
 
   const { messages, userName } = req.body || {};
+  console.log("[CHAT] Body recebido:", {
+    messagesCount: messages?.length,
+    hasUserName: !!userName,
+  });
 
   if (!Array.isArray(messages) || messages.length === 0) {
     return res.status(400).json({ error: "Envie ao menos uma mensagem." });
@@ -165,6 +178,10 @@ export default async function handler(req, res) {
   });
 
   try {
+    console.log("[CHAT] Construindo system prompt...");
+    const systemPrompt = buildSystemPrompt();
+    console.log("[CHAT] System prompt construído, chamando OpenRouter...");
+
     const upstream = await fetch("https://openrouter.ai/api/v1/chat/completions", {
       method: "POST",
       headers: {
@@ -181,7 +198,7 @@ export default async function handler(req, res) {
         messages: [
           {
             role: "system",
-            content: buildSystemPrompt() + (sanitizedUserName ? `\n\nO usuário se chama ${sanitizedUserName}. Use seu nome ocasionalmente para personalizar as respostas.` : "")
+            content: systemPrompt + (sanitizedUserName ? `\n\nO usuário se chama ${sanitizedUserName}. Use seu nome ocasionalmente para personalizar as respostas.` : "")
           },
           ...history,
         ],
