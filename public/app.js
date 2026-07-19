@@ -16,6 +16,8 @@ let streamAbort = null; // controlar cancelamento de streaming
 let currentAudio = null; // controlar áudio sendo tocado
 let isListening = false; // controlar status da gravação
 let recognition = null; // Web Speech API
+let audioPlayerElement = null; // elemento de áudio
+let audioPlayerVisible = false; // estado do player
 
 /* =========================================================
    STT (Speech-to-Text) — Gravação de voz
@@ -73,6 +75,67 @@ voiceBtn.addEventListener("click", (e) => {
 });
 
 /* =========================================================
+   Audio Player Customizado
+   ========================================================= */
+function initAudioPlayer() {
+  const player = document.getElementById("audio-player");
+  const audioEl = document.getElementById("audio-element");
+  const playBtn = document.getElementById("audio-play-btn");
+  const progressBar = document.getElementById("audio-progress");
+  const timeEl = document.querySelector(".audio-time");
+  const durationEl = document.querySelector(".audio-duration");
+  const speedSelect = document.getElementById("audio-speed");
+  const closeBtn = document.getElementById("audio-close-btn");
+
+  audioPlayerElement = audioEl;
+
+  function formatTime(seconds) {
+    if (!seconds || isNaN(seconds)) return "0:00";
+    const mins = Math.floor(seconds / 60);
+    const secs = Math.floor(seconds % 60);
+    return `${mins}:${secs.toString().padStart(2, "0")}`;
+  }
+
+  playBtn.addEventListener("click", () => {
+    if (audioEl.paused) {
+      audioEl.play();
+      playBtn.innerHTML = '<svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><rect x="6" y="4" width="4" height="16"/><rect x="14" y="4" width="4" height="16"/></svg>';
+    } else {
+      audioEl.pause();
+      playBtn.innerHTML = '<svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><polygon points="5 3 19 12 5 21 5 3"/></svg>';
+    }
+  });
+
+  audioEl.addEventListener("timeupdate", () => {
+    progressBar.value = (audioEl.currentTime / audioEl.duration) * 100 || 0;
+    timeEl.textContent = formatTime(audioEl.currentTime);
+  });
+
+  audioEl.addEventListener("loadedmetadata", () => {
+    durationEl.textContent = formatTime(audioEl.duration);
+  });
+
+  audioEl.addEventListener("ended", () => {
+    playBtn.innerHTML = '<svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><polygon points="5 3 19 12 5 21 5 3"/></svg>';
+  });
+
+  progressBar.addEventListener("input", () => {
+    audioEl.currentTime = (progressBar.value / 100) * audioEl.duration;
+  });
+
+  speedSelect.addEventListener("change", () => {
+    audioEl.playbackRate = parseFloat(speedSelect.value);
+  });
+
+  closeBtn.addEventListener("click", () => {
+    audioEl.pause();
+    audioEl.src = "";
+    player.hidden = true;
+    audioPlayerVisible = false;
+  });
+}
+
+/* =========================================================
    TTS (Text-to-Speech) com ElevenLabs
    ========================================================= */
 async function speakWithElevenLabs(text) {
@@ -116,9 +179,18 @@ async function speakWithElevenLabs(text) {
       currentAudio = null;
     }
 
-    // Toca o novo áudio
-    currentAudio = new Audio(audioUrl);
-    currentAudio.play();
+    // Mostra player
+    const player = document.getElementById("audio-player");
+    const playBtn = document.getElementById("audio-play-btn");
+    player.hidden = false;
+    audioPlayerVisible = true;
+
+    // Carrega no player customizado
+    if (audioPlayerElement) {
+      audioPlayerElement.src = audioUrl;
+      audioPlayerElement.play();
+      playBtn.innerHTML = '<svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><rect x="6" y="4" width="4" height="16"/><rect x="14" y="4" width="4" height="16"/></svg>';
+    }
   } catch (err) {
     alert("Erro ao gerar áudio: " + err.message);
   }
@@ -1078,6 +1150,8 @@ async function sendMessage(rawText) {
    Inicialização
    ========================================================= */
 (async function init() {
+  initAudioPlayer();
+
   await initAuth();
   if (redirected) return; // indo para a tela de login
 
