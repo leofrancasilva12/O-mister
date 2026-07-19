@@ -48,35 +48,28 @@ function verifyToken(token) {
 }
 
 export default async function handler(req, res) {
-  console.log("[CHAT] Requisição recebida:", {
-    method: req.method,
-    url: req.url,
-    hasAuth: !!req.headers.authorization,
-  });
+  // CORS: aceita apenas requisições do mesmo origin
+  const origin = req.headers.origin || "";
+  const allowedOrigins = [
+    "https://mister-intelligence.vercel.app",
+    "http://localhost:3000",
+    "http://localhost:5173",
+  ];
 
-  try {
-    // CORS: aceita apenas requisições do mesmo origin
-    const origin = req.headers.origin || "";
-    const allowedOrigins = [
-      "https://mister-intelligence.vercel.app",
-      "http://localhost:3000",
-      "http://localhost:5173",
-    ];
+  if (allowedOrigins.includes(origin)) {
+    res.setHeader("Access-Control-Allow-Origin", origin);
+    res.setHeader("Access-Control-Allow-Methods", "POST, OPTIONS");
+    res.setHeader("Access-Control-Allow-Headers", "Content-Type, Authorization");
+    res.setHeader("Access-Control-Max-Age", "3600");
+  }
 
-    if (allowedOrigins.includes(origin)) {
-      res.setHeader("Access-Control-Allow-Origin", origin);
-      res.setHeader("Access-Control-Allow-Methods", "POST, OPTIONS");
-      res.setHeader("Access-Control-Allow-Headers", "Content-Type, Authorization");
-      res.setHeader("Access-Control-Max-Age", "3600");
-    }
+  if (req.method === "OPTIONS") {
+    return res.status(200).end();
+  }
 
-    if (req.method === "OPTIONS") {
-      return res.status(200).end();
-    }
-
-    if (req.method !== "POST") {
-      return res.status(405).json({ error: "Método não permitido." });
-    }
+  if (req.method !== "POST") {
+    return res.status(405).json({ error: "Método não permitido." });
+  }
 
   const authHeader = req.headers.authorization || "";
   const token = authHeader.startsWith("Bearer ") ? authHeader.slice(7) : null;
@@ -104,21 +97,14 @@ export default async function handler(req, res) {
     });
   }
 
-  console.log("[CHAT] Validações passadas, processando body...");
-
   const apiKey = process.env.OPENROUTER_API_KEY;
   if (!apiKey) {
-    console.error("[CHAT] ERRO: OPENROUTER_API_KEY não configurada");
     return res.status(500).json({
       error: "OPENROUTER_API_KEY não configurada no ambiente.",
     });
   }
 
   const { messages, userName } = req.body || {};
-  console.log("[CHAT] Body recebido:", {
-    messagesCount: messages?.length,
-    hasUserName: !!userName,
-  });
 
   if (!Array.isArray(messages) || messages.length === 0) {
     return res.status(400).json({ error: "Envie ao menos uma mensagem." });
@@ -178,10 +164,6 @@ export default async function handler(req, res) {
   });
 
   try {
-    console.log("[CHAT] Construindo system prompt...");
-    const systemPrompt = buildSystemPrompt();
-    console.log("[CHAT] System prompt construído, chamando OpenRouter...");
-
     const upstream = await fetch("https://openrouter.ai/api/v1/chat/completions", {
       method: "POST",
       headers: {
@@ -198,7 +180,7 @@ export default async function handler(req, res) {
         messages: [
           {
             role: "system",
-            content: systemPrompt + (sanitizedUserName ? `\n\nO usuário se chama ${sanitizedUserName}. Use seu nome ocasionalmente para personalizar as respostas.` : "")
+            content: buildSystemPrompt() + (sanitizedUserName ? `\n\nO usuário se chama ${sanitizedUserName}. Use seu nome ocasionalmente para personalizar as respostas.` : "")
           },
           ...history,
         ],
@@ -255,16 +237,9 @@ export default async function handler(req, res) {
     res.write("data: [DONE]\n\n");
     res.end();
   } catch (err) {
-    console.error("ERRO NO /api/chat:", {
-      message: err.message,
-      stack: err.stack,
-      name: err.name
-    });
+    console.error("Falha no endpoint de chat:", err);
     if (!res.headersSent) {
-      return res.status(500).json({
-        error: "Não foi possível gerar a resposta.",
-        debug: err.message
-      });
+      res.status(500).json({ error: "Não foi possível gerar a resposta." });
     } else {
       res.end();
     }
