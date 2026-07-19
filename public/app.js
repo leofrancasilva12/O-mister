@@ -221,7 +221,13 @@ async function saveChat(chat) {
 async function loadChats() {
   if (useCloud) {
     try {
-      return await OMISTER.cloudList();
+      console.log("📥 Carregando chats da nuvem...");
+      const cloudChats = await OMISTER.cloudList();
+      console.log("   Carregou", cloudChats.length, "conversas");
+      cloudChats.forEach(c => {
+        console.log("   -", c.title, "com", c.messages.length, "mensagens");
+      });
+      return cloudChats;
     } catch (e) {
       console.error("Supabase list:", e);
       return [];
@@ -847,12 +853,14 @@ function createAssistantMessage(messageIndex = null) {
         "Esta ação não pode ser desfeita.",
         "Deletar",
         async () => {
-          console.log("Deletando mensagem de chat:", chat.id, "índice:", messageIndex);
+          console.log("🗑️ Deletando mensagem de chat:", chat.id, "índice:", messageIndex);
+          console.log("   Mensagens ANTES:", chat.messages.length);
           chat.messages.splice(messageIndex, 1);
+          console.log("   Mensagens DEPOIS:", chat.messages.length);
           chat.updatedAt = Date.now();
-          console.log("Salvando chat na nuvem:", chat);
+          console.log("   Salvando no Supabase...");
           await saveChat(chat);
-          console.log("Chat salvo com sucesso");
+          console.log("✅ Chat salvo com sucesso, re-renderizando");
           renderMessages();
         }
       );
