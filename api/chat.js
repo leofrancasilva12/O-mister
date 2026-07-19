@@ -85,17 +85,18 @@ export default async function handler(req, res) {
   let userId = null;
 
   if (token) {
-    // Se há secret configurado, valida token
+    // Tenta validar token se secret está configurado
     if (SUPABASE_JWT_SECRET) {
       const decoded = verifyToken(token);
-      if (!decoded) {
-        return res.status(401).json({ error: "Token inválido ou expirado." });
+      if (decoded) {
+        userId = decoded.sub;
+      } else {
+        console.warn("[CHAT] Token validation falhou, mas continuando sem userId");
+        // Continua sem erro - userid fica null
       }
-      userId = decoded.sub;
     }
-    // Se não há secret, aceita qualquer token (fallback para desenvolvimento)
   } else {
-    console.log("Requisição sem token de autenticação");
+    console.log("[CHAT] Sem token na requisição");
   }
 
   // Verifica rate limit
