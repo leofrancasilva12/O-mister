@@ -26,11 +26,10 @@
   }
 
   // Monitora mudanças de autenticação (inclui OAuth redirect)
-  var unsubscribe = OMISTER.auth.onAuthStateChange(function (event, session) {
+  OMISTER.auth.onAuthStateChange(function (event, session) {
     console.log("Auth state changed:", event, session);
     if (session) {
       console.log("Sessão criada! Entrando no app...");
-      unsubscribe(); // Para de escutar
       window.location.replace("index.html");
     }
   });
