@@ -46,17 +46,10 @@
     <div class="chats-section">
       <div class="chats-header">
         <p class="kb-label">Conversas</p>
-        <button id="select-chats-btn" class="chats-select-toggle" type="button">Selecionar</button>
-      </div>
-      <div id="select-bar" class="select-bar" hidden>
-        <label class="select-all-label">
-          <input type="checkbox" id="select-all-checkbox">
-          <span>Todas</span>
-        </label>
-        <div class="select-bar-actions">
-          <button id="select-delete-btn" class="select-delete-btn" type="button" disabled>Excluir (0)</button>
-          <button id="select-cancel-btn" class="select-cancel-btn" type="button">Cancelar</button>
-        </div>
+        <button id="manage-chats-btn" class="chats-manage-btn" type="button" title="Gerenciar conversas">
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="8" y1="6" x2="21" y2="6"/><line x1="8" y1="12" x2="21" y2="12"/><line x1="8" y1="18" x2="21" y2="18"/><line x1="3" y1="6" x2="3.01" y2="6"/><line x1="3" y1="12" x2="3.01" y2="12"/><line x1="3" y1="18" x2="3.01" y2="18"/></svg>
+          Gerenciar
+        </button>
       </div>
       <div id="chat-list"></div>
     </div>
@@ -224,6 +217,32 @@
       <button id="settings-close" class="modal-btn modal-cancel" type="button">Cancelar</button>
       <button id="settings-delete-account" class="modal-btn modal-danger" type="button">Deletar Conta</button>
       <button id="settings-save" class="modal-btn" type="button">Salvar</button>
+    </div>
+  </div>
+</div>
+
+<div id="conversations-modal" class="modal-overlay" hidden>
+  <div class="modal conversations-card" role="dialog" aria-modal="true" aria-labelledby="conversations-title">
+    <div class="conversations-head">
+      <h2 id="conversations-title" class="modal-title">Suas conversas</h2>
+      <button id="conversations-close-x" class="conversations-close-x" type="button" aria-label="Fechar">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+      </button>
+    </div>
+
+    <div class="conversations-toolbar">
+      <label class="conversations-selectall">
+        <input type="checkbox" id="conversations-select-all">
+        <span>Selecionar todas</span>
+      </label>
+      <span id="conversations-count" class="conversations-count">0 selecionadas</span>
+    </div>
+
+    <div id="conversations-list" class="conversations-list"></div>
+
+    <div class="modal-actions conversations-actions">
+      <button id="conversations-share" class="modal-btn modal-cancel" type="button" disabled>Compartilhar</button>
+      <button id="conversations-delete" class="modal-btn modal-danger" type="button" disabled>Excluir (0)</button>
     </div>
   </div>
 </div>

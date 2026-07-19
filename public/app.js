@@ -18,8 +18,7 @@ let isListening = false; // controlar status da gravação
 let recognition = null; // Web Speech API
 let audioPlayerElement = null; // elemento de áudio
 let audioPlayerVisible = false; // estado do player
-let selectionMode = false; // modo de seleção de conversas
-let selectedChatIds = new Set(); // ids das conversas selecionadas
+let selectedChatIds = new Set(); // ids das conversas selecionadas no gerenciador
 
 /* =========================================================
    STT (Speech-to-Text) — Gravação de voz
@@ -268,11 +267,14 @@ const collapseBtn = document.getElementById("collapse-sidebar");
 const openRailBtn = document.getElementById("open-rail");
 const newChatBtn = document.getElementById("new-chat");
 const chatListEl = document.getElementById("chat-list");
-const selectChatsBtn = document.getElementById("select-chats-btn");
-const selectBar = document.getElementById("select-bar");
-const selectAllCheckbox = document.getElementById("select-all-checkbox");
-const selectDeleteBtn = document.getElementById("select-delete-btn");
-const selectCancelBtn = document.getElementById("select-cancel-btn");
+const manageChatsBtn = document.getElementById("manage-chats-btn");
+const conversationsModal = document.getElementById("conversations-modal");
+const conversationsCloseX = document.getElementById("conversations-close-x");
+const conversationsList = document.getElementById("conversations-list");
+const conversationsSelectAll = document.getElementById("conversations-select-all");
+const conversationsCount = document.getElementById("conversations-count");
+const conversationsShareBtn = document.getElementById("conversations-share");
+const conversationsDeleteBtn = document.getElementById("conversations-delete");
 const emptyState = document.getElementById("empty-state");
 const messagesEl = document.getElementById("messages");
 const chatScroll = document.getElementById("chat-scroll");
@@ -360,6 +362,7 @@ modalConfirm.addEventListener("click", () => {
 document.addEventListener("keydown", (e) => {
   if (e.key === "Escape" && !modalOverlay.hidden) closeModal();
   if (e.key === "Escape" && !settingsModal.hidden) closeSettings();
+  if (e.key === "Escape" && !conversationsModal.hidden) closeConversationsModal();
 });
 
 /* =========================================================
@@ -677,52 +680,33 @@ function renderChatList() {
     hint.className = "chat-empty-hint";
     hint.textContent = "Nenhuma conversa ainda.";
     chatListEl.appendChild(hint);
-    selectChatsBtn.style.display = "none";
+    manageChatsBtn.style.display = "none";
     return;
   }
-  selectChatsBtn.style.display = "";
+  manageChatsBtn.style.display = "";
 
   for (const chat of sorted) {
     const item = document.createElement("div");
     item.className = "chat-item" + (chat.id === activeId ? " active" : "");
-    if (selectionMode) item.classList.add("selecting");
     item.title = chatTitle(chat);
-
-    // Checkbox (só aparece no modo seleção)
-    if (selectionMode) {
-      const checkbox = document.createElement("input");
-      checkbox.type = "checkbox";
-      checkbox.className = "chat-checkbox";
-      checkbox.checked = selectedChatIds.has(chat.id);
-      checkbox.addEventListener("click", (e) => {
-        e.stopPropagation();
-        toggleChatSelection(chat.id);
-      });
-      item.appendChild(checkbox);
-    }
 
     const title = document.createElement("span");
     title.className = "chat-item-title";
     title.textContent = chatTitle(chat);
     item.appendChild(title);
 
-    if (!selectionMode) {
-      const del = document.createElement("button");
-      del.className = "chat-del";
-      del.setAttribute("aria-label", "Excluir conversa");
-      del.innerHTML =
-        '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="3 6 5 6 21 6"/><path d="M19 6l-1 14a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2L5 6"/><line x1="10" y1="11" x2="10" y2="17"/><line x1="14" y1="11" x2="14" y2="17"/></svg>';
-      del.addEventListener("click", (e) => {
-        e.stopPropagation();
-        deleteChat(chat.id);
-      });
-      item.appendChild(del);
-    }
-
-    item.addEventListener("click", () => {
-      if (selectionMode) toggleChatSelection(chat.id);
-      else selectChat(chat.id);
+    const del = document.createElement("button");
+    del.className = "chat-del";
+    del.setAttribute("aria-label", "Excluir conversa");
+    del.innerHTML =
+      '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="3 6 5 6 21 6"/><path d="M19 6l-1 14a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2L5 6"/><line x1="10" y1="11" x2="10" y2="17"/><line x1="14" y1="11" x2="14" y2="17"/></svg>';
+    del.addEventListener("click", (e) => {
+      e.stopPropagation();
+      deleteChat(chat.id);
     });
+    item.appendChild(del);
+
+    item.addEventListener("click", () => selectChat(chat.id));
     chatListEl.appendChild(item);
   }
 }
@@ -768,57 +752,120 @@ async function deleteChat(id) {
 }
 
 /* =========================================================
-   Seleção múltipla de conversas (estilo Claude)
+   Gerenciador de conversas (modal): selecionar, excluir, compartilhar
    ========================================================= */
-function enterSelectionMode() {
-  selectionMode = true;
+function openConversationsModal() {
   selectedChatIds.clear();
-  selectBar.hidden = false;
-  selectChatsBtn.textContent = "Concluir";
-  updateSelectionUI();
-  renderChatList();
+  renderConversationsModal();
+  conversationsModal.hidden = false;
 }
 
-function exitSelectionMode() {
-  selectionMode = false;
+function closeConversationsModal() {
+  conversationsModal.hidden = true;
   selectedChatIds.clear();
-  selectBar.hidden = true;
-  selectChatsBtn.textContent = "Selecionar";
-  renderChatList();
 }
 
-function toggleChatSelection(id) {
-  if (selectedChatIds.has(id)) selectedChatIds.delete(id);
-  else selectedChatIds.add(id);
-  updateSelectionUI();
-  renderChatList();
+function renderConversationsModal() {
+  conversationsList.innerHTML = "";
+  const sorted = [...chats].sort((a, b) => (b.updatedAt || 0) - (a.updatedAt || 0));
+
+  if (!sorted.length) {
+    const empty = document.createElement("p");
+    empty.className = "conversations-empty";
+    empty.textContent = "Você ainda não tem conversas.";
+    conversationsList.appendChild(empty);
+  }
+
+  for (const chat of sorted) {
+    const row = document.createElement("label");
+    row.className = "conversations-row";
+
+    const checkbox = document.createElement("input");
+    checkbox.type = "checkbox";
+    checkbox.className = "conversations-checkbox";
+    checkbox.checked = selectedChatIds.has(chat.id);
+    checkbox.addEventListener("change", () => {
+      if (checkbox.checked) selectedChatIds.add(chat.id);
+      else selectedChatIds.delete(chat.id);
+      updateConversationsUI();
+    });
+    row.appendChild(checkbox);
+
+    const info = document.createElement("div");
+    info.className = "conversations-row-info";
+
+    const title = document.createElement("div");
+    title.className = "conversations-row-title";
+    title.textContent = chatTitle(chat);
+    info.appendChild(title);
+
+    const meta = document.createElement("div");
+    meta.className = "conversations-row-meta";
+    const count = chat.messages ? chat.messages.length : 0;
+    meta.textContent = `${count} ${count === 1 ? "mensagem" : "mensagens"} · ${formatChatDate(chat.updatedAt)}`;
+    info.appendChild(meta);
+
+    row.appendChild(info);
+    conversationsList.appendChild(row);
+  }
+
+  updateConversationsUI();
 }
 
-function updateSelectionUI() {
+function formatChatDate(ts) {
+  if (!ts) return "";
+  const d = new Date(ts);
+  return d.toLocaleDateString("pt-BR", { day: "2-digit", month: "short" });
+}
+
+function updateConversationsUI() {
   const count = selectedChatIds.size;
-  selectDeleteBtn.textContent = `Excluir (${count})`;
-  selectDeleteBtn.disabled = count === 0;
-  selectAllCheckbox.checked = count > 0 && count === chats.length;
+  conversationsCount.textContent =
+    count === 0 ? "Nenhuma selecionada" : `${count} ${count === 1 ? "selecionada" : "selecionadas"}`;
+  conversationsDeleteBtn.textContent = `Excluir (${count})`;
+  conversationsDeleteBtn.disabled = count === 0;
+  conversationsShareBtn.disabled = count === 0;
+  conversationsSelectAll.checked = count > 0 && count === chats.length;
 }
 
-selectChatsBtn.addEventListener("click", () => {
-  if (selectionMode) exitSelectionMode();
-  else enterSelectionMode();
+function buildShareTextFromChats(ids) {
+  const parts = [];
+  const sorted = [...chats].sort((a, b) => (b.updatedAt || 0) - (a.updatedAt || 0));
+  for (const chat of sorted) {
+    if (!ids.has(chat.id)) continue;
+    parts.push(`*${chatTitle(chat)}*`);
+    for (const m of chat.messages || []) {
+      const who = m.role === "user" ? "Você" : "Mister";
+      const text = typeof m.content === "string" ? m.content : "[conteúdo]";
+      parts.push(`${who}: ${text}`);
+    }
+    parts.push(""); // linha em branco entre conversas
+  }
+  return parts.join("\n").trim();
+}
+
+manageChatsBtn.addEventListener("click", openConversationsModal);
+conversationsCloseX.addEventListener("click", closeConversationsModal);
+conversationsModal.addEventListener("click", (e) => {
+  if (e.target === conversationsModal) closeConversationsModal();
 });
 
-selectCancelBtn.addEventListener("click", exitSelectionMode);
-
-selectAllCheckbox.addEventListener("change", () => {
-  if (selectAllCheckbox.checked) {
+conversationsSelectAll.addEventListener("change", () => {
+  if (conversationsSelectAll.checked) {
     chats.forEach((c) => selectedChatIds.add(c.id));
   } else {
     selectedChatIds.clear();
   }
-  updateSelectionUI();
-  renderChatList();
+  renderConversationsModal();
 });
 
-selectDeleteBtn.addEventListener("click", () => {
+conversationsShareBtn.addEventListener("click", () => {
+  if (selectedChatIds.size === 0) return;
+  const text = buildShareTextFromChats(selectedChatIds);
+  shareMessage(text);
+});
+
+conversationsDeleteBtn.addEventListener("click", () => {
   const count = selectedChatIds.size;
   if (count === 0) return;
 
@@ -843,8 +890,12 @@ selectDeleteBtn.addEventListener("click", () => {
       }
       persistActive();
 
-      exitSelectionMode();
+      selectedChatIds.clear();
+      renderChatList();
       renderMessages();
+      // Se ainda há conversas, atualiza o modal; senão fecha
+      if (chats.length) renderConversationsModal();
+      else closeConversationsModal();
     }
   );
 });
