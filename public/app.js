@@ -255,8 +255,7 @@ const uploadBtn = document.getElementById("upload-btn");
 const imagePreview = document.getElementById("image-preview");
 const pdfInput = document.getElementById("pdf-input");
 const pdfBtn = document.getElementById("pdf-btn");
-const settingsBtn = document.getElementById("settings-btn") || document.getElementById("settings-btn-top");
-const settingsBtnTop = document.getElementById("settings-btn-top");
+const settingsBtn = document.getElementById("settings-btn");
 const settingsModal = document.getElementById("settings-modal");
 const settingsCloseBtn = document.getElementById("settings-close");
 const settingsSaveBtn = document.getElementById("settings-save");
@@ -373,7 +372,6 @@ function closeSettings() {
 }
 
 settingsBtn?.addEventListener("click", openSettings);
-settingsBtnTop?.addEventListener("click", openSettings);
 settingsCloseBtn.addEventListener("click", closeSettings);
 settingsModal.addEventListener("click", (e) => {
   if (e.target === settingsModal) closeSettings();
@@ -441,11 +439,16 @@ async function initAuth() {
   user = data.session.user;
   useCloud = true;
 
-  // Carrega perfil da nuvem
+  // Carrega perfil da nuvem (sempre recarrega para garantir sincronização)
+  let profileLoaded = false;
   try {
     const cloudProfile = await OMISTER.cloudLoadProfile(user.id);
     const key = getProfileKey();
-    localStorage.setItem(key, JSON.stringify(cloudProfile));
+    // Se tem nome, então tem perfil salvo
+    if (cloudProfile && cloudProfile.name) {
+      localStorage.setItem(key, JSON.stringify(cloudProfile));
+      profileLoaded = true;
+    }
   } catch (e) {
     console.error("Erro ao carregar perfil da nuvem:", e);
   }
@@ -454,6 +457,11 @@ async function initAuth() {
 
   sidebarProfileEmail.textContent = user.email || "Conectado";
   accountEl.hidden = false;
+
+  // Se não tem perfil, abre modal para configurar
+  if (!profileLoaded) {
+    setTimeout(() => openSettings(), 800); // Aguarda um pouco pra não conflitar com outras modais
+  }
   logoutBtn.addEventListener("click", async () => {
     await OMISTER.auth.signOut();
     window.location.replace("login.html");
