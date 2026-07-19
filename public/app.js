@@ -77,11 +77,11 @@ voiceBtn.addEventListener("click", (e) => {
    ========================================================= */
 async function speakWithElevenLabs(text) {
   const cfg = window.OMISTER_CONFIG || {};
-  // Tenta: config.js → window vars (env-loader) → localStorage
-  let apiKey = cfg.ELEVENLABS_API_KEY || window.ELEVENLABS_API_KEY || localStorage.getItem("elevenlabs_key");
+  // Tenta: Vercel env var → config.js → localStorage
+  let apiKey = window.ELEVENLABS_API_KEY || cfg.ELEVENLABS_API_KEY || localStorage.getItem("elevenlabs_key");
 
   if (!apiKey) {
-    alert("Configure ElevenLabs primeiro. Clique no ⚙️ no canto superior direito.");
+    alert("Configure ElevenLabs no Vercel (env var ELEVENLABS_API_KEY)");
     return;
   }
 
