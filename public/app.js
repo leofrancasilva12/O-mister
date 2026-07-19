@@ -439,18 +439,21 @@ async function initAuth() {
   user = data.session.user;
   useCloud = true;
 
-  // Carrega perfil da nuvem (sempre recarrega para garantir sincronização)
-  let profileLoaded = false;
-  try {
-    const cloudProfile = await OMISTER.cloudLoadProfile(user.id);
-    const key = getProfileKey();
-    // Se tem nome, então tem perfil salvo
-    if (cloudProfile && cloudProfile.name) {
-      localStorage.setItem(key, JSON.stringify(cloudProfile));
-      profileLoaded = true;
+  // Verifica se já tem perfil no localStorage
+  const key = getProfileKey();
+  const localProfile = JSON.parse(localStorage.getItem(key) || "{}");
+  const hasLocalProfile = localProfile && localProfile.name;
+
+  // Carrega perfil da nuvem se não tiver local ou pra sincronizar
+  if (!hasLocalProfile) {
+    try {
+      const cloudProfile = await OMISTER.cloudLoadProfile(user.id);
+      if (cloudProfile && cloudProfile.name) {
+        localStorage.setItem(key, JSON.stringify(cloudProfile));
+      }
+    } catch (e) {
+      console.error("Erro ao carregar perfil da nuvem:", e);
     }
-  } catch (e) {
-    console.error("Erro ao carregar perfil da nuvem:", e);
   }
 
   updateProfileUI(); // Recarrega perfil com a chave correta do usuário
@@ -458,8 +461,9 @@ async function initAuth() {
   sidebarProfileEmail.textContent = user.email || "Conectado";
   accountEl.hidden = false;
 
-  // Se não tem perfil, abre modal para configurar
-  if (!profileLoaded) {
+  // Se não tem perfil em lugar nenhum, abre modal para configurar
+  const finalProfile = JSON.parse(localStorage.getItem(key) || "{}");
+  if (!finalProfile.name) {
     setTimeout(() => openSettings(), 800); // Aguarda um pouco pra não conflitar com outras modais
   }
   logoutBtn.addEventListener("click", async () => {
