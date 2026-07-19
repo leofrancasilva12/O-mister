@@ -76,7 +76,8 @@ voiceBtn.addEventListener("click", (e) => {
    TTS (Text-to-Speech) com ElevenLabs
    ========================================================= */
 async function speakWithElevenLabs(text) {
-  let apiKey = localStorage.getItem("elevenlabs_key");
+  const cfg = window.OMISTER_CONFIG || {};
+  let apiKey = cfg.ELEVENLABS_API_KEY || localStorage.getItem("elevenlabs_key");
 
   if (!apiKey) {
     alert("Configure ElevenLabs primeiro. Clique no ⚙️ no canto superior direito.");
@@ -983,6 +984,17 @@ async function sendMessage(rawText) {
    Inicialização
    ========================================================= */
 (async function init() {
+  // Verifica se precisa configurar ElevenLabs
+  const hasElevenLabsKey = localStorage.getItem("elevenlabs_key");
+  if (!hasElevenLabsKey && !localStorage.getItem("elevenlabs_warning_shown")) {
+    // Mostra aviso apenas uma vez
+    const msg = document.createElement("div");
+    msg.style.cssText = "background:#FFF9E6; border:1px solid #FFD700; color:#333; padding:8px 12px; margin:8px 16px; border-radius:6px; font-size:12px; line-height:1.4;";
+    msg.innerHTML = "💡 <strong>Dica:</strong> Clique em ⚙️ (canto superior esquerdo) e cole sua chave ElevenLabs para ouvir o Mister falar. <a href='https://elevenlabs.io/api/keys' target='_blank' style='color:#FF8C00; text-decoration:none;'>Pegue aqui →</a>";
+    document.querySelector("#input-area")?.insertBefore(msg, document.querySelector("#input-area").firstChild);
+    localStorage.setItem("elevenlabs_warning_shown", "1");
+  }
+
   await initAuth();
   if (redirected) return; // indo para a tela de login
 

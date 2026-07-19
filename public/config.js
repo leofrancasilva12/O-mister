@@ -13,5 +13,4 @@
 window.OMISTER_CONFIG = {
   SUPABASE_URL:"https://oqkfezeetxivwblavivj.supabase.co",
   SUPABASE_ANON_KEY:"sb_publishable_gxsPK8LDEJ2qhVANkACnSA_3bgw0OPg",
-  ELEVENLABS_API_KEY:"", // preencha no .env.local
 };
