@@ -908,6 +908,12 @@ html, body {
   justify-content: flex-end;
   gap: 10px;
 }
+
+/* Centraliza ações em modal simples (boas-vinda) */
+.welcome-card .modal-actions {
+  justify-content: center;
+}
+
 .modal-btn {
   padding: 8px 16px;
   border-radius: 9px;
