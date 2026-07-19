@@ -373,11 +373,61 @@ function closeSettings() {
   settingsModal.hidden = true;
 }
 
+const settingsDeleteAccountBtn = document.getElementById("settings-delete-account");
+
 settingsBtn?.addEventListener("click", openSettings);
 settingsCloseBtn.addEventListener("click", closeSettings);
 settingsModal.addEventListener("click", (e) => {
   if (e.target === settingsModal) closeSettings();
 });
+
+settingsDeleteAccountBtn.addEventListener("click", () => {
+  const confirmed = confirm("⚠️ ATENÇÃO: Tem certeza que quer deletar sua conta?\n\nEsta ação é IRREVERSÍVEL e vai apagar:\n- Seu perfil\n- Todas as conversas\n- Todos os dados\n\nClique em OK para continuar com a deleção.");
+
+  if (!confirmed) return;
+
+  const doubleConfirm = prompt("Digite DELETAR para confirmar a exclusão permanente da sua conta:");
+
+  if (doubleConfirm?.toUpperCase() !== "DELETAR") {
+    alert("Deleção cancelada. Sua conta foi mantida.");
+    return;
+  }
+
+  deleteAccount();
+});
+
+async function deleteAccount() {
+  try {
+    // Pega token de autenticação
+    const session = await OMISTER.auth.getSession();
+    const token = session?.data?.session?.access_token;
+
+    if (!token) {
+      alert("Erro: não foi possível autenticar.");
+      return;
+    }
+
+    // Chama API para deletar conta
+    const res = await fetch("/api/delete-account", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        "Authorization": `Bearer ${token}`,
+      },
+    });
+
+    if (!res.ok) {
+      const error = await res.json();
+      throw new Error(error.error || "Erro desconhecido");
+    }
+
+    // Faz logout
+    await OMISTER.auth.signOut();
+    window.location.replace("login.html");
+  } catch (err) {
+    alert("Erro ao deletar conta: " + err.message);
+  }
+}
 
 settingsSaveBtn.addEventListener("click", async () => {
   // Salva perfil
