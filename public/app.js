@@ -199,9 +199,16 @@ function saveLocal() {
 }
 
 // Salva um chat alterado (upsert na nuvem) ou tudo (local).
-function saveChat(chat) {
+async function saveChat(chat) {
   if (useCloud) {
-    if (chat) OMISTER.cloudUpsert(chat, user.id).catch((e) => console.error("Supabase:", e));
+    if (chat) {
+      try {
+        await OMISTER.cloudUpsert(chat, user.id);
+      } catch (e) {
+        console.error("Erro ao salvar na nuvem:", e);
+        alert("Erro ao salvar alterações. Tente novamente.");
+      }
+    }
   } else {
     saveLocal();
   }
@@ -836,10 +843,10 @@ function createAssistantMessage(messageIndex = null) {
         "Deletar mensagem?",
         "Esta ação não pode ser desfeita.",
         "Deletar",
-        () => {
+        async () => {
           chat.messages.splice(messageIndex, 1);
           chat.updatedAt = Date.now();
-          saveChat(chat);
+          await saveChat(chat);
           renderMessages();
         }
       );
@@ -1282,7 +1289,7 @@ async function sendMessage(rawText) {
   if (selectedPdf) userMsg.pdf = selectedPdf;
   chat.messages.push(userMsg);
   chat.updatedAt = Date.now();
-  saveChat(chat);
+  await saveChat(chat);
   renderChatList();
 
   input.value = "";
@@ -1406,7 +1413,7 @@ async function sendMessage(rawText) {
     if (answer.trim()) {
       chat.messages.push({ role: "assistant", content: answer });
       chat.updatedAt = Date.now();
-      saveChat(chat);
+      await saveChat(chat);
       renderChatList();
     } else {
       throw new Error("A resposta voltou vazia. Tente reformular a pergunta.");
@@ -1417,7 +1424,7 @@ async function sendMessage(rawText) {
       if (answer.trim()) {
         chat.messages.push({ role: "assistant", content: answer });
         chat.updatedAt = Date.now();
-        saveChat(chat);
+        await saveChat(chat);
         renderChatList();
       }
     } else {
