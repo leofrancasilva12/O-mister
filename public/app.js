@@ -1112,7 +1112,8 @@ async function sendMessage(rawText) {
     });
 
     // Pega nome do usuário para personalizar a resposta
-    const profile = JSON.parse(localStorage.getItem("user_profile") || "{}");
+    const key = getProfileKey();
+    const profile = JSON.parse(localStorage.getItem(key) || "{}");
     const userName = profile.name || "usuário";
 
     const res = await fetch("/api/chat", {
