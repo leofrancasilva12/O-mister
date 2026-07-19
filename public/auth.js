@@ -132,7 +132,7 @@
             company: profile.company || "",
             photo: profile.photo || "",
             updated_at: new Date().toISOString(),
-          });
+          }, { onConflict: "user_id" });
         })
         .then(function (res) {
           if (res.error) throw res.error;
