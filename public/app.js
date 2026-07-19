@@ -256,7 +256,8 @@ const uploadBtn = document.getElementById("upload-btn");
 const imagePreview = document.getElementById("image-preview");
 const pdfInput = document.getElementById("pdf-input");
 const pdfBtn = document.getElementById("pdf-btn");
-const settingsBtn = document.getElementById("settings-btn");
+const settingsBtn = document.getElementById("settings-btn") || document.getElementById("settings-btn-top");
+const settingsBtnTop = document.getElementById("settings-btn-top");
 const settingsModal = document.getElementById("settings-modal");
 const settingsCloseBtn = document.getElementById("settings-close");
 const settingsSaveBtn = document.getElementById("settings-save");
@@ -348,6 +349,7 @@ function closeSettings() {
 }
 
 settingsBtn?.addEventListener("click", openSettings);
+settingsBtnTop?.addEventListener("click", openSettings);
 settingsCloseBtn.addEventListener("click", closeSettings);
 settingsModal.addEventListener("click", (e) => {
   if (e.target === settingsModal) closeSettings();
