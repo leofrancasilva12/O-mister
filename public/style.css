@@ -1106,6 +1106,17 @@ html, body {
   background: var(--border);
 }
 
+#audio-close-btn {
+  width: 36px;
+  height: 36px;
+  background: var(--user-bubble);
+  color: var(--accent);
+}
+
+#audio-close-btn:hover {
+  background: #FFE8D1;
+}
+
 .audio-progress-container {
   display: flex;
   align-items: center;
