@@ -268,6 +268,9 @@ const profileCompanyInput = document.getElementById("profile-company-input");
 const mobileProfilePhoto = document.getElementById("mobile-profile-photo");
 const mobileProfileName = document.getElementById("mobile-profile-name");
 const mobileProfileCompany = document.getElementById("mobile-profile-company");
+const desktopProfilePhoto = document.getElementById("desktop-profile-photo");
+const desktopProfileName = document.getElementById("desktop-profile-name");
+const desktopProfileCompany = document.getElementById("desktop-profile-company");
 
 let selectedImage = null; // { data: base64, type: 'image/jpeg', name: 'file.jpg' }
 let selectedPdf = null; // { data: base64, name: 'file.pdf' }
@@ -331,16 +334,19 @@ document.addEventListener("keydown", (e) => {
    ========================================================= */
 function updateProfileUI() {
   const profile = JSON.parse(localStorage.getItem("user_profile") || "{}");
+  const name = profile.name || "O Mister";
+  const company = profile.company || "";
+  const photoHTML = profile.photo ? `<img src="${profile.photo}" alt="Perfil">` : '👤';
 
   // Atualiza header mobile
-  mobileProfileName.textContent = profile.name || "O Mister";
-  mobileProfileCompany.textContent = profile.company || "";
+  mobileProfileName.textContent = name;
+  mobileProfileCompany.textContent = company;
+  mobileProfilePhoto.innerHTML = photoHTML;
 
-  if (profile.photo) {
-    mobileProfilePhoto.innerHTML = `<img src="${profile.photo}" alt="Perfil">`;
-  } else {
-    mobileProfilePhoto.innerHTML = '👤';
-  }
+  // Atualiza desktop profile
+  desktopProfileName.textContent = name;
+  desktopProfileCompany.textContent = company;
+  desktopProfilePhoto.innerHTML = photoHTML;
 }
 
 function openSettings() {
@@ -381,8 +387,9 @@ settingsSaveBtn.addEventListener("click", () => {
   // Atualiza UI com novo perfil
   updateProfileUI();
 
-  alert("Configurações salvas!");
+  // Mostra modal "Perfil salvo"
   closeSettings();
+  showModal("Perfil salvo!", "Suas informações foram atualizadas com sucesso.", "Fechar");
 });
 
 // Upload de foto de perfil
