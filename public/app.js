@@ -1078,12 +1078,6 @@ async function sendMessage(rawText) {
    Inicialização
    ========================================================= */
 (async function init() {
-  // Setup ElevenLabs na primeira vez
-  if (!localStorage.getItem("elevenlabs_key")) {
-    openSettings();
-    elevenLabsInput.focus();
-  }
-
   await initAuth();
   if (redirected) return; // indo para a tela de login
 
