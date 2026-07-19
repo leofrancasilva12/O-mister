@@ -46,6 +46,64 @@
 
 * { box-sizing: border-box; }
 
+/* ================= Tela de splash (pós-login) ================= */
+.splash-screen {
+  position: fixed;
+  inset: 0;
+  z-index: 500;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--bg);
+  opacity: 1;
+  transition: opacity 0.5s ease;
+}
+.splash-screen.hiding { opacity: 0; }
+.splash-screen.gone { display: none; }
+.splash-inner {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 28px;
+  animation: splash-pop 0.5s ease;
+  padding: 24px;
+}
+.splash-img {
+  width: min(360px, 74vw);
+  height: auto;
+  object-fit: contain;
+}
+.splash-spinner {
+  width: 30px;
+  height: 30px;
+  border: 3px solid var(--border-hover);
+  border-top-color: var(--accent);
+  border-radius: 50%;
+  animation: splash-spin 0.8s linear infinite;
+}
+@keyframes splash-spin { to { transform: rotate(360deg); } }
+@keyframes splash-pop {
+  from { opacity: 0; transform: scale(0.96); }
+  to { opacity: 1; transform: scale(1); }
+}
+/* No tema escuro, a imagem tem fundo branco — damos um cartão claro */
+:root[data-theme="dark"] .splash-img {
+  background: #FFFFFF;
+  border-radius: 16px;
+  padding: 20px;
+}
+
+/* No tema escuro, os logos ganham fundo branco circular (a arte tem fundo claro) */
+:root[data-theme="dark"] .brand-logo,
+:root[data-theme="dark"] .empty-logo,
+:root[data-theme="dark"] .welcome-logo {
+  background: #FFFFFF;
+  border-radius: 50%;
+  padding: 6px;
+}
+:root[data-theme="dark"] .empty-logo { padding: 12px; }
+:root[data-theme="dark"] .welcome-logo { padding: 10px; }
+
 html, body {
   margin: 0;
   padding: 0;

@@ -1910,4 +1910,26 @@ function showChatListSkeleton() {
 
   renderMessages();
   updateSendState();
+
+  hideSplash();
 })();
+
+// Some com a tela de splash suavemente após o app carregar
+function hideSplash() {
+  const splash = document.getElementById("splash-screen");
+  if (!splash) return;
+  // Garante um tempo mínimo de exibição para a marca aparecer
+  setTimeout(() => {
+    splash.classList.add("hiding");
+    setTimeout(() => splash.classList.add("gone"), 500);
+  }, 1400);
+}
+
+// Failsafe: nunca deixa a splash travada mais de 6s
+setTimeout(() => {
+  const splash = document.getElementById("splash-screen");
+  if (splash && !splash.classList.contains("gone")) {
+    splash.classList.add("hiding");
+    setTimeout(() => splash.classList.add("gone"), 500);
+  }
+}, 6000);
