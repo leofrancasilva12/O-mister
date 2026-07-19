@@ -1105,10 +1105,17 @@ async function sendMessage(rawText) {
       return m;
     });
 
+    // Pega nome do usuário para personalizar a resposta
+    const profile = JSON.parse(localStorage.getItem("user_profile") || "{}");
+    const userName = profile.name || "usuário";
+
     const res = await fetch("/api/chat", {
       method: "POST",
       headers,
-      body: JSON.stringify({ messages: formattedMessages }),
+      body: JSON.stringify({
+        messages: formattedMessages,
+        userName: userName // Passa pra API personalizar resposta
+      }),
       signal: streamAbort.signal,
     });
 

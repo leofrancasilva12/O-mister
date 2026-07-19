@@ -30,7 +30,7 @@ export default async function handler(req, res) {
     });
   }
 
-  const { messages } = req.body || {};
+  const { messages, userName } = req.body || {};
   if (!Array.isArray(messages) || messages.length === 0) {
     return res.status(400).json({ error: "Envie ao menos uma mensagem." });
   }
@@ -70,7 +70,10 @@ export default async function handler(req, res) {
         max_tokens: 1024, // respostas concisas e diretas
         temperature: 0.3, // baixa: contexto técnico premia consistência
         messages: [
-          { role: "system", content: buildSystemPrompt() },
+          {
+            role: "system",
+            content: buildSystemPrompt() + (userName ? `\n\nO usuário se chama ${userName}. Use seu nome ocasionalmente para personalizar as respostas.` : "")
+          },
           ...history,
         ],
       }),
