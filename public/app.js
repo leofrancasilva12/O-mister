@@ -6,6 +6,7 @@
 const STORE_KEY = "omister.chats.v1";
 const ACTIVE_KEY = "omister.activeChat.v1";
 const COLLAPSE_KEY = "omister.sidebarCollapsed.v1";
+const THEME_KEY = "omister.theme.v1";
 
 let chats = [];
 let activeId = localStorage.getItem(ACTIVE_KEY) || null;
@@ -19,6 +20,58 @@ let recognition = null; // Web Speech API
 let audioPlayerElement = null; // elemento de áudio
 let audioPlayerVisible = false; // estado do player
 let selectedChatIds = new Set(); // ids das conversas selecionadas no gerenciador
+let conversationsSearch = ""; // texto de busca no gerenciador
+
+/* =========================================================
+   Toast (feedback rápido no rodapé)
+   ========================================================= */
+function showToast(message, type = "") {
+  const container = document.getElementById("toast-container");
+  if (!container) return;
+  const toast = document.createElement("div");
+  toast.className = "toast" + (type ? " toast-" + type : "");
+  toast.textContent = message;
+  container.appendChild(toast);
+  setTimeout(() => {
+    toast.classList.add("leaving");
+    setTimeout(() => toast.remove(), 200);
+  }, 2600);
+}
+
+/* =========================================================
+   Tema claro/escuro
+   ========================================================= */
+function applyTheme(theme) {
+  const root = document.documentElement;
+  if (theme === "dark") root.setAttribute("data-theme", "dark");
+  else root.removeAttribute("data-theme");
+
+  const moon = document.getElementById("theme-icon-moon");
+  const sun = document.getElementById("theme-icon-sun");
+  if (moon && sun) {
+    moon.hidden = theme === "dark";
+    sun.hidden = theme !== "dark";
+  }
+}
+
+function initTheme() {
+  let theme = localStorage.getItem(THEME_KEY);
+  if (!theme) {
+    // Segue a preferência do sistema na primeira vez
+    theme = window.matchMedia && window.matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light";
+  }
+  applyTheme(theme);
+}
+
+function toggleTheme() {
+  const isDark = document.documentElement.getAttribute("data-theme") === "dark";
+  const next = isDark ? "light" : "dark";
+  localStorage.setItem(THEME_KEY, next);
+  applyTheme(next);
+}
+
+// Aplica o tema imediatamente (antes do DOM completo) para evitar flash
+initTheme();
 
 /* =========================================================
    STT (Speech-to-Text) — Gravação de voz
@@ -271,6 +324,7 @@ const manageChatsBtn = document.getElementById("manage-chats-btn");
 const conversationsModal = document.getElementById("conversations-modal");
 const conversationsCloseX = document.getElementById("conversations-close-x");
 const conversationsList = document.getElementById("conversations-list");
+const conversationsSearchInput = document.getElementById("conversations-search-input");
 const conversationsSelectAll = document.getElementById("conversations-select-all");
 const conversationsCount = document.getElementById("conversations-count");
 const conversationsShareBtn = document.getElementById("conversations-share");
@@ -643,6 +697,21 @@ logoutBtn.addEventListener("click", async () => {
   window.location.replace("login.html");
 });
 
+// Botão de alternar tema
+const themeBtn = document.getElementById("theme-btn");
+if (themeBtn) themeBtn.addEventListener("click", toggleTheme);
+
+// Chips de sugestão no estado vazio
+const emptySuggestions = document.getElementById("empty-suggestions");
+if (emptySuggestions) {
+  emptySuggestions.querySelectorAll(".suggestion-chip").forEach((chip) => {
+    chip.addEventListener("click", () => {
+      if (isStreaming) return;
+      sendMessage(chip.textContent);
+    });
+  });
+}
+
 /* =========================================================
    Sidebar: abrir/fechar (mobile) e recolher/expandir (desktop)
    ========================================================= */
@@ -738,7 +807,7 @@ async function deleteChat(id) {
           await OMISTER.cloudDelete(id);
         } catch (e) {
           console.error("Erro ao excluir conversa:", e);
-          alert("Erro ao excluir. Tente novamente.");
+          showToast("Erro ao excluir. Tente novamente.", "error");
         }
       } else {
         saveLocal();
@@ -747,6 +816,7 @@ async function deleteChat(id) {
 
       renderChatList();
       renderMessages();
+      showToast("Conversa excluída", "success");
     }
   );
 }
@@ -754,8 +824,14 @@ async function deleteChat(id) {
 /* =========================================================
    Gerenciador de conversas (modal): selecionar, excluir, compartilhar
    ========================================================= */
+let deleteConfirmPending = false;
+let deleteConfirmTimer = null;
+
 function openConversationsModal() {
   selectedChatIds.clear();
+  conversationsSearch = "";
+  if (conversationsSearchInput) conversationsSearchInput.value = "";
+  resetDeleteConfirm();
   renderConversationsModal();
   conversationsModal.hidden = false;
 }
@@ -763,53 +839,174 @@ function openConversationsModal() {
 function closeConversationsModal() {
   conversationsModal.hidden = true;
   selectedChatIds.clear();
+  resetDeleteConfirm();
+}
+
+// Agrupa conversas por faixa de data (Hoje, Ontem, 7 dias, Mais antigas)
+function groupChatsByDate(list) {
+  const now = new Date();
+  const startOfToday = new Date(now.getFullYear(), now.getMonth(), now.getDate()).getTime();
+  const startOfYesterday = startOfToday - 86400000;
+  const sevenDaysAgo = startOfToday - 7 * 86400000;
+
+  const groups = { Hoje: [], Ontem: [], "Últimos 7 dias": [], "Mais antigas": [] };
+  for (const chat of list) {
+    const t = chat.updatedAt || 0;
+    if (t >= startOfToday) groups["Hoje"].push(chat);
+    else if (t >= startOfYesterday) groups["Ontem"].push(chat);
+    else if (t >= sevenDaysAgo) groups["Últimos 7 dias"].push(chat);
+    else groups["Mais antigas"].push(chat);
+  }
+  return groups;
 }
 
 function renderConversationsModal() {
   conversationsList.innerHTML = "";
-  const sorted = [...chats].sort((a, b) => (b.updatedAt || 0) - (a.updatedAt || 0));
+  let sorted = [...chats].sort((a, b) => (b.updatedAt || 0) - (a.updatedAt || 0));
+
+  // Filtro de busca
+  const q = conversationsSearch.trim().toLowerCase();
+  if (q) {
+    sorted = sorted.filter((c) => {
+      if (chatTitle(c).toLowerCase().includes(q)) return true;
+      // busca também no conteúdo das mensagens
+      return (c.messages || []).some(
+        (m) => typeof m.content === "string" && m.content.toLowerCase().includes(q)
+      );
+    });
+  }
 
   if (!sorted.length) {
     const empty = document.createElement("p");
     empty.className = "conversations-empty";
-    empty.textContent = "Você ainda não tem conversas.";
+    empty.textContent = q ? "Nenhuma conversa encontrada." : "Você ainda não tem conversas.";
     conversationsList.appendChild(empty);
+    updateConversationsUI();
+    return;
   }
 
-  for (const chat of sorted) {
-    const row = document.createElement("label");
-    row.className = "conversations-row";
+  // Renderiza por grupos de data
+  const groups = groupChatsByDate(sorted);
+  for (const [label, list] of Object.entries(groups)) {
+    if (!list.length) continue;
 
-    const checkbox = document.createElement("input");
-    checkbox.type = "checkbox";
-    checkbox.className = "conversations-checkbox";
-    checkbox.checked = selectedChatIds.has(chat.id);
-    checkbox.addEventListener("change", () => {
-      if (checkbox.checked) selectedChatIds.add(chat.id);
-      else selectedChatIds.delete(chat.id);
-      updateConversationsUI();
-    });
-    row.appendChild(checkbox);
+    const header = document.createElement("div");
+    header.className = "conversations-group-label";
+    header.textContent = label;
+    conversationsList.appendChild(header);
 
-    const info = document.createElement("div");
-    info.className = "conversations-row-info";
-
-    const title = document.createElement("div");
-    title.className = "conversations-row-title";
-    title.textContent = chatTitle(chat);
-    info.appendChild(title);
-
-    const meta = document.createElement("div");
-    meta.className = "conversations-row-meta";
-    const count = chat.messages ? chat.messages.length : 0;
-    meta.textContent = `${count} ${count === 1 ? "mensagem" : "mensagens"} · ${formatChatDate(chat.updatedAt)}`;
-    info.appendChild(meta);
-
-    row.appendChild(info);
-    conversationsList.appendChild(row);
+    for (const chat of list) {
+      conversationsList.appendChild(buildConversationRow(chat));
+    }
   }
 
   updateConversationsUI();
+}
+
+function buildConversationRow(chat) {
+  const row = document.createElement("div");
+  row.className = "conversations-row";
+
+  const checkbox = document.createElement("input");
+  checkbox.type = "checkbox";
+  checkbox.className = "conversations-checkbox";
+  checkbox.checked = selectedChatIds.has(chat.id);
+  checkbox.addEventListener("change", () => {
+    if (checkbox.checked) selectedChatIds.add(chat.id);
+    else selectedChatIds.delete(chat.id);
+    resetDeleteConfirm();
+    updateConversationsUI();
+  });
+  row.appendChild(checkbox);
+
+  const info = document.createElement("div");
+  info.className = "conversations-row-info";
+
+  const title = document.createElement("div");
+  title.className = "conversations-row-title";
+  title.textContent = chatTitle(chat);
+  info.appendChild(title);
+
+  const meta = document.createElement("div");
+  meta.className = "conversations-row-meta";
+  const count = chat.messages ? chat.messages.length : 0;
+  meta.textContent = `${count} ${count === 1 ? "mensagem" : "mensagens"} · ${formatChatDate(chat.updatedAt)}`;
+  info.appendChild(meta);
+
+  row.appendChild(info);
+
+  // Ações da linha: renomear e abrir
+  const actions = document.createElement("div");
+  actions.className = "conversations-row-actions";
+
+  const renameBtn = document.createElement("button");
+  renameBtn.className = "conversations-row-btn";
+  renameBtn.title = "Renomear";
+  renameBtn.setAttribute("aria-label", "Renomear conversa");
+  renameBtn.innerHTML = '<svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/></svg>';
+  renameBtn.addEventListener("click", (e) => {
+    e.stopPropagation();
+    startRenameConversation(chat, row, info);
+  });
+  actions.appendChild(renameBtn);
+
+  const openBtn = document.createElement("button");
+  openBtn.className = "conversations-row-btn";
+  openBtn.title = "Abrir conversa";
+  openBtn.setAttribute("aria-label", "Abrir conversa");
+  openBtn.innerHTML = '<svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14"/><path d="M12 5l7 7-7 7"/></svg>';
+  openBtn.addEventListener("click", (e) => {
+    e.stopPropagation();
+    closeConversationsModal();
+    selectChat(chat.id);
+  });
+  actions.appendChild(openBtn);
+
+  row.appendChild(actions);
+
+  // Clicar na linha (fora dos botões) alterna a seleção
+  row.addEventListener("click", (e) => {
+    if (e.target === checkbox) return;
+    checkbox.checked = !checkbox.checked;
+    checkbox.dispatchEvent(new Event("change"));
+  });
+
+  return row;
+}
+
+function startRenameConversation(chat, row, info) {
+  const input = document.createElement("input");
+  input.type = "text";
+  input.className = "conversations-rename-input";
+  input.value = chatTitle(chat);
+  row.replaceChild(input, info);
+  input.focus();
+  input.select();
+
+  let done = false;
+  const commit = async (save) => {
+    if (done) return;
+    done = true;
+    if (save) {
+      const newTitle = input.value.trim();
+      if (newTitle && newTitle !== chat.title) {
+        chat.title = newTitle.slice(0, 60);
+        chat.updatedAt = Date.now();
+        await saveChat(chat);
+        renderChatList();
+        showToast("Conversa renomeada", "success");
+      }
+    }
+    renderConversationsModal();
+  };
+
+  input.addEventListener("keydown", (e) => {
+    if (e.key === "Enter") { e.preventDefault(); commit(true); }
+    else if (e.key === "Escape") { e.preventDefault(); commit(false); }
+  });
+  input.addEventListener("blur", () => commit(true));
+  // Evita que o clique no input alterne seleção
+  input.addEventListener("click", (e) => e.stopPropagation());
 }
 
 function formatChatDate(ts) {
@@ -822,7 +1019,7 @@ function updateConversationsUI() {
   const count = selectedChatIds.size;
   conversationsCount.textContent =
     count === 0 ? "Nenhuma selecionada" : `${count} ${count === 1 ? "selecionada" : "selecionadas"}`;
-  conversationsDeleteBtn.textContent = `Excluir (${count})`;
+  if (!deleteConfirmPending) conversationsDeleteBtn.textContent = `Excluir (${count})`;
   conversationsDeleteBtn.disabled = count === 0;
   conversationsShareBtn.disabled = count === 0;
   conversationsSelectAll.checked = count > 0 && count === chats.length;
@@ -844,10 +1041,52 @@ function buildShareTextFromChats(ids) {
   return parts.join("\n").trim();
 }
 
+function resetDeleteConfirm() {
+  deleteConfirmPending = false;
+  if (deleteConfirmTimer) { clearTimeout(deleteConfirmTimer); deleteConfirmTimer = null; }
+  conversationsDeleteBtn.classList.remove("confirming");
+  const count = selectedChatIds.size;
+  conversationsDeleteBtn.textContent = `Excluir (${count})`;
+}
+
+async function performBulkDelete() {
+  const ids = [...selectedChatIds];
+  chats = chats.filter((c) => !selectedChatIds.has(c.id));
+  if (activeId && selectedChatIds.has(activeId)) activeId = null;
+
+  if (useCloud) {
+    try {
+      await Promise.all(ids.map((id) => OMISTER.cloudDelete(id)));
+    } catch (e) {
+      console.error("Erro ao excluir conversas:", e);
+      showToast("Erro ao excluir algumas conversas", "error");
+    }
+  } else {
+    saveLocal();
+  }
+  persistActive();
+
+  const n = ids.length;
+  selectedChatIds.clear();
+  resetDeleteConfirm();
+  renderChatList();
+  renderMessages();
+  showToast(n === 1 ? "Conversa excluída" : `${n} conversas excluídas`, "success");
+
+  if (chats.length) renderConversationsModal();
+  else closeConversationsModal();
+}
+
 manageChatsBtn.addEventListener("click", openConversationsModal);
 conversationsCloseX.addEventListener("click", closeConversationsModal);
 conversationsModal.addEventListener("click", (e) => {
   if (e.target === conversationsModal) closeConversationsModal();
+});
+
+conversationsSearchInput.addEventListener("input", () => {
+  conversationsSearch = conversationsSearchInput.value;
+  resetDeleteConfirm();
+  renderConversationsModal();
 });
 
 conversationsSelectAll.addEventListener("change", () => {
@@ -856,6 +1095,7 @@ conversationsSelectAll.addEventListener("change", () => {
   } else {
     selectedChatIds.clear();
   }
+  resetDeleteConfirm();
   renderConversationsModal();
 });
 
@@ -865,39 +1105,20 @@ conversationsShareBtn.addEventListener("click", () => {
   shareMessage(text);
 });
 
+// Exclusão com confirmação inline (sem popup em cima de popup)
 conversationsDeleteBtn.addEventListener("click", () => {
   const count = selectedChatIds.size;
   if (count === 0) return;
 
-  showModal(
-    count === 1 ? "Excluir conversa?" : `Excluir ${count} conversas?`,
-    "Essa ação não pode ser desfeita.",
-    "Excluir",
-    async () => {
-      const ids = [...selectedChatIds];
-      chats = chats.filter((c) => !selectedChatIds.has(c.id));
-      if (activeId && selectedChatIds.has(activeId)) activeId = null;
+  if (!deleteConfirmPending) {
+    deleteConfirmPending = true;
+    conversationsDeleteBtn.classList.add("confirming");
+    conversationsDeleteBtn.textContent = "Confirmar exclusão?";
+    deleteConfirmTimer = setTimeout(resetDeleteConfirm, 3500);
+    return;
+  }
 
-      if (useCloud) {
-        try {
-          await Promise.all(ids.map((id) => OMISTER.cloudDelete(id)));
-        } catch (e) {
-          console.error("Erro ao excluir conversas:", e);
-          alert("Erro ao excluir algumas conversas.");
-        }
-      } else {
-        saveLocal();
-      }
-      persistActive();
-
-      selectedChatIds.clear();
-      renderChatList();
-      renderMessages();
-      // Se ainda há conversas, atualiza o modal; senão fecha
-      if (chats.length) renderConversationsModal();
-      else closeConversationsModal();
-    }
-  );
+  performBulkDelete();
 });
 
 function startNewChat() {
@@ -989,7 +1210,9 @@ function createAssistantMessage(messageIndex = null) {
   copyBtn.innerHTML = '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>';
   copyBtn.addEventListener("click", () => {
     const text = content.innerText || content.textContent;
-    navigator.clipboard.writeText(text).catch(() => alert("Erro ao copiar"));
+    navigator.clipboard.writeText(text)
+      .then(() => showToast("Copiado", "success"))
+      .catch(() => showToast("Erro ao copiar", "error"));
   });
   toolbar.appendChild(copyBtn);
 
@@ -1660,6 +1883,16 @@ async function sendMessage(rawText) {
 /* =========================================================
    Inicialização
    ========================================================= */
+function showChatListSkeleton() {
+  chatListEl.innerHTML = "";
+  for (let i = 0; i < 5; i++) {
+    const sk = document.createElement("div");
+    sk.className = "chat-skeleton";
+    sk.style.width = 70 + Math.random() * 30 + "%";
+    chatListEl.appendChild(sk);
+  }
+}
+
 (async function init() {
   initAudioPlayer();
   updateProfileUI(); // Carrega perfil do usuário
@@ -1667,6 +1900,7 @@ async function sendMessage(rawText) {
   await initAuth();
   if (redirected) return; // indo para a tela de login
 
+  showChatListSkeleton();
   chats = await loadChats();
   renderChatList();
 
