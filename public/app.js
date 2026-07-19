@@ -1179,13 +1179,9 @@ async function sendMessage(rawText) {
   chats = await loadChats();
   renderChatList();
 
-  // Auto-seleciona a última conversa
-  if (!activeId && chats.length > 0) {
-    const sorted = [...chats].sort((a, b) => (b.updatedAt || 0) - (a.updatedAt || 0));
-    activeId = sorted[0].id;
-    persistActive();
-    renderChatList();
-  }
+  // Sempre começa com novo chat (não carrega a última)
+  activeId = null;
+  persistActive();
 
   renderMessages();
   updateSendState();
