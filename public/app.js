@@ -120,35 +120,30 @@ function initAudioPlayer() {
    TTS (Text-to-Speech) com ElevenLabs
    ========================================================= */
 async function speakWithElevenLabs(text) {
-  const cfg = window.OMISTER_CONFIG || {};
-  // Tenta: Vercel env var → config.js → localStorage
-  let apiKey = window.ELEVENLABS_API_KEY || cfg.ELEVENLABS_API_KEY || localStorage.getItem("elevenlabs_key");
-
-  if (!apiKey) {
-    alert("Configure ElevenLabs no Vercel (env var ELEVENLABS_API_KEY)");
-    return;
-  }
+  if (!text || text.trim().length === 0) return;
 
   try {
-    // Para PT-BR, usando voz "Adam" (homem maduro)
-    const voiceId = "pNInz6obpgDQGcFmaJgB"; // Adam - male voice
+    const session = await OMISTER.auth.getSession();
+    if (!session?.data?.session?.access_token) {
+      alert("É necessário estar autenticado para usar TTS.");
+      return;
+    }
 
-    const res = await fetch(`https://api.elevenlabs.io/v1/text-to-speech/${voiceId}`, {
+    const res = await fetch("/api/text-to-speech", {
       method: "POST",
       headers: {
-        "xi-api-key": apiKey,
+        "Authorization": `Bearer ${session.data.session.access_token}`,
         "Content-Type": "application/json",
       },
       body: JSON.stringify({
         text: text,
-        model_id: "eleven_flash_v2_5",
-        voice_settings: { stability: 0.5, similarity_boost: 0.75 },
+        voiceId: "pNInz6obpgDQGcFmaJgB",
       }),
     });
 
     if (!res.ok) {
       const err = await res.json().catch(() => ({}));
-      throw new Error(err.detail?.message || "Erro ao gerar áudio");
+      throw new Error(err.error || "Erro ao gerar áudio");
     }
 
     const audioBlob = await res.blob();

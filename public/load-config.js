@@ -1,14 +1,3 @@
-/* Carrega config do backend (Vercel env vars) */
-(async function() {
-  try {
-    const res = await fetch("/api/config");
-    if (res.ok) {
-      const data = await res.json();
-      if (data.elevenlabsApiKey) {
-        window.ELEVENLABS_API_KEY = data.elevenlabsApiKey;
-      }
-    }
-  } catch (e) {
-    // Silencioso — fallback para localStorage
-  }
-})();
+/* Configuração removida por segurança: /api/config foi descontinuado */
+/* TTS agora usa proxy autenticado em /api/text-to-speech (a implementar) */
+/* Por enquanto, fallback para ELEVENLABS_API_KEY em window ou localStorage */

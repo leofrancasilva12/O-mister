@@ -3,6 +3,9 @@
     "api/chat.js": {
       "includeFiles": "{lib,knowledge}/**",
       "maxDuration": 60
+    },
+    "api/text-to-speech.js": {
+      "maxDuration": 30
     }
   },
   "headers": [
