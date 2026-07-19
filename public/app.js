@@ -373,7 +373,25 @@ function closeSettings() {
   settingsModal.hidden = true;
 }
 
+function showWelcome(userName) {
+  const name = userName || "Amigo";
+  welcomeName.textContent = `Olá, ${name}!`;
+  welcomeModal.hidden = false;
+}
+
+function closeWelcome() {
+  welcomeModal.hidden = true;
+}
+
+welcomeCloseBtn.addEventListener("click", closeWelcome);
+welcomeModal.addEventListener("click", (e) => {
+  if (e.target === welcomeModal) closeWelcome();
+});
+
 const settingsDeleteAccountBtn = document.getElementById("settings-delete-account");
+const welcomeModal = document.getElementById("welcome-modal");
+const welcomeName = document.getElementById("welcome-name");
+const welcomeCloseBtn = document.getElementById("welcome-close");
 
 settingsBtn?.addEventListener("click", openSettings);
 settingsCloseBtn.addEventListener("click", closeSettings);
@@ -430,13 +448,17 @@ async function deleteAccount() {
 }
 
 settingsSaveBtn.addEventListener("click", async () => {
+  // Verifica se é primeira vez (perfil vazio antes)
+  const key = getProfileKey();
+  const oldProfile = JSON.parse(localStorage.getItem(key) || "{}");
+  const isFirstTime = !oldProfile.name;
+
   // Salva perfil
   const profile = {
     name: profileNameInput.value.trim(),
     company: profileCompanyInput.value.trim(),
     photo: profilePhotoPreview.querySelector("img")?.src || ""
   };
-  const key = getProfileKey();
   localStorage.setItem(key, JSON.stringify(profile));
 
   // Salva na nuvem se logado
@@ -451,9 +473,16 @@ settingsSaveBtn.addEventListener("click", async () => {
   // Atualiza UI com novo perfil
   updateProfileUI();
 
-  // Mostra modal "Perfil salvo"
+  // Fecha settings
   closeSettings();
-  showModal("Perfil salvo!", "Suas informações foram atualizadas com sucesso.", "Fechar");
+
+  // Se é primeira vez, mostra boas-vindas
+  if (isFirstTime && profile.name) {
+    setTimeout(() => showWelcome(profile.name), 400);
+  } else {
+    // Se não é primeira vez, mostra confirmação
+    showModal("Perfil salvo!", "Suas informações foram atualizadas com sucesso.", "Fechar");
+  }
 });
 
 // Upload de foto de perfil
