@@ -186,11 +186,11 @@ export default async function handler(req, res) {
         model: MODEL,
         stream: true,
         max_tokens: 1024, // respostas concisas e diretas
-        temperature: 0.3, // baixa: contexto técnico premia consistência
+        temperature: 0.5, // um pouco mais alta: tom natural e caloroso
         messages: [
           {
             role: "system",
-            content: buildSystemPrompt() + (sanitizedUserName ? `\n\nO usuário se chama ${sanitizedUserName}. Use seu nome ocasionalmente para personalizar as respostas.` : "")
+            content: buildSystemPrompt() + (sanitizedUserName ? `\n\nO nome do usuário é ${sanitizedUserName}. Chame-o pelo nome com naturalidade e calor — ao cumprimentar, ao iniciar respostas importantes ou para deixar o papo mais próximo. Não force em toda frase, mas seja um colega simpático, não um manual.` : "")
           },
           ...history,
         ],
