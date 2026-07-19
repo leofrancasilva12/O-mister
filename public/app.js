@@ -249,7 +249,6 @@ const form = document.getElementById("input-form");
 const input = document.getElementById("chat-input");
 const sendBtn = document.getElementById("send-btn");
 const accountEl = document.getElementById("account");
-const accountEmailEl = document.getElementById("account-email");
 const logoutBtn = document.getElementById("logout-btn");
 const imageInput = document.getElementById("image-input");
 const uploadBtn = document.getElementById("upload-btn");
