@@ -18,6 +18,8 @@ let isListening = false; // controlar status da gravação
 let recognition = null; // Web Speech API
 let audioPlayerElement = null; // elemento de áudio
 let audioPlayerVisible = false; // estado do player
+let selectionMode = false; // modo de seleção de conversas
+let selectedChatIds = new Set(); // ids das conversas selecionadas
 
 /* =========================================================
    STT (Speech-to-Text) — Gravação de voz
@@ -181,6 +183,28 @@ function chatTitle(chat) {
   return (chat && chat.title) || "Nova conversa";
 }
 
+/* =========================================================
+   Compartilhar mensagem (WhatsApp / share nativo)
+   ========================================================= */
+async function shareMessage(text) {
+  const shareText = text + "\n\n— via O Mister";
+
+  // Em mobile com suporte nativo, abre o menu de compartilhamento do sistema
+  if (navigator.share) {
+    try {
+      await navigator.share({ text: shareText });
+      return;
+    } catch (e) {
+      if (e.name === "AbortError") return; // usuário cancelou
+      // senão, cai no fallback do WhatsApp
+    }
+  }
+
+  // Fallback: abre o WhatsApp com o texto pronto
+  const url = "https://wa.me/?text=" + encodeURIComponent(shareText);
+  window.open(url, "_blank", "noopener");
+}
+
 function activeChat() {
   return chats.find((c) => c.id === activeId) || null;
 }
@@ -253,6 +277,11 @@ const collapseBtn = document.getElementById("collapse-sidebar");
 const openRailBtn = document.getElementById("open-rail");
 const newChatBtn = document.getElementById("new-chat");
 const chatListEl = document.getElementById("chat-list");
+const selectChatsBtn = document.getElementById("select-chats-btn");
+const selectBar = document.getElementById("select-bar");
+const selectAllCheckbox = document.getElementById("select-all-checkbox");
+const selectDeleteBtn = document.getElementById("select-delete-btn");
+const selectCancelBtn = document.getElementById("select-cancel-btn");
 const emptyState = document.getElementById("empty-state");
 const messagesEl = document.getElementById("messages");
 const chatScroll = document.getElementById("chat-scroll");
@@ -657,31 +686,52 @@ function renderChatList() {
     hint.className = "chat-empty-hint";
     hint.textContent = "Nenhuma conversa ainda.";
     chatListEl.appendChild(hint);
+    selectChatsBtn.style.display = "none";
     return;
   }
+  selectChatsBtn.style.display = "";
 
   for (const chat of sorted) {
     const item = document.createElement("div");
     item.className = "chat-item" + (chat.id === activeId ? " active" : "");
+    if (selectionMode) item.classList.add("selecting");
     item.title = chatTitle(chat);
+
+    // Checkbox (só aparece no modo seleção)
+    if (selectionMode) {
+      const checkbox = document.createElement("input");
+      checkbox.type = "checkbox";
+      checkbox.className = "chat-checkbox";
+      checkbox.checked = selectedChatIds.has(chat.id);
+      checkbox.addEventListener("click", (e) => {
+        e.stopPropagation();
+        toggleChatSelection(chat.id);
+      });
+      item.appendChild(checkbox);
+    }
 
     const title = document.createElement("span");
     title.className = "chat-item-title";
     title.textContent = chatTitle(chat);
     item.appendChild(title);
 
-    const del = document.createElement("button");
-    del.className = "chat-del";
-    del.setAttribute("aria-label", "Excluir conversa");
-    del.innerHTML =
-      '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="3 6 5 6 21 6"/><path d="M19 6l-1 14a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2L5 6"/><line x1="10" y1="11" x2="10" y2="17"/><line x1="14" y1="11" x2="14" y2="17"/></svg>';
-    del.addEventListener("click", (e) => {
-      e.stopPropagation();
-      deleteChat(chat.id);
-    });
-    item.appendChild(del);
+    if (!selectionMode) {
+      const del = document.createElement("button");
+      del.className = "chat-del";
+      del.setAttribute("aria-label", "Excluir conversa");
+      del.innerHTML =
+        '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="3 6 5 6 21 6"/><path d="M19 6l-1 14a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2L5 6"/><line x1="10" y1="11" x2="10" y2="17"/><line x1="14" y1="11" x2="14" y2="17"/></svg>';
+      del.addEventListener("click", (e) => {
+        e.stopPropagation();
+        deleteChat(chat.id);
+      });
+      item.appendChild(del);
+    }
 
-    item.addEventListener("click", () => selectChat(chat.id));
+    item.addEventListener("click", () => {
+      if (selectionMode) toggleChatSelection(chat.id);
+      else selectChat(chat.id);
+    });
     chatListEl.appendChild(item);
   }
 }
@@ -695,7 +745,7 @@ function selectChat(id) {
   if (isMobile()) closeSidebar();
 }
 
-function deleteChat(id) {
+async function deleteChat(id) {
   if (isStreaming) return;
   const chat = chats.find((c) => c.id === id);
   if (!chat) return;
@@ -704,12 +754,20 @@ function deleteChat(id) {
     "Excluir conversa?",
     `Tem certeza que deseja excluir a conversa <strong>"${chatTitle(chat)}"</strong>? Essa ação não pode ser desfeita.`,
     "Excluir",
-    () => {
+    async () => {
       chats = chats.filter((c) => c.id !== id);
       if (activeId === id) activeId = null;
 
-      if (useCloud) OMISTER.cloudDelete(id).catch((e) => console.error("Supabase:", e));
-      else saveLocal();
+      if (useCloud) {
+        try {
+          await OMISTER.cloudDelete(id);
+        } catch (e) {
+          console.error("Erro ao excluir conversa:", e);
+          alert("Erro ao excluir. Tente novamente.");
+        }
+      } else {
+        saveLocal();
+      }
       persistActive();
 
       renderChatList();
@@ -717,6 +775,88 @@ function deleteChat(id) {
     }
   );
 }
+
+/* =========================================================
+   Seleção múltipla de conversas (estilo Claude)
+   ========================================================= */
+function enterSelectionMode() {
+  selectionMode = true;
+  selectedChatIds.clear();
+  selectBar.hidden = false;
+  selectChatsBtn.textContent = "Concluir";
+  updateSelectionUI();
+  renderChatList();
+}
+
+function exitSelectionMode() {
+  selectionMode = false;
+  selectedChatIds.clear();
+  selectBar.hidden = true;
+  selectChatsBtn.textContent = "Selecionar";
+  renderChatList();
+}
+
+function toggleChatSelection(id) {
+  if (selectedChatIds.has(id)) selectedChatIds.delete(id);
+  else selectedChatIds.add(id);
+  updateSelectionUI();
+  renderChatList();
+}
+
+function updateSelectionUI() {
+  const count = selectedChatIds.size;
+  selectDeleteBtn.textContent = `Excluir (${count})`;
+  selectDeleteBtn.disabled = count === 0;
+  selectAllCheckbox.checked = count > 0 && count === chats.length;
+}
+
+selectChatsBtn.addEventListener("click", () => {
+  if (selectionMode) exitSelectionMode();
+  else enterSelectionMode();
+});
+
+selectCancelBtn.addEventListener("click", exitSelectionMode);
+
+selectAllCheckbox.addEventListener("change", () => {
+  if (selectAllCheckbox.checked) {
+    chats.forEach((c) => selectedChatIds.add(c.id));
+  } else {
+    selectedChatIds.clear();
+  }
+  updateSelectionUI();
+  renderChatList();
+});
+
+selectDeleteBtn.addEventListener("click", () => {
+  const count = selectedChatIds.size;
+  if (count === 0) return;
+
+  showModal(
+    count === 1 ? "Excluir conversa?" : `Excluir ${count} conversas?`,
+    "Essa ação não pode ser desfeita.",
+    "Excluir",
+    async () => {
+      const ids = [...selectedChatIds];
+      chats = chats.filter((c) => !selectedChatIds.has(c.id));
+      if (activeId && selectedChatIds.has(activeId)) activeId = null;
+
+      if (useCloud) {
+        try {
+          await Promise.all(ids.map((id) => OMISTER.cloudDelete(id)));
+        } catch (e) {
+          console.error("Erro ao excluir conversas:", e);
+          alert("Erro ao excluir algumas conversas.");
+        }
+      } else {
+        saveLocal();
+      }
+      persistActive();
+
+      exitSelectionMode();
+      renderMessages();
+    }
+  );
+});
 
 function startNewChat() {
   if (isStreaming) return;
@@ -811,6 +951,17 @@ function createAssistantMessage(messageIndex = null) {
   });
   toolbar.appendChild(copyBtn);
 
+  const shareBtn = document.createElement("button");
+  shareBtn.className = "msg-btn msg-share";
+  shareBtn.setAttribute("aria-label", "Compartilhar");
+  shareBtn.title = "Compartilhar";
+  shareBtn.innerHTML = '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/><line x1="8.59" y1="13.51" x2="15.42" y2="17.49"/><line x1="15.41" y1="6.51" x2="8.59" y2="10.49"/></svg>';
+  shareBtn.addEventListener("click", () => {
+    const text = content.innerText || content.textContent;
+    if (text.trim()) shareMessage(text);
+  });
+  toolbar.appendChild(shareBtn);
+
   const speakBtn = document.createElement("button");
   speakBtn.className = "msg-btn msg-speak";
   speakBtn.setAttribute("aria-label", "Ouvir");
@@ -853,14 +1004,22 @@ function createAssistantMessage(messageIndex = null) {
         "Esta ação não pode ser desfeita.",
         "Deletar",
         async () => {
-          console.log("🗑️ Deletando mensagem de chat:", chat.id, "índice:", messageIndex);
-          console.log("   Mensagens ANTES:", chat.messages.length);
           chat.messages.splice(messageIndex, 1);
-          console.log("   Mensagens DEPOIS:", chat.messages.length);
           chat.updatedAt = Date.now();
-          console.log("   Salvando no Supabase...");
-          await saveChat(chat);
-          console.log("✅ Chat salvo com sucesso, re-renderizando");
+          // Se a conversa ficou vazia, remove ela inteira da nuvem
+          if (chat.messages.length === 0) {
+            chats = chats.filter((c) => c.id !== chat.id);
+            if (activeId === chat.id) activeId = null;
+            if (useCloud) {
+              try { await OMISTER.cloudDelete(chat.id); } catch (e) { console.error(e); }
+            } else {
+              saveLocal();
+            }
+            persistActive();
+            renderChatList();
+          } else {
+            await saveChat(chat);
+          }
           renderMessages();
         }
       );

@@ -719,6 +719,83 @@ html, body {
 .chat-item:hover .chat-del,
 .chat-item.active .chat-del { opacity: 1; }
 .chat-del:hover { color: #8C3A2B; background: rgba(140, 58, 43, 0.08); }
+
+/* Seleção múltipla de conversas */
+.chats-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+}
+.chats-select-toggle {
+  background: none;
+  border: none;
+  color: var(--text-fainter);
+  font-size: 11px;
+  cursor: pointer;
+  padding: 2px 6px;
+  border-radius: 6px;
+  font-family: inherit;
+  transition: color 0.12s ease, background-color 0.12s ease;
+}
+.chats-select-toggle:hover { color: var(--text); background: var(--sidebar-hover); }
+
+.select-bar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  padding: 6px 10px;
+  margin-top: 6px;
+  border-radius: 8px;
+  background: var(--sidebar-hover);
+}
+.select-all-label {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 12px;
+  color: var(--text-file);
+  cursor: pointer;
+}
+.select-bar-actions {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+.select-delete-btn {
+  background: #8C3A2B;
+  color: #fff;
+  border: none;
+  font-size: 12px;
+  padding: 4px 10px;
+  border-radius: 6px;
+  cursor: pointer;
+  font-family: inherit;
+  transition: opacity 0.12s ease;
+}
+.select-delete-btn:disabled { opacity: 0.4; cursor: default; }
+.select-delete-btn:not(:disabled):hover { background: #752f23; }
+.select-cancel-btn {
+  background: none;
+  border: none;
+  color: var(--text-fainter);
+  font-size: 12px;
+  padding: 4px 6px;
+  border-radius: 6px;
+  cursor: pointer;
+  font-family: inherit;
+}
+.select-cancel-btn:hover { color: var(--text); }
+
+.chat-checkbox {
+  flex-shrink: 0;
+  width: 15px;
+  height: 15px;
+  cursor: pointer;
+  accent-color: #8C3A2B;
+}
+.chat-item.selecting { cursor: pointer; }
 .chat-empty-hint {
   font-size: 12px;
   color: var(--text-fainter);

@@ -44,7 +44,20 @@
     </button>
 
     <div class="chats-section">
-      <p class="kb-label">Conversas</p>
+      <div class="chats-header">
+        <p class="kb-label">Conversas</p>
+        <button id="select-chats-btn" class="chats-select-toggle" type="button">Selecionar</button>
+      </div>
+      <div id="select-bar" class="select-bar" hidden>
+        <label class="select-all-label">
+          <input type="checkbox" id="select-all-checkbox">
+          <span>Todas</span>
+        </label>
+        <div class="select-bar-actions">
+          <button id="select-delete-btn" class="select-delete-btn" type="button" disabled>Excluir (0)</button>
+          <button id="select-cancel-btn" class="select-cancel-btn" type="button">Cancelar</button>
+        </div>
+      </div>
       <div id="chat-list"></div>
     </div>
 
