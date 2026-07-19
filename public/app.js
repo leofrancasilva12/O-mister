@@ -261,7 +261,6 @@ const settingsBtnTop = document.getElementById("settings-btn-top");
 const settingsModal = document.getElementById("settings-modal");
 const settingsCloseBtn = document.getElementById("settings-close");
 const settingsSaveBtn = document.getElementById("settings-save");
-const elevenLabsInput = document.getElementById("elevenlabs-input");
 const profilePhotoInput = document.getElementById("profile-photo-input");
 const profilePhotoPreview = document.getElementById("profile-photo-preview");
 const profileNameInput = document.getElementById("profile-name-input");
@@ -345,8 +344,6 @@ function updateProfileUI() {
 }
 
 function openSettings() {
-  elevenLabsInput.value = localStorage.getItem("elevenlabs_key") || "";
-
   // Carrega perfil do usuário
   const profile = JSON.parse(localStorage.getItem("user_profile") || "{}");
   profileNameInput.value = profile.name || "";
@@ -373,11 +370,6 @@ settingsModal.addEventListener("click", (e) => {
 });
 
 settingsSaveBtn.addEventListener("click", () => {
-  const key = elevenLabsInput.value.trim();
-  if (key) {
-    localStorage.setItem("elevenlabs_key", key);
-  }
-
   // Salva perfil
   const profile = {
     name: profileNameInput.value.trim(),
