@@ -111,11 +111,19 @@
     cloudDelete: function (id) {
       return getClient()
         .then(function (c) {
-          // Hard delete: remove conversa completamente
-          return c.from("conversations").delete().eq("id", id);
+          // Hard delete: remove conversa completamente.
+          // .select() retorna as linhas apagadas para confirmar que apagou.
+          return c.from("conversations").delete().eq("id", id).select();
         })
         .then(function (res) {
           if (res.error) throw res.error;
+          // Se nenhuma linha foi apagada, a RLS provavelmente bloqueou.
+          if (!res.data || res.data.length === 0) {
+            throw new Error(
+              "Nada foi apagado (políticas do banco bloquearam). Rode o SQL de correção no Supabase."
+            );
+          }
+          return res.data;
         });
     },
 

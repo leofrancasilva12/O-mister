@@ -227,9 +227,7 @@ async function saveChat(chat) {
   if (useCloud) {
     if (chat) {
       try {
-        console.log("saveChat: enviando para nuvem (cloudUpsert)");
         await OMISTER.cloudUpsert(chat, user.id);
-        console.log("saveChat: sucesso na nuvem");
       } catch (e) {
         console.error("Erro ao salvar na nuvem:", e);
         alert("Erro ao salvar alterações: " + (e.message || "Tente novamente."));
@@ -237,7 +235,6 @@ async function saveChat(chat) {
     }
   } else {
     saveLocal();
-    console.log("saveChat: salvo localmente");
   }
   persistActive();
 }
@@ -245,13 +242,7 @@ async function saveChat(chat) {
 async function loadChats() {
   if (useCloud) {
     try {
-      console.log("📥 Carregando chats da nuvem...");
-      const cloudChats = await OMISTER.cloudList();
-      console.log("   Carregou", cloudChats.length, "conversas");
-      cloudChats.forEach(c => {
-        console.log("   -", c.title, "com", c.messages.length, "mensagens");
-      });
-      return cloudChats;
+      return await OMISTER.cloudList();
     } catch (e) {
       console.error("Supabase list:", e);
       return [];
