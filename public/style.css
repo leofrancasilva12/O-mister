@@ -540,7 +540,7 @@ html, body {
   #chat-inner { padding-left: 14px; padding-right: 14px; }
   #input-area { padding-left: 14px; padding-right: 14px; }
   .bubble-user { max-width: 88%; }
-  .empty-logo { width: 44px; height: 44px; margin-bottom: 16px; }
+  .empty-logo { width: 100px; height: 100px; margin-bottom: 16px; }
   #empty-state { margin-top: 24px; }
   #messages { gap: 24px; }
 }
