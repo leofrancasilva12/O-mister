@@ -543,72 +543,65 @@ async function initAuth() {
   if (!OMISTER.isConfigured) return; // modo local: sem login
 
   // Aguarda session ser processada (inclui OAuth redirect)
-  return new Promise(async (resolve) => {
+  return new Promise((resolve) => {
     let sessionFound = false;
-    let unsubscribe = OMISTER.auth.onAuthStateChange((event, session) => {
+    let timeoutId;
+
+    OMISTER.auth.onAuthStateChange((event, session) => {
       console.log("App auth state:", event, session ? "logado" : "não logado");
 
-      if (session) {
+      if (session && !sessionFound) {
         sessionFound = true;
         user = session.user;
         useCloud = true;
-        unsubscribe();
+
+        // Carrega perfil da nuvem
+        (async () => {
+          try {
+            const key = getProfileKey();
+            const localProfile = JSON.parse(localStorage.getItem(key) || "{}");
+
+            if (!localProfile.name) {
+              const cloudProfile = await OMISTER.cloudLoadProfile(user.id);
+              if (cloudProfile && cloudProfile.name) {
+                localStorage.setItem(key, JSON.stringify(cloudProfile));
+              }
+            }
+
+            updateProfileUI();
+            sidebarProfileEmail.textContent = user.email || "Conectado";
+            accountEl.hidden = false;
+
+            // Se não tem perfil, abre modal
+            const finalProfile = JSON.parse(localStorage.getItem(key) || "{}");
+            if (!finalProfile.name) {
+              setTimeout(() => openSettings(), 800);
+            }
+          } catch (e) {
+            console.error("Erro ao carregar perfil:", e);
+          }
+        })();
+
+        clearTimeout(timeoutId);
         resolve();
       }
     });
 
-    // Se após 2s ainda não tem sessão, vai pro login
-    setTimeout(async () => {
-      unsubscribe();
+    // Timeout de segurança
+    timeoutId = setTimeout(() => {
       if (!sessionFound) {
-        const { data } = await OMISTER.auth.getSession();
-        if (!data.session) {
-          redirected = true;
-        }
+        redirected = true;
         resolve();
       }
     }, 1500);
   });
-
-  user = data.session.user;
-  useCloud = true;
-
-  // Verifica se já tem perfil no localStorage
-  const key = getProfileKey();
-  const localProfile = JSON.parse(localStorage.getItem(key) || "{}");
-  const hasLocalProfile = localProfile && localProfile.name;
-
-  // Carrega perfil da nuvem se não tiver local ou pra sincronizar
-  if (!hasLocalProfile) {
-    try {
-      const cloudProfile = await OMISTER.cloudLoadProfile(user.id);
-      if (cloudProfile && cloudProfile.name) {
-        localStorage.setItem(key, JSON.stringify(cloudProfile));
-      }
-    } catch (e) {
-      console.error("Erro ao carregar perfil da nuvem:", e);
-    }
-  }
-
-  updateProfileUI(); // Recarrega perfil com a chave correta do usuário
-
-  sidebarProfileEmail.textContent = user.email || "Conectado";
-  accountEl.hidden = false;
-
-  // Se não tem perfil em lugar nenhum, abre modal para configurar
-  const finalProfile = JSON.parse(localStorage.getItem(key) || "{}");
-  if (!finalProfile.name) {
-    setTimeout(() => openSettings(), 800); // Aguarda um pouco pra não conflitar com outras modais
-  }
-  logoutBtn.addEventListener("click", async () => {
-    await OMISTER.auth.signOut();
-    window.location.replace("login.html");
-  });
-
-  OMISTER.auth.onAuthStateChange((_event, session) => {
-    if (!session) window.location.replace("login.html");
-  });
 }
+
+// Configura logout
+logoutBtn.addEventListener("click", async () => {
+  await OMISTER.auth.signOut();
+  window.location.replace("login.html");
+});
 
 /* =========================================================
    Sidebar: abrir/fechar (mobile) e recolher/expandir (desktop)
