@@ -11,6 +11,6 @@
    Passo a passo completo: veja SUPABASE-SETUP.md
    ========================================================= */
 window.OMISTER_CONFIG = {
-  SUPABASE_URL: "https://SEU-PROJETO.supabase.co",
-  SUPABASE_ANON_KEY: "SUA-ANON-KEY-AQUI",
+  SUPABASE_URL: process.env.REACT_APP_SUPABASE_URL || "",
+  SUPABASE_ANON_KEY: process.env.REACT_APP_SUPABASE_ANON_KEY || "",
 };
