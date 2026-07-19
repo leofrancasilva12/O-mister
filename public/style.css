@@ -1098,8 +1098,10 @@ html, body {
 
 .account-actions {
   display: flex;
-  gap: 8px;
+  align-items: center;
+  gap: 10px;
   justify-content: flex-end;
+  margin-top: 8px;
 }
 
 /* ================= Modal de confirmação (estilo Claude) ================= */
@@ -1259,18 +1261,20 @@ html, body {
   flex-shrink: 0;
   display: flex;
   align-items: center;
+  justify-content: center;
   gap: 6px;
+  height: 34px;
   background: none;
   border: 1px solid var(--sidebar-border);
   border-radius: 8px;
-  padding: 5px 10px;
+  padding: 0 12px;
   font-size: 12px;
   color: var(--text-muted);
   cursor: pointer;
   font-family: inherit;
-  transition: background-color 0.15s ease;
+  transition: background-color 0.15s ease, color 0.15s ease;
 }
-.account-logout:hover { background: var(--sidebar-hover); }
+.account-logout:hover { background: var(--sidebar-hover); color: var(--text); }
 
 /* ================= Tela de login ================= */
 .auth-page {
@@ -1635,16 +1639,23 @@ html, body {
 
 /* Configurações */
 .account-settings {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 34px;
+  height: 34px;
   background: none;
-  border: none;
+  border: 1px solid var(--sidebar-border);
+  border-radius: 8px;
   cursor: pointer;
-  padding: 4px;
+  padding: 0;
   color: var(--text-faint);
-  transition: color 0.15s ease;
+  transition: color 0.15s ease, background-color 0.15s ease;
 }
 
 .account-settings:hover {
   color: var(--text);
+  background: var(--sidebar-hover);
 }
 
 .settings-form {
