@@ -542,17 +542,33 @@ let redirected = false;
 async function initAuth() {
   if (!OMISTER.isConfigured) return; // modo local: sem login
 
-  // Limpa tokens da URL (OAuth redirect)
-  if (window.location.hash) {
-    window.history.replaceState(null, "", window.location.pathname + window.location.search);
-  }
+  // Aguarda session ser processada (inclui OAuth redirect)
+  return new Promise(async (resolve) => {
+    let sessionFound = false;
+    let unsubscribe = OMISTER.auth.onAuthStateChange((event, session) => {
+      console.log("App auth state:", event, session ? "logado" : "não logado");
 
-  const { data } = await OMISTER.auth.getSession();
-  if (!data.session) {
-    redirected = true;
-    window.location.replace("login.html");
-    return;
-  }
+      if (session) {
+        sessionFound = true;
+        user = session.user;
+        useCloud = true;
+        unsubscribe();
+        resolve();
+      }
+    });
+
+    // Se após 2s ainda não tem sessão, vai pro login
+    setTimeout(async () => {
+      unsubscribe();
+      if (!sessionFound) {
+        const { data } = await OMISTER.auth.getSession();
+        if (!data.session) {
+          redirected = true;
+        }
+        resolve();
+      }
+    }, 1500);
+  });
 
   user = data.session.user;
   useCloud = true;

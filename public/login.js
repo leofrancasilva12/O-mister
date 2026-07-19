@@ -12,8 +12,9 @@
     msg.hidden = false;
   }
 
-  // URL para onde o Supabase volta após autenticar (raiz = o app).
-  var redirectTo = window.location.origin + "/";
+  // URL para onde o Supabase volta após autenticar
+  // Deixa sem redirectTo pra processar automaticamente
+  var redirectTo = window.location.origin;
 
   if (!window.OMISTER || !window.OMISTER.isConfigured) {
     // Supabase ainda não configurado: mostra aviso e desabilita as ações.
