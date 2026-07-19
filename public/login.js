@@ -24,21 +24,15 @@
     return;
   }
 
-  // Já logado? vai direto pro app.
-  // Aguarda um pouco pra Supabase processar token da URL
-  setTimeout(function () {
-    OMISTER.auth.getSession().then(function (res) {
-      console.log("Session check result:", res);
-      if (res && res.data && res.data.session) {
-        console.log("Session encontrada, indo pro app...");
-        window.location.replace("index.html");
-      } else {
-        console.log("Sem session, esperando login do usuário");
-      }
-    }).catch(function (err) {
-      console.error("Erro ao verificar session:", err);
-    });
-  }, 500);
+  // Monitora mudanças de autenticação (inclui OAuth redirect)
+  var unsubscribe = OMISTER.auth.onAuthStateChange(function (event, session) {
+    console.log("Auth state changed:", event, session);
+    if (session) {
+      console.log("Sessão criada! Entrando no app...");
+      unsubscribe(); // Para de escutar
+      window.location.replace("index.html");
+    }
+  });
 
   googleBtn.addEventListener("click", function () {
     console.log("Clicou em Google, redirectTo:", redirectTo);
