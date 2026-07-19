@@ -401,11 +401,17 @@ welcomeModal.addEventListener("click", (e) => {
 });
 
 settingsDeleteAccountBtn.addEventListener("click", () => {
-  const confirmed = confirm("⚠️ Tem certeza que quer deletar sua conta?\n\nEsta ação é irreversível.");
-
-  if (!confirmed) return;
-
-  deleteAccount();
+  // Usa modal padrão em vez de confirm()
+  showModal(
+    "Deletar conta?",
+    "Esta ação é irreversível. Você perderá acesso à sua conta e todos os dados serão apagados.",
+    "Deletar"
+  );
+  // Override do callback padrão para deletar
+  modalCallback = () => {
+    closeModal();
+    deleteAccount();
+  };
 });
 
 async function deleteAccount() {
@@ -419,7 +425,14 @@ async function deleteAccount() {
       return;
     }
 
-    // Chama API para deletar conta
+    // Limpa localStorage (todos os dados locais do usuário)
+    const key = getProfileKey();
+    localStorage.removeItem(key);
+    localStorage.removeItem(STORE_KEY);
+    localStorage.removeItem(ACTIVE_KEY);
+    localStorage.removeItem(COLLAPSE_KEY);
+
+    // Chama API para deletar conta (deleta também no Supabase)
     const res = await fetch("/api/delete-account", {
       method: "POST",
       headers: {
@@ -440,7 +453,11 @@ async function deleteAccount() {
 
     // Faz logout
     await OMISTER.auth.signOut();
-    window.location.replace("login.html");
+
+    // Aguarda um pouco e redireciona
+    setTimeout(() => {
+      window.location.replace("login.html");
+    }, 300);
   } catch (err) {
     alert("Erro ao deletar conta: " + err.message);
     console.error("Erro detalhado:", err);
