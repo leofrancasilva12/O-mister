@@ -203,14 +203,17 @@ async function saveChat(chat) {
   if (useCloud) {
     if (chat) {
       try {
+        console.log("saveChat: enviando para nuvem (cloudUpsert)");
         await OMISTER.cloudUpsert(chat, user.id);
+        console.log("saveChat: sucesso na nuvem");
       } catch (e) {
         console.error("Erro ao salvar na nuvem:", e);
-        alert("Erro ao salvar alterações. Tente novamente.");
+        alert("Erro ao salvar alterações: " + (e.message || "Tente novamente."));
       }
     }
   } else {
     saveLocal();
+    console.log("saveChat: salvo localmente");
   }
   persistActive();
 }
@@ -844,9 +847,12 @@ function createAssistantMessage(messageIndex = null) {
         "Esta ação não pode ser desfeita.",
         "Deletar",
         async () => {
+          console.log("Deletando mensagem de chat:", chat.id, "índice:", messageIndex);
           chat.messages.splice(messageIndex, 1);
           chat.updatedAt = Date.now();
+          console.log("Salvando chat na nuvem:", chat);
           await saveChat(chat);
+          console.log("Chat salvo com sucesso");
           renderMessages();
         }
       );
