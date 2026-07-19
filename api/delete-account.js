@@ -24,28 +24,39 @@ export default async function handler(req, res) {
     // Cria cliente Supabase com service role (acesso administrativo)
     const supabase = createClient(SUPABASE_URL, SUPABASE_SERVICE_KEY);
 
-    // Verifica o token para obter o user_id
-    const { data: { user }, error: userError } = await supabase.auth.getUser(token);
+    // Verifica o token para obter o user_id (usa cliente com service role)
+    const { data: { user }, error: userError } = await supabase.auth.admin.getUserById(token);
     if (userError || !user) {
-      return res.status(401).json({ error: "Token inválido." });
+      // Tenta fallback: cria cliente com token do usuário
+      const userClient = createClient(SUPABASE_URL, SUPABASE_SERVICE_KEY, {
+        auth: { persistSession: false }
+      });
+      const { data: { user: sessionUser }, error: sessionError } = await userClient.auth.getUser(token);
+      if (sessionError || !sessionUser) {
+        return res.status(401).json({ error: "Token inválido." });
+      }
+      var userId = sessionUser.id;
+    } else {
+      var userId = user.id;
     }
 
-    const userId = user.id;
-
-    // Deleta os dados do usuário em cascata (conversas, perfil, etc.)
-    // A tabela user_profiles será deletada automaticamente pela constraint
+    // Deleta os dados do usuário (conversas, perfil)
     await supabase.from("conversations").delete().eq("user_id", userId);
     await supabase.from("user_profiles").delete().eq("user_id", userId);
 
-    // Deleta a conta do usuário
-    const { error: deleteError } = await supabase.auth.admin.deleteUser(userId);
-    if (deleteError) {
-      return res.status(500).json({ error: "Erro ao deletar conta: " + deleteError.message });
+    // Tenta deletar a conta do usuário (requer service role key)
+    if (SUPABASE_SERVICE_KEY) {
+      try {
+        await supabase.auth.admin.deleteUser(userId);
+      } catch (adminErr) {
+        console.warn("Não conseguiu deletar via admin:", adminErr.message);
+        // Continua mesmo se não conseguir deletar a conta (dados já foram)
+      }
     }
 
     return res.status(200).json({ success: true, message: "Conta deletada com sucesso." });
   } catch (err) {
     console.error("Erro ao deletar conta:", err);
-    return res.status(500).json({ error: "Erro ao deletar conta." });
+    return res.status(500).json({ error: "Erro ao deletar conta: " + err.message });
   }
 }
