@@ -1,9 +1,18 @@
 import { buildSystemPrompt } from "../lib/system-prompt.js";
 import jwt from "jsonwebtoken";
 
+console.log("[INIT] Carregando /api/chat...");
+
 const MODEL = process.env.OPENROUTER_MODEL || "anthropic/claude-haiku-4.5";
 const MAX_HISTORY = 20;
 const SUPABASE_JWT_SECRET = process.env.SUPABASE_JWT_SECRET;
+const OPENROUTER_KEY = process.env.OPENROUTER_API_KEY;
+
+console.log("[INIT] Configurações carregadas:", {
+  MODEL,
+  HAS_JWT_SECRET: !!SUPABASE_JWT_SECRET,
+  HAS_OPENROUTER_KEY: !!OPENROUTER_KEY
+});
 
 // Rate limiting: máximo 30 requisições por minuto por IP/usuário
 const RATE_LIMIT_WINDOW = 60 * 1000; // 1 minuto
