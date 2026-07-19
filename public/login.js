@@ -28,8 +28,12 @@
   // Aguarda um pouco pra Supabase processar token da URL
   setTimeout(function () {
     OMISTER.auth.getSession().then(function (res) {
+      console.log("Session check result:", res);
       if (res && res.data && res.data.session) {
+        console.log("Session encontrada, indo pro app...");
         window.location.replace("index.html");
+      } else {
+        console.log("Sem session, esperando login do usuário");
       }
     }).catch(function (err) {
       console.error("Erro ao verificar session:", err);
@@ -37,16 +41,19 @@
   }, 500);
 
   googleBtn.addEventListener("click", function () {
+    console.log("Clicou em Google, redirectTo:", redirectTo);
     googleBtn.disabled = true;
     OMISTER.auth
       .signInWithOAuth({ provider: "google", options: { redirectTo: redirectTo } })
       .then(function (res) {
+        console.log("OAuth resposta:", res);
         if (res && res.error) {
           googleBtn.disabled = false;
           showMsg("Não foi possível iniciar o login com Google: " + res.error.message, "error");
         }
       })
       .catch(function (e) {
+        console.error("OAuth erro:", e);
         googleBtn.disabled = false;
         showMsg("Erro: " + e.message, "error");
       });
