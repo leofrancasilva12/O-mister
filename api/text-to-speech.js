@@ -48,10 +48,13 @@ export default async function handler(req, res) {
     return res.status(401).json({ error: "Token obrigatório." });
   }
 
-  const decoded = verifyToken(token);
-  if (!decoded) {
-    return res.status(401).json({ error: "Token inválido ou expirado." });
+  if (SUPABASE_JWT_SECRET) {
+    const decoded = verifyToken(token);
+    if (!decoded) {
+      return res.status(401).json({ error: "Token inválido ou expirado." });
+    }
   }
+  // Sem secret: aceita qualquer token (fallback para desenvolvimento)
 
   if (!ELEVENLABS_API_KEY) {
     return res.status(500).json({
