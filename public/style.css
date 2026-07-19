@@ -995,3 +995,13 @@ html, body {
   border-radius: 8px;
   display: block;
 }
+
+/* Botão de áudio TTS */
+.msg-speak {
+  color: var(--text-faint);
+  transition: color 0.15s ease;
+}
+
+.msg-speak:hover {
+  color: var(--accent);
+}

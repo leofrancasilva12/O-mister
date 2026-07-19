@@ -13,6 +13,65 @@ let isStreaming = false;
 let useCloud = false;
 let user = null;
 let streamAbort = null; // controlar cancelamento de streaming
+let currentAudio = null; // controlar áudio sendo tocado
+
+/* =========================================================
+   TTS (Text-to-Speech) com ElevenLabs
+   ========================================================= */
+async function speakWithElevenLabs(text) {
+  const cfg = window.OMISTER_CONFIG || {};
+  let apiKey = cfg.ELEVENLABS_API_KEY;
+
+  // Se vazio, tenta localStorage (dev local)
+  if (!apiKey) {
+    apiKey = localStorage.getItem("elevenlabs_key");
+  }
+
+  if (!apiKey) {
+    const key = prompt("Cole sua chave ElevenLabs (https://elevenlabs.io/api/keys):");
+    if (!key) return;
+    localStorage.setItem("elevenlabs_key", key);
+    apiKey = key;
+  }
+
+  try {
+    // Para PT-BR, usando voz "Adam" (homem maduro)
+    const voiceId = "pNInz6obpgDQGcFmaJgB"; // Adam - male voice
+
+    const res = await fetch(`https://api.elevenlabs.io/v1/text-to-speech/${voiceId}`, {
+      method: "POST",
+      headers: {
+        "xi-api-key": apiKey,
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        text: text,
+        model_id: "eleven_monolingual_v1",
+        voice_settings: { stability: 0.5, similarity_boost: 0.75 },
+      }),
+    });
+
+    if (!res.ok) {
+      const err = await res.json().catch(() => ({}));
+      throw new Error(err.detail?.message || "Erro ao gerar áudio");
+    }
+
+    const audioBlob = await res.blob();
+    const audioUrl = URL.createObjectURL(audioBlob);
+
+    // Para se houver áudio tocando
+    if (currentAudio) {
+      currentAudio.pause();
+      currentAudio = null;
+    }
+
+    // Toca o novo áudio
+    currentAudio = new Audio(audioUrl);
+    currentAudio.play();
+  } catch (err) {
+    alert("Erro ao gerar áudio: " + err.message);
+  }
+}
 
 function newId() {
   if (window.crypto && crypto.randomUUID) return crypto.randomUUID();
@@ -367,6 +426,17 @@ function createAssistantMessage(messageIndex = null) {
     navigator.clipboard.writeText(text).catch(() => alert("Erro ao copiar"));
   });
   toolbar.appendChild(copyBtn);
+
+  const speakBtn = document.createElement("button");
+  speakBtn.className = "msg-btn msg-speak";
+  speakBtn.setAttribute("aria-label", "Ouvir");
+  speakBtn.title = "Ouvir com voz";
+  speakBtn.innerHTML = '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"/><path d="M15.54 8.46a5 5 0 0 1 0 7.07"/><path d="M19.07 4.93a10 10 0 0 1 0 14.14"/></svg>';
+  speakBtn.addEventListener("click", () => {
+    const text = content.innerText || content.textContent;
+    if (text.trim()) speakWithElevenLabs(text);
+  });
+  toolbar.appendChild(speakBtn);
 
   const regenerateBtn = document.createElement("button");
   regenerateBtn.className = "msg-btn msg-regenerate";
