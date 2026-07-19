@@ -591,8 +591,13 @@ async function initAuth() {
     // Timeout de segurança
     timeoutId = setTimeout(() => {
       if (!sessionFound) {
+        console.log("Timeout: sem sessão, redirecionando pra login");
         redirected = true;
         resolve();
+        // Redireciona pra login após resolver
+        setTimeout(() => {
+          window.location.replace("login.html");
+        }, 100);
       }
     }, 1500);
   });
