@@ -97,6 +97,7 @@
   /* ---------- 3. Barra de progresso de leitura ---------- */
   var barra = document.getElementById("progresso-barra");
   var topoFixo = document.getElementById("topo-fixo");
+  var btnTopo = document.getElementById("voltar-topo");
   var hero = document.getElementById("topo");
   var aguardando = false;
 
@@ -111,13 +112,20 @@
       barra.style.width = Math.min(pct, 100).toFixed(2) + "%";
     }
 
-    // Cabeçalho aparece depois que o topo sai da tela.
-    if (topoFixo) {
-      var limite = hero ? hero.offsetHeight * 0.75 : 500;
-      topoFixo.classList.toggle("visivel", y > limite);
-    }
+    // Cabeçalho e botão aparecem depois que o topo sai da tela.
+    var limite = hero ? hero.offsetHeight * 0.75 : 500;
+    if (topoFixo) topoFixo.classList.toggle("visivel", y > limite);
+    if (btnTopo) btnTopo.classList.toggle("visivel", y > limite);
 
     aguardando = false;
+  }
+
+  /* Clique no botão: sobe suavemente (ou direto, se o usuário
+     preferir menos movimento). */
+  if (btnTopo) {
+    btnTopo.addEventListener("click", function () {
+      window.scrollTo({ top: 0, behavior: semMovimento ? "auto" : "smooth" });
+    });
   }
 
   function pedirAtualizacao() {
