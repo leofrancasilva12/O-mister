@@ -110,6 +110,70 @@ img { max-width: 100%; height: auto; display: block; }
 
 .btn:focus-visible { outline: 3px solid var(--laranja-claro); outline-offset: 3px; }
 
+.btn-pequeno { font-size: 14.5px; padding: 10px 22px; }
+
+/* ============ Barra de progresso de leitura ============ */
+.progresso {
+  position: fixed;
+  top: 0; left: 0; right: 0;
+  height: 3px;
+  z-index: 60;
+  background: transparent;
+  pointer-events: none;
+}
+.progresso span {
+  display: block;
+  height: 100%;
+  width: 0;
+  background: linear-gradient(90deg, var(--laranja), var(--laranja-claro));
+  box-shadow: 0 0 10px rgba(232, 121, 26, .6);
+  transition: width .1s linear;
+}
+
+/* ============ Cabeçalho que aparece ao rolar ============ */
+.topo-fixo {
+  position: fixed;
+  top: 0; left: 0; right: 0;
+  z-index: 50;
+  background: rgba(10, 31, 61, .85);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border-bottom: 1px solid rgba(255, 255, 255, .1);
+  /* Escondido até passar do topo da página */
+  transform: translateY(-100%);
+  opacity: 0;
+  transition: transform .45s cubic-bezier(.22,.8,.3,1),
+              opacity .45s cubic-bezier(.22,.8,.3,1);
+}
+.topo-fixo.visivel { transform: translateY(0); opacity: 1; }
+
+.topo-inner {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 20px;
+  padding-top: 13px;
+  padding-bottom: 13px;
+}
+
+.topo-marca {
+  text-decoration: none;
+  color: #FFFFFF;
+  font-weight: 800;
+  font-size: 20px;
+  letter-spacing: -.01em;
+  line-height: 1.15;
+  display: flex;
+  flex-direction: column;
+}
+.topo-marca span {
+  font-size: 11px;
+  font-weight: 500;
+  letter-spacing: .06em;
+  text-transform: uppercase;
+  color: var(--texto-claro-medio);
+}
+
 /* ============ HERO ============ */
 .hero {
   position: relative;
@@ -120,6 +184,24 @@ img { max-width: 100%; height: auto; display: block; }
 }
 
 .hero-bg { position: absolute; inset: 0; pointer-events: none; }
+
+/* Gradiente que se desloca lentamente, dando "vida" ao fundo */
+.gradiente-vivo {
+  position: absolute;
+  inset: -25%;
+  background:
+    radial-gradient(circle at 20% 25%, rgba(232, 121, 26, .28), transparent 45%),
+    radial-gradient(circle at 78% 20%, rgba(30, 100, 200, .32), transparent 48%),
+    radial-gradient(circle at 55% 82%, rgba(247, 147, 51, .20), transparent 46%),
+    radial-gradient(circle at 12% 78%, rgba(20, 70, 150, .30), transparent 44%);
+  animation: gradienteVivo 22s ease-in-out infinite alternate;
+  will-change: transform;
+}
+@keyframes gradienteVivo {
+  0%   { transform: translate3d(0, 0, 0) scale(1) rotate(0deg); }
+  50%  { transform: translate3d(3%, -2%, 0) scale(1.12) rotate(4deg); }
+  100% { transform: translate3d(-3%, 3%, 0) scale(1.05) rotate(-3deg); }
+}
 
 .orb {
   position: absolute;
@@ -215,6 +297,20 @@ img { max-width: 100%; height: auto; display: block; }
   color: transparent;
 }
 
+/* Cursor da máquina de escrever no título */
+.cursor-titulo {
+  display: inline-block;
+  width: 3px;
+  height: .82em;
+  margin-left: 4px;
+  vertical-align: -.06em;
+  background: var(--laranja-claro);
+  border-radius: 2px;
+  opacity: 0;
+}
+.js-ativo .cursor-titulo { opacity: 1; animation: piscarTitulo 1.05s steps(2) infinite; }
+@keyframes piscarTitulo { 0%, 100% { opacity: 1; } 50% { opacity: 0; } }
+
 .hero-sub {
   margin: 0 0 32px;
   font-size: clamp(16.5px, 1.9vw, 19px);
@@ -264,6 +360,9 @@ img { max-width: 100%; height: auto; display: block; }
 
 /* ============ Seções ============ */
 .secao { padding: clamp(56px, 9vw, 96px) 0; }
+
+/* Compensa a altura do cabeçalho fixo ao pular por links âncora */
+[id] { scroll-margin-top: 84px; }
 .secao-suave { background: var(--bg-suave); }
 
 .secao-escura {
@@ -360,6 +459,17 @@ img { max-width: 100%; height: auto; display: block; }
   flex-direction: column;
   gap: 16px;
   min-width: 0;
+}
+
+/* Transição entre as perguntas do ciclo de demonstração */
+.app-msg {
+  transition: opacity .45s ease, transform .45s ease;
+}
+.app-msg.saindo { opacity: 0; transform: translateY(-10px); }
+.app-msg.entrando { animation: entrarMsg .5s cubic-bezier(.22,.8,.3,1) both; }
+@keyframes entrarMsg {
+  from { opacity: 0; transform: translateY(14px); }
+  to   { opacity: 1; transform: none; }
 }
 
 .app-msg-usuario {
@@ -807,6 +917,12 @@ img { max-width: 100%; height: auto; display: block; }
 /* --- Celulares grandes / tablets em pé --- */
 @media (max-width: 680px) {
   body { font-size: 16px; }
+
+  /* No celular o cabeçalho fixo mostra só a sigla, para caber o botão */
+  .topo-marca { font-size: 18px; }
+  .topo-marca span { display: none; }
+  .topo-inner { padding-top: 10px; padding-bottom: 10px; }
+  .btn-pequeno { font-size: 13.5px; padding: 9px 16px; width: auto; }
 
   .secao-topo { margin-bottom: 36px; }
 

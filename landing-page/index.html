@@ -11,9 +11,25 @@
 </head>
 <body>
 
+<!-- Barra de progresso de leitura -->
+<div class="progresso" aria-hidden="true"><span id="progresso-barra"></span></div>
+
+<!-- Cabeçalho que aparece ao rolar -->
+<header class="topo-fixo" id="topo-fixo">
+  <div class="wrap topo-inner">
+    <a class="topo-marca" href="#topo">
+      MIOG <span>Mister Intelligence O&amp;G</span>
+    </a>
+    <a class="btn btn-primario btn-pequeno" href="https://mister-intelligence.vercel.app">
+      Acessar a plataforma
+    </a>
+  </div>
+</header>
+
 <!-- ===================== HERO ===================== -->
-<header class="hero">
+<header class="hero" id="topo">
   <div class="hero-bg" aria-hidden="true">
+    <span class="gradiente-vivo"></span>
     <span class="orb orb-1"></span>
     <span class="orb orb-2"></span>
     <span class="grid-lines"></span>
@@ -30,7 +46,8 @@
       <p class="hero-eyebrow reveal" data-reveal="up">Plataforma de Inteligência Técnica</p>
       <h1 class="reveal" data-reveal="up" data-delay="1">
         Conhecimento de engenharia,<br>
-        <span class="destaque">na hora que você precisa.</span>
+        <span class="destaque" id="frase-rotativa">na hora que você precisa.</span><span
+          class="cursor-titulo" id="cursor-titulo" aria-hidden="true"></span>
       </h1>
       <p class="hero-sub reveal" data-reveal="up" data-delay="2">
         O MIOG une normas técnicas nacionais e internacionais à Inteligência Artificial
@@ -83,11 +100,11 @@
           </aside>
 
           <div class="app-chat">
-            <div class="app-msg app-msg-usuario">
-              <p>Qual a diferença entre conexões EUE e NUE?</p>
+            <div class="app-msg app-msg-usuario" id="app-msg-usuario">
+              <p id="app-pergunta">Qual a diferença entre conexões EUE e NUE?</p>
             </div>
 
-            <div class="app-msg app-msg-mister">
+            <div class="app-msg app-msg-mister" id="app-msg-mister">
               <div class="app-avatar" aria-hidden="true"></div>
               <div class="app-balao">
                 <p class="app-digitando" id="app-resposta"></p>
