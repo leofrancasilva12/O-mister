@@ -38,7 +38,7 @@ export default async function handler(req, res) {
     if (!isJwtConfigured()) {
       return res.status(500).json({ error: "Serviço não configurado no servidor." });
     }
-    const decoded = verifyToken(token);
+    const decoded = await verifyToken(token);
     if (!decoded) {
       return res.status(401).json({ error: "Token inválido ou expirado." });
     }

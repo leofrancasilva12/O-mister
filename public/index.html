@@ -15,14 +15,7 @@
   <link rel="stylesheet" href="style.css">
   <script src="config.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/dompurify@3.0.9/dist/purify.min.js"></script>
-  <script>
-    // Decide antes de renderizar: splash só aparece logo após o login.
-    try {
-      if (sessionStorage.getItem("omister.justLoggedIn") !== "1") {
-        document.documentElement.classList.add("no-splash");
-      }
-    } catch (e) {}
-  </script>
+  <script src="splash-init.js"></script>
 </head>
 <body>
 
