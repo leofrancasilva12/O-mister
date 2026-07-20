@@ -1,60 +1,29 @@
-import jwt from "jsonwebtoken";
+import { applyCors, getBearerToken, verifyToken, isJwtConfigured } from "../lib/http.js";
 
-const SUPABASE_JWT_SECRET = process.env.SUPABASE_JWT_SECRET;
 const ELEVENLABS_API_KEY = process.env.ELEVENLABS_API_KEY;
 
-function verifyToken(token) {
-  if (!SUPABASE_JWT_SECRET) {
-    return null;
-  }
-
-  try {
-    return jwt.verify(token, SUPABASE_JWT_SECRET, {
-      algorithms: ["HS256"],
-    });
-  } catch (err) {
-    return null;
-  }
-}
-
 export default async function handler(req, res) {
-  // CORS
-  const origin = req.headers.origin || "";
-  const allowedOrigins = [
-    "https://mister-intelligence.vercel.app",
-    "http://localhost:3000",
-    "http://localhost:5173",
-  ];
-
-  if (allowedOrigins.includes(origin)) {
-    res.setHeader("Access-Control-Allow-Origin", origin);
-    res.setHeader("Access-Control-Allow-Methods", "POST, OPTIONS");
-    res.setHeader("Access-Control-Allow-Headers", "Content-Type, Authorization");
-  }
-
-  if (req.method === "OPTIONS") {
-    return res.status(200).end();
-  }
+  if (applyCors(req, res)) return;
 
   if (req.method !== "POST") {
     return res.status(405).json({ error: "Método não permitido." });
   }
 
-  // Autenticação obrigatória
-  const authHeader = req.headers.authorization || "";
-  const token = authHeader.startsWith("Bearer ") ? authHeader.slice(7) : null;
-
+  // Autenticação obrigatória (falha fechada)
+  const token = getBearerToken(req);
   if (!token) {
     return res.status(401).json({ error: "Token obrigatório." });
   }
 
-  if (SUPABASE_JWT_SECRET) {
-    const decoded = verifyToken(token);
-    if (!decoded) {
-      return res.status(401).json({ error: "Token inválido ou expirado." });
-    }
+  if (!isJwtConfigured()) {
+    console.error("SUPABASE_JWT_SECRET não configurada — TTS bloqueado.");
+    return res.status(500).json({ error: "Serviço não configurado no servidor." });
   }
-  // Sem secret: aceita qualquer token (fallback para desenvolvimento)
+
+  const decoded = verifyToken(token);
+  if (!decoded) {
+    return res.status(401).json({ error: "Token inválido ou expirado." });
+  }
 
   if (!ELEVENLABS_API_KEY) {
     return res.status(500).json({
