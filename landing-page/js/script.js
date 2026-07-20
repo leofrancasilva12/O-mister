@@ -1,6 +1,6 @@
 /* =========================================================
    MIOG — Landing page
-   Animações: revelação ao rolar, contador e efeito de digitação
+   Animações: revelação ao rolar e efeito de digitação
    na simulação do aplicativo.
 
    Tudo é progressivo: se o JavaScript falhar ou o usuário preferir
@@ -60,41 +60,7 @@
     for (var j = 0; j < alvos.length; j++) observador.observe(alvos[j]);
   }
 
-  /* ---------- 2. Contador numérico do hero ---------- */
-  var contadores = document.querySelectorAll("[data-contador]");
-
-  function animarContador(el) {
-    var alvo = parseInt(el.getAttribute("data-contador"), 10);
-    if (isNaN(alvo)) return;
-
-    if (semMovimento) {
-      el.textContent = String(alvo);
-      return;
-    }
-
-    var duracao = 1100;
-    var inicio = null;
-
-    function passo(agora) {
-      if (inicio === null) inicio = agora;
-      var progresso = Math.min((agora - inicio) / duracao, 1);
-      // easing suave na saída
-      var suave = 1 - Math.pow(1 - progresso, 3);
-      el.textContent = String(Math.round(alvo * suave));
-      if (progresso < 1) requestAnimationFrame(passo);
-    }
-
-    requestAnimationFrame(passo);
-  }
-
-  for (var k = 0; k < contadores.length; k++) {
-    (function (el) {
-      // Pequeno atraso para acompanhar a entrada do hero.
-      setTimeout(function () { animarContador(el); }, 500);
-    })(contadores[k]);
-  }
-
-  /* ---------- 3. Barra de progresso de leitura ---------- */
+  /* ---------- 2. Barra de progresso de leitura ---------- */
   var barra = document.getElementById("progresso-barra");
   var topoFixo = document.getElementById("topo-fixo");
   var btnTopo = document.getElementById("voltar-topo");

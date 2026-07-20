@@ -342,14 +342,10 @@ img { max-width: 100%; height: auto; display: block; }
 .hero h1,
 .hero-sub,
 .hero-acoes,
-.hero-pilares {
-  animation: entradaHero .85s cubic-bezier(.22, .8, .3, 1) both;
-}
 .hero-eyebrow { animation-delay: .10s; }
 .hero h1      { animation-delay: .20s; }
 .hero-sub     { animation-delay: .32s; }
 .hero-acoes   { animation-delay: .44s; }
-.hero-pilares { animation-delay: .56s; }
 
 .hero-eyebrow {
   margin: 0 0 14px;
@@ -397,27 +393,6 @@ img { max-width: 100%; height: auto; display: block; }
 
 .hero-acoes { display: flex; flex-wrap: wrap; gap: 14px; margin-bottom: 44px; }
 
-.hero-pilares {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 36px;
-  list-style: none;
-  margin: 0;
-  padding: 26px 0 0;
-  border-top: 1px solid rgba(255, 255, 255, .15);
-}
-.hero-pilares li { display: flex; flex-direction: column; }
-.hero-pilares strong {
-  font-size: 30px;
-  font-weight: 800;
-  line-height: 1.1;
-  color: var(--laranja-claro);
-}
-.hero-pilares span {
-  font-size: 13.5px;
-  color: var(--texto-claro-medio);
-  letter-spacing: .01em;
-}
 
 .hero-seta {
   position: absolute;
@@ -1028,7 +1003,6 @@ img { max-width: 100%; height: auto; display: block; }
 /* --- Notebooks menores / tablets deitados --- */
 @media (max-width: 1024px) {
   .hero-inner { gap: 40px; }
-  .hero-pilares { gap: 28px; }
   .acesso { gap: 34px; padding: 42px; }
 }
 
@@ -1039,7 +1013,6 @@ img { max-width: 100%; height: auto; display: block; }
   .hero-marca { max-width: 330px; margin: 0 auto; padding: 18px; }
   .hero-sub { margin-left: auto; margin-right: auto; }
   .hero-acoes { justify-content: center; }
-  .hero-pilares { justify-content: center; gap: 30px; }
   .duo { grid-template-columns: 1fr; }
   .acesso { flex-direction: column; text-align: center; padding: 42px 30px; }
   .acesso-texto p { margin-left: auto; margin-right: auto; }
@@ -1080,9 +1053,6 @@ img { max-width: 100%; height: auto; display: block; }
   .btn { padding: 15px 28px; }
 
   .hero-marca { max-width: 280px; }
-  .hero-pilares { gap: 20px 26px; padding-top: 22px; }
-  .hero-pilares strong { font-size: 24px; }
-  .hero-pilares span { font-size: 12.5px; }
   .hero-seta { display: none; }
 
   /* Simulação do app: esconde a barra lateral e compacta o conteúdo */
@@ -1134,14 +1104,6 @@ img { max-width: 100%; height: auto; display: block; }
   .hero-marca { max-width: 232px; padding: 14px; }
 
   /* Em telas muito estreitas, os indicadores viram uma linha só */
-  .hero-pilares {
-    gap: 16px;
-    justify-content: space-between;
-    width: 100%;
-  }
-  .hero-pilares li { flex: 1; min-width: 0; align-items: center; text-align: center; }
-  .hero-pilares strong { font-size: 21px; }
-  .hero-pilares span { font-size: 11.5px; line-height: 1.3; }
 
   .app-barra { padding: 10px 13px; }
   .app-corpo { min-height: 230px; }
