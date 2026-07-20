@@ -212,6 +212,14 @@
         "transporte de óleo e gás. A escolha segue a aplicação: poço ou duto."
     },
     {
+      pergunta: "Decodifique 9 5/8\" 47# P110 BTC",
+      resposta:
+        "9 5/8\" e o diametro externo nominal. 47# e o peso nominal, 47 lb/ft, " +
+        "que define a espessura de parede. P110 e o grau do aco conforme API 5CT " +
+        "(110 ksi de limite de escoamento minimo). BTC e Buttress Thread Casing. " +
+        "A espessura exata esta na tabela da API 5CT, conforme a edicao em uso."
+    },
+    {
       pergunta: "O que a API Q1 exige no controle de documentos?",
       resposta:
         "A norma pede procedimento documentado que garanta aprovação antes do uso, " +
