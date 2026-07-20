@@ -99,17 +99,6 @@
   padding: 20px;
 }
 
-/* No tema escuro, os logos ganham fundo branco circular (a arte tem fundo claro) */
-:root[data-theme="dark"] .brand-logo,
-:root[data-theme="dark"] .empty-logo,
-:root[data-theme="dark"] .welcome-logo {
-  background: #FFFFFF;
-  border-radius: 50%;
-  padding: 6px;
-}
-:root[data-theme="dark"] .empty-logo { padding: 12px; }
-:root[data-theme="dark"] .welcome-logo { padding: 10px; }
-
 html, body {
   margin: 0;
   padding: 0;
