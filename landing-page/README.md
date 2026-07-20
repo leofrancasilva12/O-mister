@@ -5,13 +5,16 @@ Página institucional de apresentação da plataforma MIOG.
 ## Estrutura
 
 ```
-langpage/
-├── index.html   estrutura e conteúdo
-├── style.css    todo o visual (paleta da marca, responsivo, tema escuro)
-├── script.js    animações de entrada e efeito de digitação
-├── favicon.png  ícone da aba do navegador
+landing-page/
+├── index.html            estrutura e conteúdo
+├── css/
+│   └── style.css         todo o visual (paleta da marca, responsivo, tema escuro)
+├── js/
+│   ├── init.js           ativa as animações (carregado no <head>)
+│   └── script.js         animações de entrada e efeito de digitação
 └── img/
-    └── marca-miog.png
+    ├── marca-miog.png    arte institucional do topo
+    └── favicon.png       ícone da aba do navegador
 ```
 
 A pasta é **autossuficiente**: não depende de nenhum arquivo externo, biblioteca,

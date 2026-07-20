@@ -700,7 +700,9 @@ img { max-width: 100%; height: auto; display: block; }
    natural quando entra na tela. O atraso vem da variável --d, que o
    JavaScript preenche para escalonar grupos (efeito cascata). */
 
-.reveal {
+/* Os estados iniciais só valem quando o JavaScript está ativo (.js-ativo).
+   Sem JS, nada é escondido e a página continua legível. */
+.js-ativo .reveal {
   opacity: 0;
   transition:
     opacity .75s cubic-bezier(.22, .8, .3, 1),
@@ -710,23 +712,23 @@ img { max-width: 100%; height: auto; display: block; }
   will-change: opacity, transform;
 }
 
-.reveal[data-reveal="up"]     { transform: translateY(36px); }
-.reveal[data-reveal="down"]   { transform: translateY(-28px); }
-.reveal[data-reveal="left"]   { transform: translateX(-42px); }
-.reveal[data-reveal="right"]  { transform: translateX(42px); }
-.reveal[data-reveal="zoom"]   { transform: scale(.92); }
-.reveal[data-reveal="pop"]    { transform: scale(.8); }
-.reveal[data-reveal="blur"]   { filter: blur(10px); transform: translateY(18px); }
-.reveal[data-reveal="tilt"]   { transform: perspective(900px) rotateX(12deg) translateY(30px); }
+.js-ativo .reveal[data-reveal="up"]     { transform: translateY(36px); }
+.js-ativo .reveal[data-reveal="down"]   { transform: translateY(-28px); }
+.js-ativo .reveal[data-reveal="left"]   { transform: translateX(-42px); }
+.js-ativo .reveal[data-reveal="right"]  { transform: translateX(42px); }
+.js-ativo .reveal[data-reveal="zoom"]   { transform: scale(.92); }
+.js-ativo .reveal[data-reveal="pop"]    { transform: scale(.8); }
+.js-ativo .reveal[data-reveal="blur"]   { filter: blur(10px); transform: translateY(18px); }
+.js-ativo .reveal[data-reveal="tilt"]   { transform: perspective(900px) rotateX(12deg) translateY(30px); }
 
-.reveal.visivel {
+.js-ativo .reveal.visivel {
   opacity: 1;
   transform: none;
   filter: none;
 }
 
 /* Saída mais elástica para os elementos "pop" (chips, normas) */
-.reveal[data-reveal="pop"] {
+.js-ativo .reveal[data-reveal="pop"] {
   transition-timing-function: cubic-bezier(.34, 1.56, .64, 1);
 }
 
