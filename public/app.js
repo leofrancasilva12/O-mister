@@ -805,7 +805,7 @@ async function deleteChat(id) {
 
   showModal(
     "Excluir conversa?",
-    `Tem certeza que deseja excluir a conversa <strong>"${chatTitle(chat)}"</strong>? Essa ação não pode ser desfeita.`,
+    `Tem certeza que deseja excluir a conversa <strong>"${escapeHtml(chatTitle(chat))}"</strong>? Essa ação não pode ser desfeita.`,
     "Excluir",
     async () => {
       chats = chats.filter((c) => c.id !== id);

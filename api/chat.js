@@ -1,38 +1,19 @@
 import { buildSystemPrompt } from "../lib/system-prompt.js";
-import jwt from "jsonwebtoken";
-
-console.log("[INIT] Carregando /api/chat...");
+import { applyCors, getBearerToken, verifyToken, isJwtConfigured } from "../lib/http.js";
+import { isRateLimited } from "../lib/rate-limit.js";
 
 const MODEL = process.env.OPENROUTER_MODEL || "anthropic/claude-haiku-4.5";
 const MAX_HISTORY = 20;
-const SUPABASE_JWT_SECRET = process.env.SUPABASE_JWT_SECRET;
-const OPENROUTER_KEY = process.env.OPENROUTER_API_KEY;
 
-console.log("[INIT] Configurações carregadas:", {
-  MODEL,
-  HAS_JWT_SECRET: !!SUPABASE_JWT_SECRET,
-  HAS_OPENROUTER_KEY: !!OPENROUTER_KEY
-});
+// Limites de payload de imagem (base64) para evitar abuso/custo/DoS.
+const MAX_IMAGES = 4;
+const MAX_IMAGE_CHARS = 3_000_000; // ~2 MB por imagem em base64
 
-// Rate limiting: máximo 30 requisições por minuto por IP/usuário
-const RATE_LIMIT_WINDOW = 60 * 1000; // 1 minuto
+// Rate limiting: máximo 30 requisições por minuto por IP/usuário.
+// O store compartilhado (Vercel KV/Upstash) é usado quando configurado;
+// caso contrário há fallback em memória. Ver lib/rate-limit.js.
 const RATE_LIMIT_MAX = 30;
-const rateLimitMap = new Map();
-
-function checkRateLimit(key) {
-  const now = Date.now();
-  const entry = rateLimitMap.get(key) || { count: 0, resetTime: now + RATE_LIMIT_WINDOW };
-
-  if (now > entry.resetTime) {
-    entry.count = 0;
-    entry.resetTime = now + RATE_LIMIT_WINDOW;
-  }
-
-  entry.count++;
-  rateLimitMap.set(key, entry);
-
-  return entry.count <= RATE_LIMIT_MAX;
-}
+const RATE_LIMIT_WINDOW_SEC = 60;
 
 function getRateLimitKey(req, userId) {
   // Prioriza usuário autenticado, senão usa IP
@@ -41,67 +22,32 @@ function getRateLimitKey(req, userId) {
   return `ip:${ip}`;
 }
 
-function verifyToken(token) {
-  if (!SUPABASE_JWT_SECRET) {
-    console.warn("SUPABASE_JWT_SECRET não configurada, JWT validation desabilitada");
-    return null;
-  }
-
-  try {
-    return jwt.verify(token, SUPABASE_JWT_SECRET, {
-      algorithms: ["HS256"],
-    });
-  } catch (err) {
-    return null;
-  }
-}
-
 export default async function handler(req, res) {
-  // CORS: aceita apenas requisições do mesmo origin
-  const origin = req.headers.origin || "";
-  const allowedOrigins = [
-    "https://mister-intelligence.vercel.app",
-    "http://localhost:3000",
-    "http://localhost:5173",
-  ];
-
-  if (allowedOrigins.includes(origin)) {
-    res.setHeader("Access-Control-Allow-Origin", origin);
-    res.setHeader("Access-Control-Allow-Methods", "POST, OPTIONS");
-    res.setHeader("Access-Control-Allow-Headers", "Content-Type, Authorization");
-    res.setHeader("Access-Control-Max-Age", "3600");
-  }
-
-  if (req.method === "OPTIONS") {
-    return res.status(200).end();
-  }
+  if (applyCors(req, res)) return;
 
   if (req.method !== "POST") {
     return res.status(405).json({ error: "Método não permitido." });
   }
 
-  const authHeader = req.headers.authorization || "";
-  const token = authHeader.startsWith("Bearer ") ? authHeader.slice(7) : null;
+  const token = getBearerToken(req);
   let userId = null;
 
+  // Se um token foi enviado, ele DEVE ser válido (falha fechada). Requisições
+  // sem token continuam permitidas (modo convidado), mas rate-limitadas por IP.
   if (token) {
-    // Tenta validar token se secret está configurado
-    if (SUPABASE_JWT_SECRET) {
-      const decoded = verifyToken(token);
-      if (decoded) {
-        userId = decoded.sub;
-      } else {
-        console.warn("[CHAT] Token validation falhou, mas continuando sem userId");
-        // Continua sem erro - userid fica null
-      }
+    if (!isJwtConfigured()) {
+      return res.status(500).json({ error: "Serviço não configurado no servidor." });
     }
-  } else {
-    console.log("[CHAT] Sem token na requisição");
+    const decoded = verifyToken(token);
+    if (!decoded) {
+      return res.status(401).json({ error: "Token inválido ou expirado." });
+    }
+    userId = decoded.sub;
   }
 
   // Verifica rate limit
   const rateLimitKey = getRateLimitKey(req, userId);
-  if (!checkRateLimit(rateLimitKey)) {
+  if (await isRateLimited(rateLimitKey, { max: RATE_LIMIT_MAX, windowSec: RATE_LIMIT_WINDOW_SEC })) {
     return res.status(429).json({
       error: "Muitas requisições. Tente novamente em alguns instantes.",
     });
@@ -153,15 +99,25 @@ export default async function handler(req, res) {
 
     // Se content é array (visão com imagens), passa como está; senão normaliza como texto
     if (Array.isArray(content)) {
+      let imageCount = 0;
       msg.content = content.map((part) => {
         if (part.type === "text") {
           return { type: "text", text: String(part.text ?? "").slice(0, 4000) };
         }
         if (part.type === "image_url" && part.image_url?.url) {
+          const url = part.image_url.url;
           // Valida base64 de imagem
-          if (!part.image_url.url.startsWith("data:image/")) {
+          if (!url.startsWith("data:image/")) {
             return { type: "text", text: "[Imagem inválida]" };
           }
+          // Limita quantidade e tamanho para evitar abuso/custo/DoS
+          if (imageCount >= MAX_IMAGES) {
+            return { type: "text", text: "[Imagem ignorada: limite excedido]" };
+          }
+          if (url.length > MAX_IMAGE_CHARS) {
+            return { type: "text", text: "[Imagem muito grande]" };
+          }
+          imageCount++;
           return part;
         }
         return { type: "text", text: "[Conteúdo inválido]" };

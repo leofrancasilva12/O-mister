@@ -1,73 +1,33 @@
-import jwt from "jsonwebtoken";
 import { createClient } from "@supabase/supabase-js";
+import { applyCors, getBearerToken, verifyToken, isJwtConfigured } from "../lib/http.js";
 
-const SUPABASE_JWT_SECRET = process.env.SUPABASE_JWT_SECRET;
 const SUPABASE_URL = process.env.SUPABASE_URL;
 const SUPABASE_SERVICE_ROLE_KEY = process.env.SUPABASE_SERVICE_ROLE_KEY;
 
-function verifyToken(token) {
-  if (!SUPABASE_JWT_SECRET) {
-    return null;
-  }
-
-  try {
-    return jwt.verify(token, SUPABASE_JWT_SECRET, {
-      algorithms: ["HS256"],
-    });
-  } catch (err) {
-    return null;
-  }
-}
-
 export default async function handler(req, res) {
-  // CORS
-  const origin = req.headers.origin || "";
-  const allowedOrigins = [
-    "https://mister-intelligence.vercel.app",
-    "http://localhost:3000",
-    "http://localhost:5173",
-  ];
-
-  if (allowedOrigins.includes(origin)) {
-    res.setHeader("Access-Control-Allow-Origin", origin);
-    res.setHeader("Access-Control-Allow-Methods", "POST, OPTIONS");
-    res.setHeader("Access-Control-Allow-Headers", "Content-Type, Authorization");
-    res.setHeader("Access-Control-Max-Age", "3600");
-  }
-
-  if (req.method === "OPTIONS") {
-    return res.status(200).end();
-  }
+  if (applyCors(req, res)) return;
 
   if (req.method !== "POST") {
     return res.status(405).json({ error: "Método não permitido." });
   }
 
-  const authHeader = req.headers.authorization || "";
-  const token = authHeader.startsWith("Bearer ") ? authHeader.slice(7) : null;
-
+  const token = getBearerToken(req);
   if (!token) {
     return res.status(401).json({ error: "Token obrigatório." });
   }
 
-  let userId = null;
-  if (SUPABASE_JWT_SECRET) {
-    const decoded = verifyToken(token);
-    if (!decoded) {
-      return res.status(401).json({ error: "Token inválido ou expirado." });
-    }
-    userId = decoded.sub;
+  // Falha fechada: sem secret configurado não há como validar o dono do token,
+  // e um endpoint destrutivo nunca deve confiar num JWT não verificado.
+  if (!isJwtConfigured()) {
+    console.error("SUPABASE_JWT_SECRET não configurada — deleção bloqueada.");
+    return res.status(500).json({ error: "Serviço não configurado no servidor." });
   }
-  // Sem secret configurado, extrair user_id do token (fallback)
-  // Isso é menos seguro mas permite desenvolvimento sem secret
-  if (!userId) {
-    try {
-      const decoded = JSON.parse(Buffer.from(token.split('.')[1], 'base64').toString());
-      userId = decoded.sub;
-    } catch (e) {
-      return res.status(401).json({ error: "Token inválido." });
-    }
+
+  const decoded = verifyToken(token);
+  if (!decoded || !decoded.sub) {
+    return res.status(401).json({ error: "Token inválido ou expirado." });
   }
+  const userId = decoded.sub;
 
   // Valida confirmação explícita via body
   const { confirm } = req.body || {};
@@ -77,7 +37,6 @@ export default async function handler(req, res) {
     });
   }
 
-  // Sem service role key: retorna erro
   if (!SUPABASE_URL || !SUPABASE_SERVICE_ROLE_KEY) {
     console.error("SUPABASE_SERVICE_ROLE_KEY não configurada");
     return res.status(500).json({
@@ -114,15 +73,13 @@ export default async function handler(req, res) {
 
     // Deleta usuário do Auth do Supabase
     const { error: deleteAuthError } = await supabase.auth.admin.deleteUser(userId);
-
     if (deleteAuthError) {
-      console.error("Erro ao deletar usuário:", deleteAuthError);
-      // Não retorna erro aqui porque conversas/perfil já foram deletados
-      // A deleção de Auth é secundária
+      console.error("Erro ao deletar usuário do Auth:", deleteAuthError);
     }
 
     return res.status(200).json({
       success: true,
+      authDeleted: !deleteAuthError,
       message: "Conta, conversas e perfil foram permanentemente deletados.",
     });
   } catch (err) {

@@ -27,9 +27,7 @@
 
   // Monitora mudanças de autenticação (inclui OAuth redirect)
   OMISTER.auth.onAuthStateChange(function (event, session) {
-    console.log("Auth state changed:", event, session);
     if (session) {
-      console.log("Sessão criada! Entrando no app...");
       // Marca que veio de um login → mostra a splash uma vez no app
       try { sessionStorage.setItem("omister.justLoggedIn", "1"); } catch (e) {}
       window.location.replace("index.html");
@@ -37,12 +35,10 @@
   });
 
   googleBtn.addEventListener("click", function () {
-    console.log("Clicou em Google, redirectTo:", redirectTo);
     googleBtn.disabled = true;
     OMISTER.auth
       .signInWithOAuth({ provider: "google", options: { redirectTo: redirectTo } })
       .then(function (res) {
-        console.log("OAuth resposta:", res);
         if (res && res.error) {
           googleBtn.disabled = false;
           showMsg("Não foi possível iniciar o login com Google: " + res.error.message, "error");
