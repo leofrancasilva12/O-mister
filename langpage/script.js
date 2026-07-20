@@ -14,7 +14,27 @@
     window.matchMedia &&
     window.matchMedia("(prefers-reduced-motion: reduce)").matches;
 
-  /* ---------- 1. Revelação dos elementos ao rolar ---------- */
+  /* ---------- 1. Cascata automática ----------
+     Containers marcados com data-stagger transformam seus filhos em
+     elementos animados, com atraso crescente — sem precisar escrever
+     data-delay um por um no HTML.                                     */
+  var grupos = document.querySelectorAll("[data-stagger]");
+
+  for (var g = 0; g < grupos.length; g++) {
+    var grupo = grupos[g];
+    var tipo = grupo.getAttribute("data-stagger") || "up";
+    var passo = parseFloat(grupo.getAttribute("data-passo")) || 0.07;
+    var filhos = grupo.children;
+
+    for (var f = 0; f < filhos.length; f++) {
+      var filho = filhos[f];
+      filho.classList.add("reveal");
+      filho.setAttribute("data-reveal", tipo);
+      filho.style.setProperty("--d", (f * passo).toFixed(2) + "s");
+    }
+  }
+
+  /* ---------- 2. Revelação dos elementos ao rolar ---------- */
   var alvos = document.querySelectorAll(".reveal");
 
   function mostrarTudo() {

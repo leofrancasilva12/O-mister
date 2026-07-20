@@ -68,7 +68,11 @@ body {
 
 img { max-width: 100%; height: auto; display: block; }
 
-.wrap { max-width: 1120px; margin: 0 auto; padding: 0 24px; }
+.wrap {
+  max-width: 1120px;
+  margin: 0 auto;
+  padding: 0 clamp(18px, 5vw, 24px);
+}
 .wrap.estreito { max-width: 780px; }
 
 /* ============ Botões ============ */
@@ -165,12 +169,28 @@ img { max-width: 100%; height: auto; display: block; }
   background: #FFFFFF;
   border-radius: var(--raio-lg);
   box-shadow: 0 20px 60px rgba(0, 0, 0, .35);
-  animation: respirar 7s ease-in-out infinite;
+  animation:
+    entradaMarca .9s cubic-bezier(.22, .8, .3, 1) both,
+    respirar 7s ease-in-out 1s infinite;
 }
 @keyframes respirar {
   0%, 100% { transform: translateY(0); }
   50%      { transform: translateY(-12px); }
 }
+
+/* O texto do hero entra em sequência assim que a página carrega */
+.hero-eyebrow,
+.hero h1,
+.hero-sub,
+.hero-acoes,
+.hero-pilares {
+  animation: entradaHero .85s cubic-bezier(.22, .8, .3, 1) both;
+}
+.hero-eyebrow { animation-delay: .10s; }
+.hero h1      { animation-delay: .20s; }
+.hero-sub     { animation-delay: .32s; }
+.hero-acoes   { animation-delay: .44s; }
+.hero-pilares { animation-delay: .56s; }
 
 .hero-eyebrow {
   margin: 0 0 14px;
@@ -243,7 +263,7 @@ img { max-width: 100%; height: auto; display: block; }
 }
 
 /* ============ Seções ============ */
-.secao { padding: 96px 0; }
+.secao { padding: clamp(56px, 9vw, 96px) 0; }
 .secao-suave { background: var(--bg-suave); }
 
 .secao-escura {
@@ -676,55 +696,192 @@ img { max-width: 100%; height: auto; display: block; }
 }
 
 /* ============ Animações de entrada ============ */
+/* Cada elemento parte de um estado deslocado/transparente e chega ao
+   natural quando entra na tela. O atraso vem da variável --d, que o
+   JavaScript preenche para escalonar grupos (efeito cascata). */
+
 .reveal {
   opacity: 0;
-  transition: opacity .7s cubic-bezier(.22,.8,.3,1),
-              transform .7s cubic-bezier(.22,.8,.3,1);
+  transition:
+    opacity .75s cubic-bezier(.22, .8, .3, 1),
+    transform .75s cubic-bezier(.22, .8, .3, 1),
+    filter .75s cubic-bezier(.22, .8, .3, 1);
+  transition-delay: var(--d, 0s);
   will-change: opacity, transform;
 }
-.reveal[data-reveal="up"]    { transform: translateY(34px); }
-.reveal[data-reveal="left"]  { transform: translateX(-34px); }
-.reveal[data-reveal="right"] { transform: translateX(34px); }
-.reveal[data-reveal="zoom"]  { transform: scale(.94); }
+
+.reveal[data-reveal="up"]     { transform: translateY(36px); }
+.reveal[data-reveal="down"]   { transform: translateY(-28px); }
+.reveal[data-reveal="left"]   { transform: translateX(-42px); }
+.reveal[data-reveal="right"]  { transform: translateX(42px); }
+.reveal[data-reveal="zoom"]   { transform: scale(.92); }
+.reveal[data-reveal="pop"]    { transform: scale(.8); }
+.reveal[data-reveal="blur"]   { filter: blur(10px); transform: translateY(18px); }
+.reveal[data-reveal="tilt"]   { transform: perspective(900px) rotateX(12deg) translateY(30px); }
 
 .reveal.visivel {
   opacity: 1;
   transform: none;
+  filter: none;
 }
 
-.reveal[data-delay="1"] { transition-delay: .09s; }
-.reveal[data-delay="2"] { transition-delay: .18s; }
-.reveal[data-delay="3"] { transition-delay: .27s; }
-.reveal[data-delay="4"] { transition-delay: .36s; }
-.reveal[data-delay="5"] { transition-delay: .45s; }
-.reveal[data-delay="6"] { transition-delay: .54s; }
+/* Saída mais elástica para os elementos "pop" (chips, normas) */
+.reveal[data-reveal="pop"] {
+  transition-timing-function: cubic-bezier(.34, 1.56, .64, 1);
+}
+
+/* Atrasos fixos (usados onde não há cascata automática) */
+.reveal[data-delay="1"] { --d: .09s; }
+.reveal[data-delay="2"] { --d: .18s; }
+.reveal[data-delay="3"] { --d: .27s; }
+.reveal[data-delay="4"] { --d: .36s; }
+.reveal[data-delay="5"] { --d: .45s; }
+.reveal[data-delay="6"] { --d: .54s; }
+
+/* ---- Entrada do hero ao carregar a página ---- */
+@keyframes entradaHero {
+  from { opacity: 0; transform: translateY(28px); }
+  to   { opacity: 1; transform: none; }
+}
+@keyframes entradaMarca {
+  from { opacity: 0; transform: scale(.9) translateY(20px); }
+  to   { opacity: 1; transform: none; }
+}
+
+/* Barra de brilho que cruza a arte da marca uma vez, ao carregar */
+.hero-marca { position: relative; overflow: hidden; }
+.hero-marca::after {
+  content: "";
+  position: absolute;
+  top: 0; bottom: 0;
+  width: 45%;
+  background: linear-gradient(100deg, transparent, rgba(255,255,255,.55), transparent);
+  transform: skewX(-18deg);
+  animation: brilho 5.5s ease-in-out 1.2s infinite;
+  pointer-events: none;
+}
+@keyframes brilho {
+  0%       { left: -60%; }
+  22%, 100% { left: 130%; }
+}
+
+/* Sublinhado que se desenha sob os títulos de seção */
+.secao-topo h2 { position: relative; display: inline-block; }
+.secao-topo h2::after {
+  content: "";
+  position: absolute;
+  left: 50%; bottom: -12px;
+  width: 0; height: 3px;
+  border-radius: 2px;
+  background: linear-gradient(90deg, var(--laranja-claro), var(--laranja));
+  transition: width .7s cubic-bezier(.22,.8,.3,1) .25s,
+              margin-left .7s cubic-bezier(.22,.8,.3,1) .25s;
+}
+.secao-topo.visivel h2::after { width: 54px; margin-left: -27px; }
 
 /* ============ Responsivo ============ */
-@media (max-width: 900px) {
-  .hero { padding: 60px 0 80px; }
-  .hero-inner { grid-template-columns: 1fr; gap: 40px; text-align: center; }
-  .hero-marca { max-width: 340px; margin: 0 auto; }
-  .hero-sub { margin-left: auto; margin-right: auto; }
-  .hero-acoes { justify-content: center; }
-  .hero-pilares { justify-content: center; gap: 28px; }
-  .duo { grid-template-columns: 1fr; }
-  .acesso { flex-direction: column; text-align: center; padding: 40px 28px; }
-  .acesso-texto p { margin-left: auto; margin-right: auto; }
+
+/* --- Notebooks menores / tablets deitados --- */
+@media (max-width: 1024px) {
+  .hero-inner { gap: 40px; }
+  .hero-pilares { gap: 28px; }
+  .acesso { gap: 34px; padding: 42px; }
 }
 
+/* --- Tablets: hero e cartões empilham --- */
+@media (max-width: 900px) {
+  .hero { padding: 60px 0 84px; }
+  .hero-inner { grid-template-columns: 1fr; gap: 40px; text-align: center; }
+  .hero-marca { max-width: 330px; margin: 0 auto; padding: 18px; }
+  .hero-sub { margin-left: auto; margin-right: auto; }
+  .hero-acoes { justify-content: center; }
+  .hero-pilares { justify-content: center; gap: 30px; }
+  .duo { grid-template-columns: 1fr; }
+  .acesso { flex-direction: column; text-align: center; padding: 42px 30px; }
+  .acesso-texto p { margin-left: auto; margin-right: auto; }
+  .secao-acesso { padding-bottom: clamp(64px, 10vw, 110px); }
+}
+
+/* --- Celulares grandes / tablets em pé --- */
 @media (max-width: 680px) {
   body { font-size: 16px; }
-  .secao { padding: 68px 0; }
-  .secao-topo { margin-bottom: 40px; }
+
+  .secao-topo { margin-bottom: 36px; }
+
+  /* Botões ocupam a largura, mas empilhados e com alvo de toque confortável */
+  .hero-acoes { flex-direction: column; align-items: stretch; }
+  .hero-acoes .btn { width: 100%; text-align: center; }
+  .btn { padding: 15px 28px; }
+
+  .hero-marca { max-width: 280px; }
+  .hero-pilares { gap: 20px 26px; padding-top: 22px; }
+  .hero-pilares strong { font-size: 24px; }
+  .hero-pilares span { font-size: 12.5px; }
+  .hero-seta { display: none; }
+
+  /* Simulação do app: esconde a barra lateral e compacta o conteúdo */
   .app-lateral { display: none; }
-  .app-chat { padding: 18px 16px 16px; }
-  .app-corpo { min-height: 280px; }
-  .hero-pilares { gap: 22px; }
-  .hero-pilares strong { font-size: 25px; }
-  .btn { width: 100%; text-align: center; }
-  .hero-acoes { flex-direction: column; }
-  .destaque-paragrafo { font-size: 18px !important; }
-  .norma { font-size: 16.5px; padding: 12px 22px; }
+  .app-chat { padding: 18px 15px 15px; gap: 13px; }
+  .app-corpo { min-height: 260px; }
+  .app-msg-usuario { max-width: 88%; }
+  .app-msg-usuario p, .app-digitando { font-size: 14px; }
+  .app-url { font-size: 11px; }
+  .app-composer { padding: 10px 10px 10px 16px; font-size: 13.5px; }
+
+  .destaque-paragrafo { font-size: 17.5px !important; padding-left: 16px; }
+  .texto-corrido p { font-size: 16.5px; }
+
+  .norma { font-size: 16px; padding: 11px 20px; }
+  .normas { gap: 10px; }
+
+  .publico li { padding: 16px 18px 16px 44px; font-size: 15.5px; }
+  .publico li::before { left: 18px; }
+
+  .cartao { padding: 28px 24px; }
+  .valores { gap: 14px 24px; }
+  .valores li { font-size: 16px; }
+
+  .acesso { padding: 36px 22px; gap: 28px; }
+  .qr svg { width: 132px; height: 132px; }
+}
+
+/* --- Celulares pequenos --- */
+@media (max-width: 420px) {
+  .hero { padding: 48px 0 68px; }
+  .hero-marca { max-width: 232px; padding: 14px; }
+
+  /* Em telas muito estreitas, os indicadores viram uma linha só */
+  .hero-pilares {
+    gap: 16px;
+    justify-content: space-between;
+    width: 100%;
+  }
+  .hero-pilares li { flex: 1; min-width: 0; align-items: center; text-align: center; }
+  .hero-pilares strong { font-size: 21px; }
+  .hero-pilares span { font-size: 11.5px; line-height: 1.3; }
+
+  .app-barra { padding: 10px 13px; }
+  .app-corpo { min-height: 230px; }
+  .app-chat { padding: 15px 12px 12px; }
+
+  .chip { font-size: 13.5px; padding: 8px 15px; }
+  .app-chips { gap: 8px; margin-top: 26px; }
+
+  .norma { font-size: 15px; padding: 10px 17px; }
+
+  .cartao { padding: 24px 20px; }
+  .acesso { padding: 30px 18px; }
+  .qr svg { width: 120px; height: 120px; }
+
+  .rodape { padding: 44px 0 52px; }
+  .rodape-marca { font-size: 17px; }
+  .rodape-slogan { font-size: 15px; }
+}
+
+/* --- Telas baixas e deitadas (celular na horizontal) --- */
+@media (max-height: 520px) and (orientation: landscape) {
+  .hero { padding: 44px 0 56px; }
+  .hero-seta { display: none; }
 }
 
 /* ============ Acessibilidade: movimento reduzido ============ */
