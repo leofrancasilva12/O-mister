@@ -1,5 +1,6 @@
 import { buildSystemPrompt } from "../lib/system-prompt.js";
 import { applyCors, getBearerToken, verifyToken, isJwtConfigured } from "../lib/http.js";
+import { isRateLimited } from "../lib/rate-limit.js";
 
 const MODEL = process.env.OPENROUTER_MODEL || "anthropic/claude-haiku-4.5";
 const MAX_HISTORY = 20;
@@ -9,34 +10,10 @@ const MAX_IMAGES = 4;
 const MAX_IMAGE_CHARS = 3_000_000; // ~2 MB por imagem em base64
 
 // Rate limiting: máximo 30 requisições por minuto por IP/usuário.
-// Observação: em serverless o Map é por-instância; um limite robusto exige
-// um store compartilhado (ex.: Vercel KV/Upstash). Aqui evitamos apenas abuso
-// trivial e vazamento de memória (poda de entradas expiradas).
-const RATE_LIMIT_WINDOW = 60 * 1000; // 1 minuto
+// O store compartilhado (Vercel KV/Upstash) é usado quando configurado;
+// caso contrário há fallback em memória. Ver lib/rate-limit.js.
 const RATE_LIMIT_MAX = 30;
-const rateLimitMap = new Map();
-
-function pruneRateLimit(now) {
-  for (const [key, entry] of rateLimitMap) {
-    if (now > entry.resetTime) rateLimitMap.delete(key);
-  }
-}
-
-function checkRateLimit(key) {
-  const now = Date.now();
-  pruneRateLimit(now);
-  const entry = rateLimitMap.get(key) || { count: 0, resetTime: now + RATE_LIMIT_WINDOW };
-
-  if (now > entry.resetTime) {
-    entry.count = 0;
-    entry.resetTime = now + RATE_LIMIT_WINDOW;
-  }
-
-  entry.count++;
-  rateLimitMap.set(key, entry);
-
-  return entry.count <= RATE_LIMIT_MAX;
-}
+const RATE_LIMIT_WINDOW_SEC = 60;
 
 function getRateLimitKey(req, userId) {
   // Prioriza usuário autenticado, senão usa IP
@@ -70,7 +47,7 @@ export default async function handler(req, res) {
 
   // Verifica rate limit
   const rateLimitKey = getRateLimitKey(req, userId);
-  if (!checkRateLimit(rateLimitKey)) {
+  if (await isRateLimited(rateLimitKey, { max: RATE_LIMIT_MAX, windowSec: RATE_LIMIT_WINDOW_SEC })) {
     return res.status(429).json({
       error: "Muitas requisições. Tente novamente em alguns instantes.",
     });
