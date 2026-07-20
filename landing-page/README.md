@@ -2,6 +2,9 @@
 
 Página institucional de apresentação da plataforma MIOG.
 
+**No ar:** https://landing-page-miog.vercel.app/
+**Plataforma:** https://mister-intelligence.vercel.app/login.html
+
 ## Estrutura
 
 ```
@@ -13,8 +16,10 @@ landing-page/
 │   ├── init.js           ativa as animações (carregado no <head>)
 │   └── script.js         animações de entrada e efeito de digitação
 └── img/
-    ├── marca-miog.png    arte institucional do topo
-    └── favicon.png       ícone da aba do navegador
+    ├── marca-miog.png      arte institucional do topo
+    ├── logo-emblema.png    emblema redondo do cabeçalho
+    ├── preview-social.png  imagem exibida ao compartilhar o link
+    └── favicon.png         ícone da aba do navegador
 ```
 
 A pasta é **autossuficiente**: não depende de nenhum arquivo externo, biblioteca,
