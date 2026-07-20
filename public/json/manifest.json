@@ -1,7 +1,7 @@
 {
-  "name": "O Mister",
-  "short_name": "O Mister",
-  "description": "Assistente técnico de normas API de roscas, tubos e sistemas de qualidade.",
+  "name": "MIOG — Mister Intelligence O&G",
+  "short_name": "MIOG",
+  "description": "Inteligência técnica para a indústria de óleo e gás: normas, engenharia e qualidade.",
   "start_url": "../",
   "scope": "../",
   "display": "standalone",
