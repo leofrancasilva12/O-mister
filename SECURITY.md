@@ -2,11 +2,21 @@
 
 ## ✅ CRÍTICO (Implementado)
 
-- [x] **JWT Validation** — `/api/chat.js` valida tokens Supabase via `jwt.verify()`
+- [x] **JWT Validation** — tokens Supabase verificados em `lib/http.js` (HS256 via segredo ou ES256/RS256 via JWKS)
 - [x] **XSS Prevention** — DOMPurify sanitiza markdown antes de inserir no DOM
-- [x] **Tokens em sessionStorage** — Mudar de localStorage para sessionStorage (tokens perdidos ao fechar aba)
 - [x] **API Key Exposure** — `/api/config` removido; nunca exponha secrets públicas
 - [x] **delete-account Seguro** — Autenticação JWT obrigatória + deleção real em Supabase
+
+### ⚖️ Decisão consciente: sessão em `localStorage`
+
+A sessão fica em `localStorage` (`public/js/auth.js`), e **não** em `sessionStorage`.
+
+- **Por quê:** com `sessionStorage` a sessão era apagada ao fechar o app, obrigando
+  o usuário a entrar novamente toda vez — inaceitável para um PWA instalado.
+- **Risco aceito:** se houver uma falha de XSS, o token pode ser lido pelo script
+  injetado. A mitigação é impedir o XSS: CSP restritiva (`vercel.json`) e DOMPurify
+  em todo conteúdo renderizado.
+- **Dispositivo compartilhado:** orientar o uso do botão "Sair", que limpa a sessão.
 
 ## ✅ ALTO (Implementado)
 

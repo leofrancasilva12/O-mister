@@ -40,9 +40,15 @@
       clientPromise = loadLib().then(function () {
         return window.supabase.createClient(cfg.SUPABASE_URL, cfg.SUPABASE_ANON_KEY, {
           auth: {
-            storage: sessionStorage,
+            // localStorage mantém o usuário logado entre aberturas do app.
+            // Com sessionStorage a sessão era apagada ao fechar, obrigando
+            // a entrar de novo toda vez — inviável para um app instalado.
+            // O risco de roubo do token por XSS é contido pela CSP e pelo
+            // DOMPurify; em dispositivo compartilhado, use "Sair".
+            storage: localStorage,
             persistSession: true,
             autoRefreshToken: true,
+            detectSessionInUrl: true,
           },
         });
       });
