@@ -5,6 +5,10 @@ on:
   push:
     branches: [main]
 
+# Menor privilegio possivel: o CI so precisa ler o codigo.
+permissions:
+  contents: read
+
 jobs:
   checks:
     runs-on: ubuntu-latest
