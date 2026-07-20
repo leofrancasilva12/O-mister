@@ -159,19 +159,40 @@ img { max-width: 100%; height: auto; display: block; }
 .topo-marca {
   text-decoration: none;
   color: #FFFFFF;
-  font-weight: 800;
-  font-size: 20px;
-  letter-spacing: -.01em;
-  line-height: 1.15;
   display: flex;
-  flex-direction: column;
+  align-items: center;
+  gap: 13px;
+  min-width: 0;
 }
-.topo-marca span {
-  font-size: 11px;
-  font-weight: 500;
-  letter-spacing: .06em;
-  text-transform: uppercase;
+
+/* Logo em círculo, com fundo branco para o emblema respirar */
+.topo-logo {
+  width: 44px;
+  height: 44px;
+  flex-shrink: 0;
+  border-radius: 50%;
+  background: #FFFFFF;
+  padding: 4px;
+  object-fit: contain;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, .28);
+  transition: transform var(--transicao);
+}
+.topo-marca:hover .topo-logo { transform: scale(1.07) rotate(-4deg); }
+
+.topo-nomes { display: flex; flex-direction: column; min-width: 0; line-height: 1.25; }
+.topo-nomes strong {
+  font-size: 16.5px;
+  font-weight: 700;
+  letter-spacing: -.01em;
+  white-space: nowrap;
+}
+.topo-nomes > span {
+  font-size: 11.5px;
+  font-weight: 400;
   color: var(--texto-claro-medio);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 
 /* ============ HERO ============ */
@@ -918,9 +939,11 @@ img { max-width: 100%; height: auto; display: block; }
 @media (max-width: 680px) {
   body { font-size: 16px; }
 
-  /* No celular o cabeçalho fixo mostra só a sigla, para caber o botão */
-  .topo-marca { font-size: 18px; }
-  .topo-marca span { display: none; }
+  /* No celular o cabeçalho esconde o slogan, para caber o botão */
+  .topo-marca { gap: 10px; }
+  .topo-logo { width: 38px; height: 38px; }
+  .topo-nomes strong { font-size: 14.5px; }
+  .topo-nomes > span { display: none; }
   .topo-inner { padding-top: 10px; padding-bottom: 10px; }
   .btn-pequeno { font-size: 13.5px; padding: 9px 16px; width: auto; }
 
@@ -965,6 +988,10 @@ img { max-width: 100%; height: auto; display: block; }
 
 /* --- Celulares pequenos --- */
 @media (max-width: 420px) {
+  /* Em telas bem estreitas, sobra só o emblema e o botão */
+  .topo-nomes { display: none; }
+  .btn-pequeno { font-size: 13px; padding: 9px 14px; }
+
   .hero { padding: 48px 0 68px; }
   .hero-marca { max-width: 232px; padding: 14px; }
 
