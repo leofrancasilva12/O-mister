@@ -34,172 +34,541 @@
 
 # 2. API SPECIFICATION Q1 — QUALITY MANAGEMENT SYSTEM
 
-## 2.1 Escopo e Objetivo
+> Base desta seção: **API Specification Q1, 10ª edição, setembro de 2023** ("Quality Management System
+> Requirements for Organizations Providing Products for the Petroleum and Natural Gas Industry"), incluindo
+> Errata 1–3 (out/2023, out/2024, nov/2024) e Adendos 1–2 (out/2024, jun/2025). Data de vigência do Programa
+> de Monograma API para esta edição: 18/set/2024 (adendos: 25/dez/2025).
+> Texto **traduzido e reorganizado em resumo próprio** — não é cópia literal da norma, que é protegida por
+> direitos autorais da API. Para linguagem exata e valores contratuais, sempre consulte o documento oficial.
 
-**API Specification Q1** (Tenth Edition, September 2023) define requisitos de **Quality Management System (QMS)** para organizações que fornecem produtos e serviços à indústria de petróleo e gás natural.
+## 2.1 Escopo e Aplicabilidade
 
-### Aplicabilidade
+**Escopo (Seção 1):** Q1 estabelece os requisitos mínimos de sistema de gestão da qualidade (QMS) para
+organizações que fornecem **produto** para uso na indústria de petróleo e gás natural.
 
-Aplica-se a:
-- **Fabricantes** de produtos para petróleo e gás
-- **Engenharia/Design** de componentes
-- **Prestadores de serviços** de realização de produto (soldagem, tratamento térmico, revestimento, usinagem, inspeção, testes)
-- **Distribuidores** e prestadores de atividades relacionadas a produtos
+**Referência normativa (Seção 2):** ISO 9000:2015 (Quality management systems — Fundamentals and vocabulary).
 
-### Produto (Definição)
+### O que mudou na 10ª edição (em relação à 9ª)
 
-Conforme API Q1 3.1.16:
-> "Output de uma organização destinada a ser fornecida a um cliente."
+- Alinhamento com os requisitos da ISO 9001:2015.
+- **Escopo ampliado**: antes cobria só quem fabricava produto físico, fazia serviço em produto físico ou
+  processos relacionados à manufatura. Agora cobre também engenharia/design isolado e atividades relacionadas
+  a produto (distribuição, logística, desenvolvimento de software).
+- Definição de "produto" ampliada para acompanhar o novo escopo.
+- **Prazo de retenção de registros ampliado para 10 anos** (era menor antes).
+- Removida referência a uma versão desatualizada da ISO 9000.
+- Adicionadas alternativas ao Manual da Qualidade tradicional (não precisa mais ser um documento único).
+- "Design and Development" virou apenas "**Design**".
+- Esclarecimento sobre validação de processos.
+- Linguagem revisada sobre inspeção de produto e processo de aceitação final.
+- Processo de avaliação de fornecedores revisado.
+- **Seção de ação preventiva removida** (não existe mais como requisito separado).
+- Definições novas e revisadas.
 
-Inclui:
-- Hardware e software
-- Atividades de realização de produto: soldagem, tratamento térmico, revestimento, usinagem, inspeção, testes, serviços, distribuição, logística
+### Quem precisa atender a Q1 (organizações cobertas)
 
----
+- **Manufatura** de produto.
+- **Engenharia/design.**
+- Prestadores de atividades físicas de realização de produto: **soldagem, tratamento térmico,
+  revestimento/pintura (coating/plating), usinagem, inspeção, teste, serviço (servicing)**.
+- Prestadores de atividades relacionadas a produto físico: **distribuição, logística, desenvolvimento de
+  software**.
 
-## 2.2 Estrutura do QMS (Seções Principais)
+### Definição de "Produto" (3.1.16)
 
-### 4. Quality Management System Requirements
+> "Output (saída) de uma organização destinado a ser fornecido a um cliente."
 
-#### 4.1 Quality Management System (Geral)
-- A organização deve planejar, estabelecer, documentar, implementar e manter um QMS
-- Deve medir e melhorar a efetividade do sistema
-- Escopo: produtos cobertos, limitações, exclusões
-
-#### 4.2 Management Responsibility
-- **Top management:** leadership e commitment
-- **Quality Policy:** definida, documentada, comunicada, alinhada com estratégia
-- **Quality Objectives:** mensuráveis, comunicáveis, alinhados com policy
-- **Planning:** identificação de riscos, oportunidades, sequência de processos
-- **Management Representative:** responsável por QMS conformidade e performance
-
-#### 4.3 Organization Capability
-- **Resources and Knowledge:** determinar e alocar recursos necessários
-- **Personnel Competence:** manter procedimento de competência, treinamento, registros
-- **Work Environment:** determinar e manter ambiente de trabalho adequado (buildings, workspace, utilities, process equipment, supporting services)
-
-#### 4.4 Documentation Requirements
-- QMS documentation deve incluir:
-  - Scope do QMS e justificativa de exclusões
-  - Quality policy e objectives
-  - Legal/regulatory requirements necessários para conformidade
-  - Processes que requerem validação
-  - Procedures, documentos e registros necessários
-
-#### 4.5 Control of Records
-- Estabelecer e manter procedimento para identificação, collection, legibility, correction, storage, protection, retrieval, retention time, disposition de registros
-- **Retention time mínima: 10 anos** (ou conforme legal/cliente)
-
-### 5. Product Realization
-
-#### 5.1 Contract Review
-- Determinar requirements especificados pelo cliente
-- Review antes de commitment to deliver
-- Resolver diferenças com requirements previamente identificados
-- Registrar resultados da review
-
-#### 5.2 Planning
-- Identificar e planejar processes e documentos necessários para product realization
-- Abordar: required resources, product/customer requirements, legal/regulatory requirements, design requirements, contingency planning, verification/validation/monitoring/measurement/inspection/test activities, management of change (MOC), records
-
-#### 5.3 Risk Management
-- Manter procedimento documentado para identificar e controlar riscos associados a delivery e qualidade do produto
-- Abordar: risk identification/assessment techniques, tools, criteria, mitigation actions, assessment de remaining risk, contingency planning
-
-#### 5.4 Design (quando aplicável)
-- Planning: stages, resources, responsibilities, authorities, reviews/verification/validation
-- Design Inputs: identificar requirements, incluir customer-specified, external sources (API specs), environmental/operational conditions, consequences de potential product failure
-- Design Outputs: documentação, verification contra design inputs, design acceptance criteria, identification of critical characteristics
-- Design Review: evaluate suitability, adequacy, effectiveness dos design stage results
-- Design Verification: confirmar design outputs satisfazem design inputs
-- Design Validation: prove design resulta em produto capaz de satisfazer specified requirements
-- Design Changes: review, verify, validate, approve antes da implementação
-
-#### 5.5 Purchasing (Contratos com Fornecedores)
-- **Critical products, components, or activities:** supplier evaluation abrange quality system implementation, verification of supplier capability (on-site assessment, remote assessment, inspection/testing)
-- **Non-critical purchases:** verificação de supplier quality system conformance ou assessment de product/component
-- **Purchasing Information:** especificação de product, component, activity requirements, acceptance criteria, supplier procedures/processes/equipment approval requirements, quality management system requirements
-- **Verification of Purchased Products:** critical purchases requerem review de documentation, verification de applicable versions (specs, drawings, etc.), inspection/testing/verification methods, frequency, responsible party
-
-#### 5.6 Control of Product Realization
-- Determinar e implementar MAC (Manufacturing Acceptance Criteria)
-- Identificar e documentar processes críticos
-- Implementar quality plan (conforme contract requirement)
-- Maintain identification e traceability throughout product realization
-- Implement monitoring e measurement activities
-- Manage product identification e inspection/test status
-- Review and control product realization changes
-
-#### 5.7 Product Release
-- Manter procedimento para release de produto ao cliente
-- Release não deve proceder até que arranjos planejados tenham sido satisfatoriamente completados
-- Organização deve somente liberar produto que conforma aos requirements ou está autorizado sob concessão (conforme section 5.9.3)
-
-#### 5.8 Testing, Measuring, Monitoring, and Detection Equipment (TMMDE)
-- Determinar TMMDE necessário e requirements
-- TMMDE deve ser calibrado em intervalos especificados
-- Deve ter calibration status identifiable, safeguarded de adjustments que invalide results, protected de damage/deterioration, used em condições ambientais adequadas
-
-#### 5.9 Control of Nonconforming Product
-- Manter procedimento para handling de produto não-conforme durante realization e após delivery
-- Durante realization: identificar, control, prevenir unintended use/delivery, address detected nonconformity, take action to preclude, re-grade para alternative applications, release sob concessão, ou reject/scrap
-- Após delivery: identificar, documentar, report, analyze nonconformity, take action apropriada, authorize use/release/acceptance sob concessão per relevant authority e customer
-
-#### 5.10 Management of Change (MOC)
-- Manter procedimento documentado para MOC
-- Abordar: description de change, need for, available/allocated resources, potential risks, review/approval/implementation, notifications, records
-
-### 6. Quality Management System Monitoring, Measurement, Analysis, and Improvement
-
-#### 6.1 General
-- Plan e implement monitoring, measurement, analysis, improvement processes
-- Determine applicable methods, techniques, analysis data, extent of use
-
-#### 6.2 Monitoring, Measuring, and Improving
-
-**Customer Satisfaction:**
-- Maintain procedimento para monitor customer satisfaction
-- Determine frequency/methods e key performance indicators
-
-**Internal Audit:**
-- Conduct audits para provide information on whether QMS é implemented, maintained, conforms to requirements
-- Plan audits considerando results of previous audits, criticality do process
-- **Frequency:** at least every 12 months (all processes must be audited within 12 months, can be spread)
-- Audits performed by competent, independent personnel
-- Maintain records e ensure management takes corrective actions
-
-**Analysis of Data:**
-- Maintain procedimento para identification, collection, analysis de data para demonstrate suitability/effectiveness do QMS
-- Data analysis inclui: customer satisfaction, nonconformity/product failures (após delivery/use), process performance, supplier performance, achievement of quality objectives
-
-**Improvement:**
-- Continually improve effectiveness de QMS through quality objectives, internal audits, analysis de data, corrective action, management review
-
-#### 6.4 Corrective Action
-- Maintain procedimento para address nonconformities (incluindo results de customer complaints)
-- Abordar: determine when corrective action is initiated, review nonconformity, determine/implement corrections, identify root cause, implement corrective action to reduce likelihood of recurrence, identify timeframe/responsible persons, verification de effectiveness, evaluate similar potential nonconformities
-
-#### 6.5 Management Review
-- **Frequency:** at least every 12 months (not later than end of calendar month as prior year review)
-- **Input:** status e effectiveness de actions from previous management reviews, results de internal audits (6.2.2) e audits de external parties, changes que could affect QMS, analysis de customer satisfaction, feedback from interested parties, process performance, risk assessment results, supplier performance, status de corrective actions, achievements of quality objectives, recommendations for improvement
-- **Output:** summary assessment de QMS effectiveness, required changes to processes, decisions/actions, required resources, recommendations for improvement
-- Management reviews shall be documented
+Inclui, sem se limitar a: hardware, software, atividades de produção, ou atividades relacionadas a produto
+como serviço (servicing), armazenagem, distribuição e logística.
 
 ---
 
-## 2.3 Seções Críticas para Segurança Técnica
+## 2.2 Termos e Definições Essenciais (Seção 3)
+
+| Termo (EN) | Definição resumida |
+|---|---|
+| **Acceptance criteria** | Requisitos especificados de aceitabilidade aplicados a características de produto ou processo. |
+| **Acceptance inspection** | Demonstração, por monitoramento ou medição, de que o produto atende aos requisitos especificados. |
+| **Calibration** | Comparação com um padrão de precisão conhecida, contra os critérios de aceitação do TMMDE, e ajuste se necessário. Equipamento não ajustável: chama-se "verificação". |
+| **Compliance** | Ato de satisfazer (verbo) ou status de ter satisfeito (substantivo) requisitos **legais**. |
+| **Critical** | Considerado pela organização, pela especificação do produto, ou pelo cliente como de importância significativa, exigindo ação específica. |
+| **Delivery** | Momento em que ocorre a transferência de propriedade combinada. |
+| **DAC — Design acceptance criteria** | Requisitos aplicados a características (ou combinações delas) de materiais, produtos ou componentes para atingir conformidade aos requisitos de design e/ou desempenho de design exigido. DAC **pode** ser igual ao MAC. |
+| **Design validation** | Processo de provar o design por meio de testes, demonstrando que o produto atende aos requisitos de design e desempenha como pretendido (ex.: testes de protótipo, funcionais/operacionais, exigidos por norma/regulação, testes e revisões de campo). |
+| **Design verification** | Processo de examinar as saídas do design para determinar conformidade com os requisitos especificados (ex.: cálculos alternativos, revisão de documentos de saída, comparação com designs similares comprovados). |
+| **KPI — Key performance indicator** | Medida quantificável usada para avaliar ou comparar desempenho. |
+| **Legal requirement** | Requisitos estatutários ou regulatórios. |
+| **Management personnel** | Pessoa ou grupo com autoridade e responsabilidade pela condução e controle de toda ou parte de uma organização. |
+| **MAC — Manufacturing acceptance criteria** | Requisitos aplicados a características (ou combinações) de materiais, produtos ou componentes para atingir conformidade ao DAC aplicável e a outros requisitos de manufatura do produto. MAC **pode** ser igual ao DAC. Para serviços, "manufacturing" pode ser lido como "realização do produto". |
+| **Outsource** | Função ou processo desempenhado por um fornecedor externo em nome da organização. |
+| **Procedure** | Método documentado da organização para desempenhar uma atividade sob condições controladas, visando conformidade com requisitos especificados. Pode ser instrução de trabalho, fluxograma ou manual. |
+| **Product realization** | Conjunto de atividades inter-relacionadas ou interativas necessárias para fornecer o produto. |
+| **Remote assessment** | Avaliação conduzida por pessoa(s) fisicamente ausente(s) do local avaliado. |
+| **Risk** | Situação ou circunstância com probabilidade de ocorrer e consequência potencialmente negativa. |
+| **Servicing** | Manutenção, ajuste e/ou reparo realizado após entrega e/ou instalação em campo. |
+| **Supply chain** | Fornecedores e subfornecedores associados, necessários para a realização do produto. |
+
+**Abreviações principais:** DAC, ITP (inspection test plan), KPI, MAC, MOC (management of change), MPS
+(manufacturing process specification), PCP (process control plan), QAP (quality activity plan), QMS, QP
+(quality plan), TMMDE (testing, measuring, monitoring, and detection equipment).
+
+---
+
+## 2.3 Seção 4 — Requisitos do Sistema de Gestão da Qualidade
+
+### 4.1 Quality Management System
+
+- **4.1.1 Geral:** a organização deve planejar, estabelecer, documentar, implementar e manter **a todo
+  momento** um QMS conforme os requisitos da Q1, dentro do escopo definido por ela mesma. Deve medir e
+  melhorar a efetividade do QMS.
+- **4.1.2 Política da Qualidade:** definida, documentada, revisada e aprovada pela alta direção. Deve ser
+  apropriada à organização, servir de base para os objetivos da qualidade, ser comunicada/entendida/mantida,
+  disponível às partes interessadas relevantes, e incluir compromisso com conformidade e melhoria contínua.
+- **4.1.3 Objetivos da Qualidade:** estabelecidos nas funções e níveis relevantes, com aprovação da alta
+  direção. Devem ser mensuráveis, comunicados e coerentes com a política.
+- **4.1.4 Planejamento do QMS:**
+  - **4.1.4.1 Geral** — a organização deve: definir o escopo do QMS (produtos cobertos, limitações e
+    exclusões); identificar questões internas/externas relevantes; determinar partes interessadas e seus
+    requisitos; determinar sequência e interação dos processos; determinar critérios/métodos de operação e
+    controle; identificar objetivos da qualidade (ações, recursos, responsabilidades, prazo, forma de
+    monitoramento); endereçar riscos identificados (5.3) e oportunidades de melhoria (6.4); identificar
+    pessoal-chave.
+  - **4.1.4.2 Exclusões** — se a organização desempenha atividades cobertas pela Q1 (inclusive terceirizadas),
+    **não pode excluí-las**. Exclusões só são permitidas nestas seções específicas, e exigem justificativa
+    documentada: **5.4 Design**, **5.6.4 Validação de Processos**, **5.6.7 Propriedade de Terceiros**,
+    **5.6.8 Preservação do Produto**, **5.8 TMMDE**.
+- **4.1.5 Comunicação:**
+  - **Interna** — processos para comunicar, nos níveis/funções relevantes, a importância de satisfazer
+    requisitos do cliente/legais e os resultados da análise de dados (6.3).
+  - **Externa** — processo para comunicação com organizações externas, incluindo clientes: execução de
+    consultas/contratos/pedidos e suas alterações; determinação de requisitos ao longo do contrato;
+    fornecimento de informação de produto (incluindo não conformidades); feedback e reclamações de clientes;
+    comunicação de planos de qualidade e suas mudanças; comunicação de mudanças e riscos associados (MOC).
+
+### 4.2 Management Responsibility (Responsabilidade da Direção)
+
+- **4.2.1 Geral** — a alta direção deve demonstrar liderança e comprometimento: aprovando os objetivos da
+  qualidade; provendo recursos (humanos, infraestrutura, financeiros, tecnologia); engajando e apoiando o
+  pessoal; atribuindo responsabilidades e autoridades para que os processos atinjam os resultados pretendidos.
+- **4.2.2 Responsabilidade e Autoridade** — devem ser definidas, documentadas e comunicadas em toda a
+  organização.
+- **4.2.3 Representante da Direção** — a alta direção deve nomear um membro do pessoal de gestão responsável
+  por: garantir conformidade do QMS à Q1; garantir que os processos do QMS sejam estabelecidos/implementados/
+  mantidos; reportar à alta direção sobre desempenho do QMS e necessidade de melhoria; garantir ações para
+  tratar não conformidades; promover a consciência sobre requisitos do cliente na organização.
+
+### 4.3 Organization Capability (Capacidade Organizacional)
+
+- **4.3.1 Recursos e Conhecimento** — determinar e alocar recursos necessários; determinar o conhecimento
+  necessário para operar os processos e manter conformidade do produto (pode vir de experiência, estudo,
+  treinamento, lições aprendidas, boas práticas).
+- **4.3.2 Recursos Humanos:**
+  - **Competência do pessoal** — procedimento documentado que trate: como as competências são identificadas;
+    como educação/treinamento/experiência necessários são identificados; avaliação da eficácia das ações
+    tomadas; critérios e métodos de avaliação/reavaliação; responsáveis por avaliar competência. Registros
+    obrigatórios.
+  - **Treinamento** — procedimento que trate: conteúdo e frequência exigidos; treinamento em QMS; treinamento
+    do cargo (incluindo relevância das atividades para os objetivos da qualidade); treinamento exigido/
+    fornecido pelo cliente; avaliação de eficácia; registros exigidos.
+- **4.3.3 Ambiente de Trabalho** — determinar, prover, gerenciar e manter: instalações/espaço de trabalho e
+  utilidades; equipamento de processo (hardware e software); serviços de apoio (transporte, comunicação,
+  sistemas de informação); condições físicas/ambientais do trabalho.
+
+### 4.4 Documentation Requirements (Requisitos de Documentação)
+
+- **4.4.1 Geral** — a documentação do QMS deve incluir: escopo do QMS e justificativa de exclusões; política
+  e objetivos da qualidade; requisitos legais/aplicáveis identificados; identificação dos processos que
+  exigem validação; procedimentos/documentos/registros necessários ao planejamento, operação e controle dos
+  processos. (Pode ser um único "manual da qualidade" ou vários documentos/formatos.)
+- **4.4.2 Procedimentos** — todos os procedimentos exigidos pela norma devem ser documentados, implementados
+  e mantidos atualizados. Um único procedimento pode cobrir vários requisitos, e vice-versa.
+- **4.4.3 Controle de Documentos Internos** — procedimento para identificação, distribuição e controle de
+  documentos internos (inclui revisões, traduções e atualizações), tratando: responsabilidades de aprovação/
+  reaprovação; revisão de adequação antes do uso; revisões periódicas; identificação de mudanças e status de
+  revisão atual; legibilidade e identificação; disponibilidade no local de uso. Documentos obsoletos devem ser
+  retirados de circulação ou sinalizados para evitar uso indevido.
+- **4.4.4 Controle e Uso de Documentos Externos** — procedimento para documentos de origem externa usados na
+  realização do produto (normas API e outras), tratando: identificação/documentação; acesso e distribuição
+  (versões relevantes); integração nos processos; identificação de mudanças (adendos, erratas, atualizações);
+  avaliação de impacto; integração das mudanças aplicáveis.
+
+### 4.5 Control of Records (Controle de Registros)
+
+Registros — incluindo os originados de atividades terceirizadas — devem existir e ser controlados como
+evidência de conformidade. Procedimento documentado deve tratar: identificação; coleta; legibilidade;
+correção; armazenamento; proteção contra alteração/dano/perda não intencional; recuperação; **tempo de
+retenção**; e destinação final.
+
+> **Retenção mínima: 10 anos**, ou conforme exigência do cliente/legal — o que for mais longo.
+
+---
+
+## 2.4 Seção 5 — Product Realization (Realização do Produto)
+
+### 5.1 Contract Review (Revisão de Contrato)
+
+Procedimento documentado para revisão dos requisitos ligados ao fornecimento do produto, tratando:
+- **Determinação de requisitos** — os especificados pelo cliente; requisitos legais/aplicáveis; requisitos
+  não declarados pelo cliente mas considerados necessários pela organização. Se o cliente não fornece
+  declaração documentada, a organização deve confirmar os requisitos com ele e registrar.
+- **Revisão de requisitos** — conduzida **antes** do compromisso de entrega, confirmando que os requisitos
+  estão identificados/documentados, que divergências foram resolvidas, e que a organização tem capacidade de
+  atendê-los. Mudanças de requisito exigem atualização dos documentos relevantes e comunicação ao pessoal.
+  Registros do resultado da revisão são obrigatórios.
+
+### 5.2 Planning (Planejamento)
+
+A organização deve identificar e planejar os processos e documentos necessários para a realização do produto,
+endereçando: recursos e ambiente de trabalho (4.3); requisitos do produto e do cliente (5.1); requisitos
+legais/aplicáveis; requisitos de design (5.4); planejamento de contingência (5.3.3); atividades de
+verificação/validação/monitoramento/medição/inspeção/teste e critérios de aceitação; MOC (5.10); registros
+que evidenciem conformidade (4.5). A saída do planejamento deve ser documentada e atualizada quando houver
+mudanças.
+
+### 5.3 Risk Management (Gestão de Risco)
+
+- **5.3.1 Geral** — procedimento documentado para identificar e controlar riscos associados à **entrega** e à
+  **qualidade** do produto, tratando: técnicas de identificação/avaliação de risco; ferramentas de avaliação;
+  critérios de severidade (incluindo consequências potenciais de falha do produto); ações de mitigação;
+  avaliação do risco remanescente; planejamento de contingência (quando exigido pela avaliação do risco
+  remanescente).
+- **5.3.2 Avaliação de Risco:**
+  - **Entrega do produto** — deve incluir disponibilidade de instalações/equipamentos (inclusive manutenção)
+    e desempenho de entrega/disponibilidade de material dos fornecedores.
+  - **Qualidade do produto** — deve incluir entrega de produto não conforme (5.9) e disponibilidade de
+    pessoal competente.
+  - **Mudanças que impactam a qualidade** — exigem nova avaliação de risco quando envolvem: mudança na
+    estrutura organizacional; mudança de pessoal-chave; mudança na cadeia de suprimento de produtos/
+    componentes/atividades críticas; mudança no escopo/procedimentos do sistema de gestão; mudança na
+    capacidade da organização de executar os processos de realização do produto.
+- **5.3.3 Planejamento de Contingência** — quando exigido pelo risco avaliado, o plano deve incluir no
+  mínimo: ações para reduzir efeitos de incidentes disruptivos; identificação/atribuição de responsabilidades
+  e autoridades; controles de comunicação interna/externa (4.1.5).
+- **5.3.4 Registros** — de avaliação e gestão de risco, incluindo ações tomadas.
+
+### 5.4 Design
+
+*(Aplicável apenas quando a organização é responsável pelo design do produto — pode ser excluído do escopo
+com justificativa, ver 4.1.4.2.)*
+
+- **5.4.1 Geral** — aplica-se quando a organização é responsável pelo design.
+- **5.4.2 Planejamento do Design** — procedimento documentado tratando: plano(s) de design e suas
+  atualizações; etapas do design; recursos/responsabilidades/autoridades e suas interfaces; atividades de
+  revisão/verificação/validação necessárias em cada etapa; requisitos para revisão final (5.4.6); requisitos
+  de revisão/aprovação de mudanças de design (5.4.8). Quando o design é terceirizado ou feito em local
+  diferente, o procedimento deve identificar os controles — a organização **permanece responsável** pelo
+  design mesmo terceirizando.
+- **5.4.3 Entradas de Design (Design Inputs)** — devem ser identificadas e revisadas quanto a adequação,
+  completude, falta de ambiguidade e de conflito. Incluem: requisitos especificados pelo cliente; requisitos
+  de fontes externas (inclusive especificações API); condições ambientais/operacionais; metodologia,
+  premissas e fórmulas; desempenho histórico de designs similares; requisitos legais; consequências de
+  potencial falha do produto (quando exigido por lei, norma, cliente, ou considerado necessário). Registros
+  obrigatórios.
+- **5.4.4 Saídas de Design (Design Outputs)** — documentadas para permitir verificação contra as entradas.
+  Devem: atender às entradas; fornecer informação para compras/produção/inspeção/teste/serviço; identificar
+  ou referenciar o **DAC**; identificar produtos/componentes/atividades críticos ao design; incluir resultados
+  de cálculos aplicáveis; especificar as características essenciais para a finalidade e funcionamento seguro
+  do produto. Registros obrigatórios.
+- **5.4.5 Revisão de Design** — em etapas adequadas, para avaliar adequação/efetividade dos resultados e
+  identificar problemas, com participação de representantes das funções envolvidas. Registros obrigatórios.
+- **5.4.6 Verificação de Design e Revisão Final** — para garantir que as saídas atendem às entradas.
+  Registros obrigatórios.
+- **5.4.7 Validação e Aprovação de Design** — validação conforme o procedimento, para garantir que o produto
+  resultante é capaz de satisfazer os requisitos especificados; completada antes da entrega, quando possível.
+  O design completo deve ser **aprovado por pessoa competente diferente** de quem o desenvolveu. Registros
+  obrigatórios.
+- **5.4.8 Mudanças de Design** — identificadas, revisadas/verificadas/validadas conforme apropriado, e
+  aprovadas antes da implementação. A revisão deve avaliar o efeito da mudança no produto e em produto já
+  entregue, e se a mudança exige notificação ao cliente (quando afeta negativamente a capacidade de
+  desempenho especificada). Registros obrigatórios.
+
+### 5.5 Purchasing (Compras)
+
+- **5.5.1 Controle de Compras:**
+  - **Procedimento** — deve tratar: determinação de produtos/componentes/atividades críticos; avaliação e
+    seleção inicial de fornecedores; uso do risco identificado para definir o método de avaliação inicial em
+    compras críticas; tipo/extensão do controle sobre a cadeia de suprimento; critérios/escopo/frequência de
+    reavaliação; identificação de fornecedores aprovados; fornecedores especificados pelo cliente ou limitados
+    por requisito proprietário/legal.
+  - **Avaliação inicial — compras críticas** — deve ser específica por local do fornecedor e incluir:
+    verificação da implementação/conformidade do QMS do fornecedor; verificação do tipo/extensão de controle
+    aplicado pelo fornecedor (internamente e à própria cadeia dele); avaliação da capacidade do fornecedor por
+    um ou mais destes métodos, com base no risco identificado: **avaliação in loco**; **avaliação remota**
+    (verificação por áudio/vídeo em tempo real); **inspeção/teste/verificação** de características do produto
+    recebido. Fornecedores críticos de **alto risco** sem avaliação in loco exigem avaliação remota **e**
+    inspeção/teste/verificação.
+  - **Compras críticas especificadas pelo cliente ou limitadas por proprietário/legal** — avaliação inicial
+    reduzida: verificação do QMS conforme requisitos da organização e/ou do cliente; identificação de como o
+    produto/componente/atividade fornecida atende aos requisitos especificados. Escopo de aprovação limitado
+    ao contrato do cliente relevante quando a avaliação completa não foi feita.
+  - **Compras não críticas** — critérios de avaliação seguem os mesmos da compra crítica, ou: verificação de
+    conformidade do QMS do fornecedor; avaliação do atendimento aos requisitos de compra; avaliação do
+    produto/componente na entrega ou da atividade na conclusão.
+  - **Reavaliação de fornecedores** — frequência definida com base em risco (5.3) e desempenho de qualidade;
+    segue os mesmos critérios da avaliação inicial (crítica, cliente-especificada, ou não crítica, conforme o
+    caso).
+  - **Registros** — resultados de avaliações (com evidência objetiva) e ações resultantes; identificação de
+    fornecedores aprovados, especificados pelo cliente, e limitados por proprietário/legal.
+  - **Terceirização (Outsourcing)** — ao terceirizar um processo/atividade do QMS, a organização deve
+    verificar que o fornecedor satisfaz os requisitos aplicáveis do próprio QMS da organização. Ao
+    terceirizar um processo/atividade de realização do produto, a organização **mantém a responsabilidade**
+    pela conformidade do produto, incluindo especificações API/externas aplicáveis. Registros obrigatórios.
+- **5.5.2 Informação de Compra** — a organização deve garantir a adequação da informação antes de comunicá-la
+  ao fornecedor, descrevendo o produto/componente/atividade, incluindo conforme aplicável: critérios de
+  aceitação; requisitos de aprovação de procedimentos/processos/equipamentos do fornecedor; versão aplicável
+  de especificações/desenhos/requisitos de processo/instruções de inspeção/rastreabilidade; requisitos de
+  qualificação de pessoal do fornecedor; requisitos do QMS; requisitos de aprovação de liberação do produto;
+  requisitos de verificação nas instalações do fornecedor (se a organização ou o cliente forem verificar lá).
+- **5.5.3 Verificação de Produtos/Componentes/Atividades Comprados:**
+  - **Compras críticas** — procedimento deve tratar: revisão da documentação exigida do fornecedor;
+    verificação de que as versões aplicáveis foram usadas (specs, desenhos, requisitos de processo,
+    rastreabilidade); requisitos/métodos/frequência/responsável pela inspeção/teste/verificação, definidos
+    com base no risco (5.3) e desempenho do fornecedor.
+  - **Compras não críticas** — verificadas conforme procedimento documentado da organização.
+  - **Registros** — de atividades de verificação e evidência de conformidade.
+
+### 5.6 Control of Product Realization (Controle da Realização do Produto)
+
+- **5.6.1 Geral** — procedimento tratando: determinação e implementação do **MAC**; identificação/
+  documentação de processos críticos à realização; implementação do plano de qualidade (quando aplicável);
+  conformidade a requisitos de design e mudanças relacionadas; disponibilidade e uso de equipamento de
+  realização e TMMDE; uso de instruções de trabalho aplicáveis; documentos de controle de processo (5.6.3);
+  manutenção de identificação/rastreabilidade (5.6.5); implementação de monitoramento/medição; implementação
+  da liberação do produto (5.7), incluindo entrega e pós-entrega; revisão e controle de mudanças na
+  realização, aprovações e registros.
+- **5.6.2 Plano de Qualidade** — quando exigido por contrato, deve especificar os processos do QMS
+  (incluindo realização do produto) e os recursos aplicados. No mínimo: descrição do produto/escopo do plano;
+  processos/documentação exigidos (inspeções, testes, registros); identificação de atividades terceirizadas;
+  identificação de cada procedimento/especificação/documento referenciado; pontos de retenção
+  (hold)/testemunho (witness)/monitoramento/revisão documental exigidos. Deve ser documentado, aprovado e
+  comunicado ao cliente (com revisões). *(Outros nomes usados na prática: PQP, ITP, MPS, PCP, QAP.)*
+- **5.6.3 Documentos de Controle de Processo** — devem incluir ou referenciar: requisitos de verificação de
+  conformidade com planos de qualidade, especificações API, requisitos do cliente e outras normas/códigos
+  aplicáveis; instruções e critérios de aceitação para processos/testes/inspeções; pontos de retenção/
+  testemunho/monitoramento/revisão do cliente, quando aplicável.
+- **5.6.4 Validação de Processos** — exigida quando a saída de um processo **não pode ser verificada** por
+  monitoramento/medição subsequente (deficiências só aparecem depois de entregue/em uso). Se a especificação
+  do produto identifica quais processos exigem validação, só esses exigem. Se não houver especificação
+  aplicável (ou ela não identificar), a validação mínima aplicável cobre: **NDE/NDT** (ensaio não destrutivo),
+  **soldagem**, **tratamento térmico**, e **coating/plating** (quando identificado como crítico). Procedimento
+  documentado deve tratar: equipamento exigido; qualificação de pessoal; métodos e parâmetros operacionais;
+  critérios de aceitação do processo; registros; revalidação. Se terceirizado, a organização deve manter
+  evidência de que os requisitos foram atendidos.
+- **5.6.5 Identificação e Rastreabilidade** — estabelecidas e mantidas durante toda a realização (inclusive
+  entrega e pós-entrega); requisitos de rastreabilidade definidos pela organização, cliente e/ou especificação
+  do produto; procedimento documentado tratando: métodos de identificação; informação necessária para
+  rastreabilidade; requisitos de manutenção/reaplicação da identificação; ações para tratar perda de
+  identificação/rastreabilidade. Registros obrigatórios. *(Aplica-se também a componentes e matéria-prima.)*
+- **5.6.6 Status de Inspeção/Teste** — procedimento para identificar o status de inspeção/teste ao longo da
+  realização, indicando conformidade ou não conformidade do produto.
+- **5.6.7 Propriedade de Terceiros (Externally Owned Property)** — procedimento para controle de propriedade
+  externa (inclusive do cliente) incorporada ao produto, incluindo propriedade intelectual e dados não
+  públicos, tratando: identificação; verificação; salvaguarda; preservação; manutenção; e comunicação ao
+  proprietário externo em caso de perda/dano/inadequação. Registros obrigatórios.
+- **5.6.8 Preservação do Produto** — procedimento descrevendo métodos de preservação do produto e componentes
+  durante realização e entrega: identificação/marcação de rastreabilidade; armazenamento (áreas/estoques
+  designados); avaliação periódica de condição; transporte; manuseio; embalagem; proteção. Registros dos
+  resultados das avaliações.
+- **5.6.9 Inspeção, Teste e Verificação:**
+  - **Em processo** — inspeção/teste/verificação em etapas planejadas, conforme plano de qualidade, documentos
+    de controle de processo e/ou procedimentos. Evidência de conformidade com os critérios de aceitação deve
+    ser mantida.
+  - **Final** — determina e documenta a conformidade do produto acabado aos requisitos especificados. Salvo
+    quando feita por sistema automatizado, a **inspeção de aceitação final** deve ser feita por pessoal
+    **diferente** de quem executou ou supervisionou diretamente a realização.
+  - **Registros** — de toda inspeção/teste/verificação/aceitação final exigida.
+- **5.6.10 Manutenção Preventiva** — procedimento para manutenção preventiva de equipamento usado na
+  realização do produto, tratando: tipo de equipamento coberto; frequência; pessoal responsável. Registros
+  obrigatórios. *(Pode basear-se em risco, histórico de uso, recomendações do fabricante, normas/códigos.)*
+
+### 5.7 Product Release (Liberação do Produto)
+
+Procedimento para liberação do produto ao cliente. A liberação **não deve prosseguir** até que os arranjos
+planejados (Seção 5.6) tenham sido concluídos satisfatoriamente. A organização só deve liberar produto que
+**esteja conforme** os requisitos ou que **esteja autorizado sob concessão** (5.9.3). Registros devem permitir
+identificar quem liberou o produto.
+
+### 5.8 Testing, Measuring, Monitoring, and Detection Equipment (TMMDE)
+
+- **5.8.1 Geral** — a organização determina os requisitos de teste/medição/monitoramento/detecção e o TMMDE
+  necessário para evidenciar conformidade. TMMDE próprio, de funcionário, ou de outras fontes (terceiro,
+  proprietário, cliente) usado para evidenciar conformidade ou monitorar parâmetros que afetam conformidade
+  deve ser **controlado**. Deve ser calibrado em intervalos especificados; se o intervalo é baseado na data de
+  primeiro uso, essa data deve ser documentada.
+- **5.8.2 Procedimento** — procedimento documentado tratando: identificação única; status de calibração;
+  rastreabilidade a padrões internacionais/nacionais (ou base registrada, se não existirem); método de
+  calibração e critérios de aceitação; frequência e início do intervalo de calibração; documentação das
+  medições antes e depois de ajustes ("as-found"/"as-left"); ações para prevenir uso não intencional de TMMDE
+  fora de calibração; quando fora de calibração — avaliação da validade de medições anteriores e ações sobre
+  o TMMDE e o produto (incluindo notificação ao cliente se produto suspeito foi enviado); uso de TMMDE de
+  terceiro/proprietário/funcionário/cliente; manutenção; adequação às atividades planejadas.
+- **5.8.3 Equipamento** — o TMMDE deve: ser calibrado; ter status de calibração identificável antes/durante o
+  uso; ser protegido contra ajustes que invalidem o resultado/status; ser protegido contra dano/deterioração;
+  ser usado em condições ambientais adequadas. Software usado em teste/monitoramento/medição/detecção deve
+  ter sua capacidade confirmada antes do uso inicial e reconfirmada quando necessário.
+- **5.8.4 TMMDE de Outras Fontes** — quando terceiro/proprietário/cliente, a organização deve confirmar que
+  está calibrado antes do uso; se limitado por cliente/contrato/licenciamento, alguns subitens do 5.8.2 não
+  se aplicam.
+- **5.8.5 Registros** — registro de todo o TMMDE identificado, com identificação única; resultados de
+  calibração; e, quando a calibração de TMMDE de terceiro é limitada por cliente/contrato/licença, registro
+  dessa limitação.
+
+### 5.9 Control of Nonconforming Product (Controle de Produto Não Conforme)
+
+- **5.9.1 Procedimento:**
+  - **Durante a realização** — deve tratar: identificação/controle do produto para prevenir uso ou entrega não
+    intencional; tratamento da não conformidade detectada (5.9.2); ação para impedir seu uso/entrega
+    pretendidos originalmente; autorização de uso/liberação/aceitação sob concessão pela autoridade
+    responsável e, quando exigido, pelo cliente (5.9.3).
+  - **Após a entrega** — deve tratar: identificação/documentação/relato do produto não conforme; análise da
+    não conformidade (quando o produto ou evidência documentada está disponível, para apoiar a determinação
+    da causa); ação apropriada aos efeitos (ou efeitos potenciais); autorização sob concessão pela autoridade
+    responsável e, quando exigido, pelo cliente.
+- **5.9.2 Produto Não Conforme** — a organização deve tratá-lo por um ou mais destes: **reparo/retrabalho**
+  com inspeção subsequente; **reclassificação (re-grade)** para aplicação alternativa; **liberação sob
+  concessão** (5.9.3); e/ou **rejeição/sucateamento**.
+- **5.9.3 Liberação de Produto Não Conforme Sob Concessão** — permitida quando a autoridade responsável avaliou
+  e autorizou, desde que: (a) o produto continue satisfazendo o DAC aplicável e critérios do cliente; ou
+  (b) o MAC violado é determinado como desnecessário para satisfazer o DAC e/ou critérios do cliente; ou
+  (c) o DAC é alterado (5.4.8) e os produtos afetados satisfazem o DAC/MAC revisados — se o DAC foi
+  previamente acordado com o cliente, a mudança **exige autorização do cliente**. A organização **não deve**
+  liberar produto fora do DAC ou requisitos contratuais sem autorização do cliente.
+- **5.9.4 Notificação ao Cliente de Produto Não Conforme** — obrigatória quando o produto entregue não
+  atende ao DAC ou aos requisitos contratuais. Registros da notificação obrigatórios.
+- **5.9.5 Registros** — de não conformidades, incluindo: descrição; ações subsequentes (inclusive concessões
+  obtidas); justificativa para a liberação sob concessão; autoridade responsável.
+
+### 5.10 Management of Change — MOC (Gestão de Mudanças)
+
+- **5.10.1 Geral** — procedimento documentado para manter a integridade do QMS quando ocorrem mudanças,
+  tratando: descrição da mudança e sua necessidade; disponibilidade/alocação de recursos (inclusive pessoal);
+  riscos potenciais (5.3); revisão/aprovação/implementação; notificações (5.10.3); verificação da conclusão
+  das atividades de MOC e seu impacto no QMS.
+- **5.10.2 Aplicação do MOC** — usado para mudanças que **podem impactar negativamente** a qualidade do
+  produto (ver gatilhos em 5.3.2.3: estrutura organizacional, pessoal-chave, cadeia de suprimento crítica,
+  escopo/procedimentos do sistema de gestão, capacidade da organização).
+- **5.10.3 Notificação do MOC** — pessoal interno relevante deve ser notificado da mudança e do risco
+  associado; quando exigido por contrato, o cliente também deve ser notificado. Notificações documentadas.
+- **5.10.4 Registros** — das atividades de MOC.
+
+---
+
+## 2.5 Seção 6 — Monitoramento, Medição, Análise e Melhoria do QMS
+
+### 6.1 Geral
+
+A organização deve planejar e implementar os processos de monitoramento, medição, análise e melhoria
+necessários para assegurar conformidade do QMS à Q1 e melhorar continuamente sua efetividade, determinando os
+métodos aplicáveis (inclusive técnicas de análise de dados) e sua extensão de uso.
+
+### 6.2 Monitoring, Measuring, and Improving
+
+- **6.2.1 Satisfação do Cliente** — procedimento documentado tratando frequência/métodos de determinação e
+  KPIs de satisfação do cliente. Registros obrigatórios.
+- **6.2.2 Auditoria Interna:**
+  - **Geral** — auditorias internas para informar se o QMS está implementado, mantido e conforme à Q1 e aos
+    próprios requisitos da organização. Procedimento documentado define responsabilidades de
+    planejamento/condução/documentação. Critérios/escopo/frequência/métodos devem considerar resultados de
+    auditorias anteriores (internas e externas) e a criticidade do processo auditado. **Todos os processos do
+    QMS devem ser auditados pelo menos a cada 12 meses** (não além do mesmo mês-calendário do ano anterior) —
+    não precisa ser uma auditoria única consolidada, mas se dividida, o intervalo entre partes não pode passar
+    de 12 meses. Processos identificados como críticos à realização exigem observação da atividade sendo
+    executada.
+  - **Execução** — realizada por pessoal competente e **independente** de quem executou/supervisionou
+    diretamente a atividade auditada, para garantir objetividade e imparcialidade. Registros devem evidenciar
+    que o QMS está implementado e mantido.
+  - **Revisão e Encerramento** — a organização define prazos de resposta para tratar não conformidades
+    detectadas; o responsável pela área auditada garante que correções e ações corretivas sigam 6.4.2.
+    Registros das auditorias obrigatórios.
+- **6.3 Análise de Dados** — procedimento documentado para identificação, coleta e análise de dados,
+  demonstrando adequação e efetividade do QMS. A análise deve incluir dados de monitoramento/medição,
+  auditorias internas, auditorias externas, revisões da direção e outras fontes relevantes. A saída da análise
+  deve fornecer informação (incluindo tendências) sobre: satisfação do cliente; não conformidade a requisitos
+  durante a realização; não conformidades e falhas de produto identificadas após entrega/uso (quando produto
+  ou evidência disponível); desempenho de processo; desempenho de fornecedores; cumprimento dos objetivos da
+  qualidade. A organização deve usar esses dados para avaliar onde é possível melhorar continuamente o QMS.
+
+### 6.4 Improvement (Melhoria)
+
+- **6.4.1 Geral** — melhoria contínua da efetividade do QMS por meio de objetivos da qualidade, auditoria
+  interna, análise de dados, ação corretiva e revisão da direção.
+- **6.4.2 Ação Corretiva** — procedimento documentado para tratar não conformidades (inclusive as resultantes
+  de reclamações de clientes) e tomar ações corretivas internamente e com fornecedores, proporcionais ao(s)
+  efeito(s) da não conformidade. Deve tratar: critérios para iniciar o processo; revisão da não conformidade;
+  determinação/implementação de correções; identificação da causa raiz; implementação de ação corretiva para
+  reduzir a probabilidade de recorrência; prazo e responsável; verificação da eficácia; critérios para
+  atualizar riscos/oportunidades identificados no planejamento (4.1.4); uso do MOC (5.10) quando a ação
+  corretiva exige novos controles; avaliação de não conformidades potenciais similares. Registros obrigatórios,
+  identificando as atividades de verificação da eficácia.
+
+### 6.5 Management Review (Revisão pela Direção)
+
+- **6.5.1 Geral** — o QMS deve ser revisado **pelo menos a cada 12 meses** (não além do mesmo mês-calendário
+  do ano anterior) pelo pessoal de gestão, avaliando continuidade de adequação/suficiência/efetividade,
+  incluindo oportunidades de melhoria, adequação de recursos, e necessidade de mudanças (inclusive política e
+  objetivos da qualidade).
+- **6.5.2 Entradas (mínimo)** — status/eficácia de ações de revisões anteriores; resultados de auditorias
+  internas e externas; mudanças que possam afetar o QMS (requisitos legais, normas do setor, questões
+  internas/externas); análise de satisfação do cliente; feedback relevante de clientes/partes interessadas;
+  desempenho de processo; resultados de avaliação de risco e eficácia das ações; status de ações corretivas;
+  análise de desempenho de fornecedores; análise de conformidade de produto (inclusive não conformidades pós-
+  entrega); desempenho real vs. objetivos da qualidade; recomendações de melhoria.
+- **6.5.3 Saídas** — avaliação-resumo da efetividade do QMS; mudanças exigidas nos processos; decisões e
+  ações; recursos necessários; melhorias a produtos para atender requisitos do cliente. A alta direção deve
+  revisar e aprovar a saída. Revisões documentadas e registradas.
+
+---
+
+## 2.6 Anexo A (informativo) — Programa de Monograma API
+
+O **Monograma API** é uma marca de certificação registrada, licenciada pela API a fabricantes cujos produtos
+atendam às especificações de produto aplicáveis e sejam fabricados sob um QMS conforme a Q1. Pontos-chave:
+
+- Licenças exigem **auditoria in loco** prévia confirmando implementação e manutenção contínua do QMS Q1 e
+  conformidade do produto à(s) especificação(ões) API aplicável(is).
+- **Produto monogramável**: recém-fabricado por um licenciado, sob QMS Q1 totalmente implementado, atendendo
+  a todos os requisitos da(s) especificação(ões)/norma(s) aplicável(is). Produto colocado em serviço/uso **não**
+  é "recém-fabricado".
+- O Monograma e o número de licença são **específicos do local (site)** licenciado — só podem ser aplicados
+  lá, e sua aplicação constitui garantia de conformidade.
+- **Capacidade de manufatura**: instalações limitadas a inspeção/teste final, compra/venda/distribuição de
+  produto acabado, atividades de design isoladas, desmontagem/remontagem, ou reparo/remanufatura de produto
+  usado/desgastado **não atendem** aos requisitos de capacidade de manufatura e não podem ser licenciadas com
+  base só nisso.
+- **Reaplicação do Monograma**: só é permitida sob cenários e aprovação específicos da API (ex.: manutenção/
+  reparo/remanufatura que reinstale a placa de identificação original sem modificá-la).
+- **Marcação**: deve referenciar a especificação/norma API aplicável (ex. "API 6A"), usar as unidades
+  especificadas (padrão USC, salvo indicação contrária), e incluir Monograma + número de licença na plaqueta
+  de identificação, quando aplicável.
+- **Relato de não conformidade**: a API pede que clientes relatem produtos monogramados não conformes ou
+  falhas de campo pelo sistema API Nonconformance Reporting.
+
+*(Este anexo é informativo — relevante para fabricantes licenciados. Não confundir exigência de Monograma com
+exigência geral de conformidade à Q1: qualquer organização pode alegar conformidade à Q1 sem ser licenciada
+para aplicar o Monograma.)*
+
+---
+
+## 2.7 Seções Críticas para Segurança Técnica
 
 ### Design Acceptance Criteria (DAC) vs. Manufacturing Acceptance Criteria (MAC)
 
-**DAC** (5.4.4):
-- Requirements aplicados a características ou combinações de características para conformidade aos design requirements e/ou required design performance
-
-**MAC** (5.6.1):
-- Requirements aplicados a características ou combinações de características para conformidade ao DAC (ou product manufacturing requirements) e/ou outras product manufacturing requirements
+- **DAC** (3.1.7 / 5.4.4): requisitos aplicados a características (ou combinações) de materiais, produtos ou
+  componentes para atingir conformidade aos **requisitos de design** e/ou desempenho de design exigido.
+- **MAC** (3.1.13 / 5.6.1): requisitos aplicados a características (ou combinações) para atingir conformidade
+  ao **DAC aplicável** e a outros requisitos de manufatura do produto.
 
 ### Regra de Ouro
 
-> "Design Acceptance Criteria (DAC) can be equal to Manufacturing Acceptance Criteria (MAC)" — mas nunca assuma isso automaticamente. Verifique sempre a especificação do cliente e do produto.
+> A norma admite explicitamente que "DAC pode ser igual a MAC" — mas isso é uma possibilidade, não uma regra
+> geral. **Nunca assuma equivalência automaticamente.** Verifique sempre a especificação do cliente e do
+> produto antes de tratar os dois como idênticos.
+
+### Retenção de registros — atenção à mudança de edição
+
+A 10ª edição ampliou a retenção mínima de registros para **10 anos**. Se o usuário perguntar sobre uma
+organização certificada sob edição anterior (9ª ou mais antiga), avise que o prazo pode ter sido menor
+naquela época — o prazo vigente hoje é 10 anos (ou o exigido por cliente/lei, se maior).
 
 ---
 
