@@ -1,0 +1,104 @@
+/* Painel de admin — página enxuta, reaproveita as variáveis de tema
+   já definidas em style.css (cores, bordas, etc.) */
+
+.admin-page {
+  max-width: 720px;
+  margin: 0 auto;
+  padding: 32px 20px 64px;
+}
+
+.admin-header {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 28px;
+}
+
+.admin-logo {
+  width: 36px;
+  height: 36px;
+  object-fit: contain;
+}
+
+.admin-header h1 {
+  font-size: 20px;
+  font-weight: 600;
+  color: var(--text);
+  margin: 0;
+}
+
+.admin-state {
+  color: var(--text-muted, var(--text));
+  text-align: center;
+  padding: 48px 16px;
+}
+
+.admin-login-link {
+  display: inline-block;
+  margin-top: 12px;
+  text-decoration: none;
+  text-align: center;
+}
+
+.admin-stats-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+  gap: 16px;
+  margin-bottom: 32px;
+}
+
+.admin-stat-card {
+  background: var(--sidebar-bg);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  padding: 18px 20px;
+}
+
+.admin-stat-label {
+  font-size: 13px;
+  color: var(--text-muted, var(--text));
+  opacity: 0.75;
+  margin-bottom: 6px;
+}
+
+.admin-stat-value {
+  font-size: 28px;
+  font-weight: 700;
+  color: var(--text);
+}
+
+.admin-section-title {
+  font-size: 15px;
+  font-weight: 600;
+  color: var(--text);
+  margin: 0 0 12px;
+}
+
+.admin-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 14px;
+}
+
+.admin-table th,
+.admin-table td {
+  text-align: left;
+  padding: 10px 12px;
+  border-bottom: 1px solid var(--border);
+}
+
+.admin-table th {
+  color: var(--text-muted, var(--text));
+  opacity: 0.75;
+  font-weight: 500;
+}
+
+.admin-table tbody tr:hover {
+  background: var(--sidebar-hover);
+}
+
+.admin-empty {
+  color: var(--text-muted, var(--text));
+  opacity: 0.75;
+  padding: 16px 0;
+}

@@ -1,6 +1,7 @@
 import { buildSystemPrompt } from "../lib/system-prompt.js";
 import { applyCors, getBearerToken, verifyToken, isJwtConfigured } from "../lib/http.js";
 import { isRateLimited } from "../lib/rate-limit.js";
+import { getServiceRoleClient } from "../lib/supabase-admin.js";
 
 const MODEL = process.env.OPENROUTER_MODEL || "anthropic/claude-sonnet-4.5";
 const MAX_HISTORY = 20;
@@ -14,6 +15,28 @@ const MAX_IMAGE_CHARS = 3_000_000; // ~2 MB por imagem em base64
 // caso contrário há fallback em memória. Ver lib/rate-limit.js.
 const RATE_LIMIT_MAX = 30;
 const RATE_LIMIT_WINDOW_SEC = 60;
+
+// Grava o consumo de tokens reportado pela OpenRouter, para o painel de
+// admin (ver api/admin-stats.js). Nunca deve derrubar a resposta do chat —
+// falha aqui só é logada no servidor.
+async function logTokenUsage(userId, usage) {
+  if (!usage) return;
+  const supabase = getServiceRoleClient();
+  if (!supabase) return; // SUPABASE_SERVICE_ROLE_KEY não configurada: silenciosamente ignora
+
+  try {
+    const { error } = await supabase.from("token_usage").insert({
+      user_id: userId,
+      model: MODEL,
+      prompt_tokens: usage.prompt_tokens ?? 0,
+      completion_tokens: usage.completion_tokens ?? 0,
+      total_tokens: usage.total_tokens ?? 0,
+    });
+    if (error) console.error("Falha ao registrar consumo de tokens:", error);
+  } catch (err) {
+    console.error("Falha ao registrar consumo de tokens:", err);
+  }
+}
 
 function getRateLimitKey(req, userId) {
   // Prioriza usuário autenticado, senão usa IP
@@ -154,6 +177,7 @@ export default async function handler(req, res) {
       body: JSON.stringify({
         model: MODEL,
         stream: true,
+        stream_options: { include_usage: true }, // inclui contagem de tokens no chunk final, para o painel de admin
         max_tokens: 1024, // respostas concisas e diretas
         temperature: 0.5, // um pouco mais alta: tom natural e caloroso
         messages: [
@@ -191,6 +215,7 @@ export default async function handler(req, res) {
     const reader = upstream.body.getReader();
     const decoder = new TextDecoder();
     let buffer = "";
+    let usage = null;
 
     while (true) {
       const { done, value } = await reader.read();
@@ -207,11 +232,15 @@ export default async function handler(req, res) {
         const payload = trimmed.slice(5).trim();
         if (payload === "[DONE]") {
           res.write("data: [DONE]\n\n");
+          await logTokenUsage(userId, usage);
           return res.end();
         }
 
         try {
           const parsed = JSON.parse(payload);
+          if (parsed.usage) {
+            usage = parsed.usage;
+          }
           const delta = parsed.choices?.[0]?.delta?.content;
           if (delta) {
             res.write(`data: ${JSON.stringify({ delta })}\n\n`);
@@ -222,6 +251,7 @@ export default async function handler(req, res) {
       }
     }
 
+    await logTokenUsage(userId, usage);
     res.write("data: [DONE]\n\n");
     res.end();
   } catch (err) {
