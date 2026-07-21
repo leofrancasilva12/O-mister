@@ -468,7 +468,122 @@ function openSettings() {
 
   updatePhotoRemoveButton();
   settingsModal.hidden = false;
+  loadWebauthnSettings();
 }
+
+/* =========================================================
+   Login por biometria (Configurações)
+   ========================================================= */
+const webauthnSection = document.getElementById("webauthn-settings-section");
+const webauthnDevicesList = document.getElementById("webauthn-devices-list");
+const webauthnRegisterBtn = document.getElementById("webauthn-register-btn");
+const webauthnMsg = document.getElementById("webauthn-settings-msg");
+
+function showWebauthnMsg(text, kind) {
+  if (!webauthnMsg) return;
+  webauthnMsg.textContent = text;
+  webauthnMsg.className = "webauthn-settings-msg" + (kind ? " " + kind : "");
+  webauthnMsg.hidden = false;
+}
+
+function guessDeviceName() {
+  const ua = navigator.userAgent || "";
+  if (/iPhone/.test(ua)) return "iPhone";
+  if (/iPad/.test(ua)) return "iPad";
+  if (/Android/.test(ua)) return "Android";
+  if (/Macintosh/.test(ua)) return "Mac";
+  if (/Windows/.test(ua)) return "Windows";
+  return "Este dispositivo";
+}
+
+function formatDeviceDate(iso) {
+  if (!iso) return "";
+  try {
+    return new Intl.DateTimeFormat("pt-BR", { dateStyle: "short" }).format(new Date(iso));
+  } catch {
+    return "";
+  }
+}
+
+function renderWebauthnDevices(devices, accessToken) {
+  webauthnDevicesList.innerHTML = "";
+  devices.forEach((device) => {
+    const row = document.createElement("div");
+    row.className = "webauthn-device-row";
+
+    const info = document.createElement("div");
+    info.className = "webauthn-device-info";
+    const name = document.createElement("div");
+    name.className = "webauthn-device-name";
+    name.textContent = device.deviceName;
+    const date = document.createElement("div");
+    date.className = "webauthn-device-date";
+    date.textContent = "Cadastrado em " + formatDeviceDate(device.createdAt);
+    info.appendChild(name);
+    info.appendChild(date);
+
+    const removeBtn = document.createElement("button");
+    removeBtn.type = "button";
+    removeBtn.className = "webauthn-device-remove";
+    removeBtn.setAttribute("aria-label", "Remover dispositivo");
+    removeBtn.innerHTML = '<svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="3 6 5 6 21 6"/><path d="M19 6l-1 14a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2L5 6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/></svg>';
+    removeBtn.addEventListener("click", async () => {
+      removeBtn.disabled = true;
+      try {
+        await OMISTER_WEBAUTHN.removeCredential(accessToken, device.id);
+        loadWebauthnSettings();
+      } catch (err) {
+        showWebauthnMsg("Erro ao remover: " + err.message, "error");
+        removeBtn.disabled = false;
+      }
+    });
+
+    row.appendChild(info);
+    row.appendChild(removeBtn);
+    webauthnDevicesList.appendChild(row);
+  });
+}
+
+async function loadWebauthnSettings() {
+  if (!webauthnSection || !window.OMISTER_WEBAUTHN || !useCloud) return;
+
+  const available = await OMISTER_WEBAUTHN.isPlatformAuthenticatorAvailable();
+  if (!available) {
+    webauthnSection.hidden = true;
+    return;
+  }
+  webauthnSection.hidden = false;
+
+  try {
+    const session = await OMISTER.auth.getSession();
+    const accessToken = session?.data?.session?.access_token;
+    if (!accessToken) return;
+
+    const devices = await OMISTER_WEBAUTHN.listCredentials(accessToken);
+    renderWebauthnDevices(devices, accessToken);
+  } catch (err) {
+    console.error("Falha ao carregar dispositivos de biometria:", err);
+  }
+}
+
+webauthnRegisterBtn?.addEventListener("click", async () => {
+  webauthnRegisterBtn.disabled = true;
+  try {
+    const session = await OMISTER.auth.getSession();
+    const accessToken = session?.data?.session?.access_token;
+    if (!accessToken) throw new Error("Sessão expirada.");
+
+    await OMISTER_WEBAUTHN.registerCredential(accessToken, guessDeviceName());
+    showWebauthnMsg("Biometria ativada neste dispositivo.", "ok");
+    loadWebauthnSettings();
+  } catch (err) {
+    if (err && err.name !== "NotAllowedError") {
+      showWebauthnMsg("Erro ao ativar: " + err.message, "error");
+    }
+  } finally {
+    webauthnRegisterBtn.disabled = false;
+  }
+});
 
 function closeSettings() {
   settingsModal.hidden = true;
