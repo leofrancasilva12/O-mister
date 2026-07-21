@@ -1,6 +1,7 @@
 /* Painel de admin: exige login e checa autorização no servidor
    (/api/admin-stats), que só libera para o e-mail em ADMIN_EMAIL. */
 (function () {
+  var THEME_KEY = "omister.theme.v1"; // mesma chave do chat, para o tema ficar sincronizado
   var STATES = ["admin-state-loading", "admin-state-login", "admin-state-denied", "admin-state-error", "admin-content"];
   var currentAccounts = [];
   var currentToken = null;
@@ -96,7 +97,7 @@
       delBtn.type = "button";
       delBtn.className = "admin-row-delete";
       delBtn.textContent = "Excluir";
-      delBtn.addEventListener("click", function () { deleteAccount(account); });
+      delBtn.addEventListener("click", function () { requestDeleteAccount(account); });
       tdActions.appendChild(delBtn);
 
       tr.appendChild(tdEmail);
@@ -107,12 +108,51 @@
     });
   }
 
-  async function deleteAccount(account) {
-    var ok = window.confirm(
-      "Excluir a conta " + account.email + "?\n\nIsso apaga permanentemente as conversas, o perfil e o login dessa pessoa. Não dá pra desfazer."
-    );
-    if (!ok) return;
+  var modalCallback = null;
 
+  function showModal(title, text, confirmText, onConfirm) {
+    document.getElementById("admin-modal-title").textContent = title;
+    document.getElementById("admin-modal-text").innerHTML = text;
+    document.getElementById("admin-modal-confirm").textContent = confirmText;
+    modalCallback = onConfirm;
+    document.getElementById("admin-modal-overlay").hidden = false;
+  }
+
+  function closeModal() {
+    document.getElementById("admin-modal-overlay").hidden = true;
+    modalCallback = null;
+  }
+
+  function wireModal() {
+    var overlay = document.getElementById("admin-modal-overlay");
+    var cancelBtn = document.getElementById("admin-modal-cancel");
+    var confirmBtn = document.getElementById("admin-modal-confirm");
+    if (!overlay || !cancelBtn || !confirmBtn) return;
+
+    cancelBtn.addEventListener("click", closeModal);
+    overlay.addEventListener("click", function (e) {
+      if (e.target === overlay) closeModal();
+    });
+    confirmBtn.addEventListener("click", function () {
+      var cb = modalCallback;
+      closeModal();
+      if (cb) cb();
+    });
+    document.addEventListener("keydown", function (e) {
+      if (e.key === "Escape" && !overlay.hidden) closeModal();
+    });
+  }
+
+  function requestDeleteAccount(account) {
+    showModal(
+      "Excluir conta?",
+      "Isso apaga permanentemente as conversas, o perfil e o login de <strong>" + account.email + "</strong>. Não dá pra desfazer.",
+      "Excluir",
+      function () { performDeleteAccount(account); }
+    );
+  }
+
+  async function performDeleteAccount(account) {
     try {
       var res = await fetch("/api/admin-delete-account", {
         method: "POST",
@@ -157,6 +197,57 @@
     renderAccountsTable("");
 
     show("admin-content");
+  }
+
+  function applyTheme(theme) {
+    var root = document.documentElement;
+    if (theme === "dark") root.setAttribute("data-theme", "dark");
+    else root.removeAttribute("data-theme");
+
+    var moon = document.getElementById("admin-theme-icon-moon");
+    var sun = document.getElementById("admin-theme-icon-sun");
+    if (moon && sun) {
+      moon.hidden = theme === "dark";
+      sun.hidden = theme !== "dark";
+    }
+  }
+
+  function wireTheme() {
+    var btn = document.getElementById("admin-theme-btn");
+    if (!btn) return;
+
+    // admin-theme-init.js já aplicou o tema salvo antes do paint; aqui só
+    // sincroniza os ícones com o estado atual e liga o clique.
+    var isDark = document.documentElement.getAttribute("data-theme") === "dark";
+    applyTheme(isDark ? "dark" : "light");
+
+    btn.addEventListener("click", function () {
+      var next = document.documentElement.getAttribute("data-theme") === "dark" ? "light" : "dark";
+      try {
+        localStorage.setItem(THEME_KEY, next);
+      } catch (e) {}
+      applyTheme(next);
+    });
+  }
+
+  function renderProfile(sessionUser) {
+    var accountEl = document.getElementById("admin-account");
+    var nameEl = document.getElementById("admin-profile-name");
+    var emailEl = document.getElementById("admin-profile-email");
+    var photoEl = document.getElementById("admin-profile-photo");
+    if (!accountEl || !sessionUser) return;
+
+    var profile = {};
+    try {
+      var key = "user_profile_" + sessionUser.id; // mesma chave usada no chat (Configurações)
+      profile = JSON.parse(localStorage.getItem(key) || "{}");
+    } catch (e) {}
+
+    nameEl.textContent = profile.name || "Admin";
+    emailEl.textContent = sessionUser.email || "";
+    photoEl.innerHTML = profile.photo ? '<img src="' + profile.photo + '" alt="Perfil">' : "👤";
+
+    accountEl.hidden = false;
   }
 
   function wireLogout() {
@@ -209,6 +300,8 @@
 
   async function init() {
     wireSidebarToggle();
+    wireTheme();
+    wireModal();
 
     if (!window.OMISTER || !window.OMISTER.isConfigured) {
       show("admin-state-login");
@@ -229,6 +322,7 @@
     }
 
     currentToken = session.access_token;
+    renderProfile(session.user);
     wireLogout();
     wireSearch();
 

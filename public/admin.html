@@ -35,7 +35,25 @@
       <a href="https://landing-page-miog.vercel.app/" target="_blank" rel="noopener noreferrer" class="admin-nav-link">Landing page</a>
     </nav>
 
-    <button id="admin-logout-btn" class="admin-nav-link admin-logout" type="button" hidden>Sair</button>
+    <div id="admin-account" class="account" hidden>
+      <div class="sidebar-profile">
+        <div id="admin-profile-photo" class="sidebar-profile-photo">👤</div>
+        <div class="sidebar-profile-info">
+          <div id="admin-profile-name" class="sidebar-profile-name">Admin</div>
+          <div id="admin-profile-email" class="sidebar-profile-email"></div>
+        </div>
+      </div>
+      <div class="account-actions">
+        <button id="admin-theme-btn" class="account-settings" type="button" aria-label="Alternar tema" title="Alternar tema claro/escuro">
+          <svg id="admin-theme-icon-moon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>
+          <svg id="admin-theme-icon-sun" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" hidden><circle cx="12" cy="12" r="5"/><line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/><line x1="1" y1="12" x2="3" y2="12"/><line x1="21" y1="12" x2="23" y2="12"/><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/></svg>
+        </button>
+        <button id="admin-logout-btn" class="account-logout" type="button" hidden>
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" y1="12" x2="9" y2="12"/></svg>
+          Sair
+        </button>
+      </div>
+    </div>
   </aside>
 
   <div id="admin-overlay" class="admin-overlay"></div>
@@ -83,16 +101,29 @@
 
       <h2 class="admin-section-title admin-section-title-spaced">E-mails cadastrados</h2>
       <input id="admin-accounts-search" class="admin-search" type="search" placeholder="Buscar por e-mail…">
-      <table class="admin-table">
-        <thead>
-          <tr><th>E-mail</th><th>Cadastrado em</th><th>Tokens</th><th></th></tr>
-        </thead>
-        <tbody id="admin-accounts-body"></tbody>
-      </table>
+      <div class="admin-table-wrap">
+        <table class="admin-table">
+          <thead>
+            <tr><th>E-mail</th><th>Cadastrado em</th><th>Tokens</th><th></th></tr>
+          </thead>
+          <tbody id="admin-accounts-body"></tbody>
+        </table>
+      </div>
       <p id="admin-accounts-empty" class="admin-empty" hidden>Ainda não há contas cadastradas.</p>
       <p id="admin-accounts-no-match" class="admin-empty" hidden>Nenhum e-mail bate com essa busca.</p>
     </div>
   </main>
+</div>
+
+<div id="admin-modal-overlay" class="modal-overlay" hidden>
+  <div class="modal" role="dialog" aria-modal="true" aria-labelledby="admin-modal-title">
+    <h2 id="admin-modal-title" class="modal-title">Excluir conta?</h2>
+    <p id="admin-modal-text" class="modal-text"></p>
+    <div class="modal-actions">
+      <button id="admin-modal-cancel" class="modal-btn modal-cancel" type="button">Cancelar</button>
+      <button id="admin-modal-confirm" class="modal-btn modal-danger" type="button">Excluir</button>
+    </div>
+  </div>
 </div>
 
 <script src="js/auth.js"></script>
