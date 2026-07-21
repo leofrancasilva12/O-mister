@@ -70,8 +70,12 @@ Depois cadastre as variáveis de ambiente no painel da Vercel, em **Settings →
 | Variável | Obrigatória | Observação |
 |---|---|---|
 | `OPENROUTER_API_KEY` | sim | Sua chave da OpenRouter |
-| `OPENROUTER_MODEL` | não | Padrão: `anthropic/claude-haiku-4.5` |
+| `OPENROUTER_MODEL` | não | Padrão: `anthropic/claude-sonnet-4.5` |
 | `SITE_URL` | não | A URL pública do projeto |
+| `SUPABASE_URL` | para login/registro de uso | URL do projeto Supabase |
+| `SUPABASE_JWT_SECRET` | para login (modo legado HS256) | Ver `SUPABASE-SETUP.md` |
+| `SUPABASE_SERVICE_ROLE_KEY` | para deletar conta e para o painel de admin | Chave `service_role` do Supabase (nunca expor no front-end) |
+| `ADMIN_EMAIL` | para o painel de admin (`/admin.html`) | E-mail autorizado a ver `/api/admin-stats`. Sem essa variável, o painel fica bloqueado para todo mundo |
 
 O `.env` está no `.gitignore`. A chave nunca chega ao navegador — todas as chamadas passam pela função serverless.
 
@@ -79,16 +83,30 @@ O `.env` está no `.gitignore`. A chave nunca chega ao navegador — todas as ch
 
 ## Trocar de modelo
 
-O padrão é **Claude 3.5 Haiku**. Para mudar, edite a variável de ambiente:
+O padrão é **Claude Sonnet 4.5**. Para mudar, edite a variável de ambiente:
 
 ```bash
 # Na Vercel Settings → Environment Variables:
-OPENROUTER_MODEL=anthropic/claude-haiku-4.5    # Padrão atual (rápido, barato)
+OPENROUTER_MODEL=anthropic/claude-sonnet-4.5   # Padrão atual (mais inteligente)
+OPENROUTER_MODEL=anthropic/claude-haiku-4.5    # Mais rápido e barato, menos capaz
 OPENROUTER_MODEL=anthropic/claude-opus-4-6     # Mais preciso, mais caro
-OPENROUTER_MODEL=google/gemini-flash-1.5       # Alternativa rápida
 ```
 
-O roteamento de normas API exige precisão — Claude 3.5 Haiku foi testado e aprovado para essa tarefa. Outros modelos podem funcionar, mas teste antes de mudar em produção. Confira preços em [openrouter.ai/models](https://openrouter.ai/models).
+O roteamento de normas API exige precisão — teste bem antes de trocar em produção. Confira preços em [openrouter.ai/models](https://openrouter.ai/models).
+
+---
+
+## Painel de admin (consumo de tokens e contas)
+
+Em `/admin.html` (ex.: `https://mister-intelligence.vercel.app/admin.html`) fica um painel simples com:
+- Total de contas cadastradas no Supabase Auth.
+- Total de tokens consumidos e consumo por dia (últimos 30 dias).
+
+Pra habilitar:
+1. Rode `db/admin-token-usage.sql` no SQL Editor do Supabase (cria a tabela `token_usage`, onde cada resposta do chat grava seu consumo).
+2. Configure `SUPABASE_SERVICE_ROLE_KEY` (se ainda não tiver, ela também é necessária para excluir conta).
+3. Configure `ADMIN_EMAIL` com o e-mail que você usa pra logar no app — só esse e-mail consegue ver a página. Sem essa variável, o painel fica bloqueado pra todo mundo (inclusive você).
+4. Entre em `/admin.html` já logado com esse e-mail.
 
 ---
 
