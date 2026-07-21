@@ -2,7 +2,7 @@ import { buildSystemPrompt } from "../lib/system-prompt.js";
 import { applyCors, getBearerToken, verifyToken, isJwtConfigured } from "../lib/http.js";
 import { isRateLimited } from "../lib/rate-limit.js";
 
-const MODEL = process.env.OPENROUTER_MODEL || "anthropic/claude-haiku-4.5";
+const MODEL = process.env.OPENROUTER_MODEL || "anthropic/claude-sonnet-4.5";
 const MAX_HISTORY = 20;
 
 // Limites de payload de imagem (base64) para evitar abuso/custo/DoS.
@@ -129,6 +129,19 @@ export default async function handler(req, res) {
     return msg;
   });
 
+  // Prompt caching (Anthropic, repassado pela OpenRouter): marca o último
+  // bloco da mensagem mais recente do histórico, para que o próximo turno
+  // desta mesma conversa reaproveite o prefixo (system + histórico) já
+  // processado, em vez de pagar o custo total de novo a cada mensagem.
+  if (history.length > 0) {
+    const last = history[history.length - 1];
+    const parts = Array.isArray(last.content)
+      ? [...last.content]
+      : [{ type: "text", text: last.content }];
+    parts[parts.length - 1] = { ...parts[parts.length - 1], cache_control: { type: "ephemeral" } };
+    last.content = parts;
+  }
+
   try {
     const upstream = await fetch("https://openrouter.ai/api/v1/chat/completions", {
       method: "POST",
@@ -146,7 +159,16 @@ export default async function handler(req, res) {
         messages: [
           {
             role: "system",
-            content: buildSystemPrompt() + (sanitizedUserName ? `\n\nO nome do usuário é ${sanitizedUserName}. Chame-o pelo nome com naturalidade e calor — ao cumprimentar, ao iniciar respostas importantes ou para deixar o papo mais próximo. Não force em toda frase, mas seja um colega simpático, não um manual.` : "")
+            // Bloco estável (persona + base de conhecimento) com cache_control:
+            // idêntico em todas as conversas, então o cache é reaproveitado
+            // entre usuários diferentes. O nome do usuário vem depois, sem
+            // cache, pois muda por pessoa.
+            content: [
+              { type: "text", text: buildSystemPrompt(), cache_control: { type: "ephemeral" } },
+              ...(sanitizedUserName
+                ? [{ type: "text", text: `O nome do usuário é ${sanitizedUserName}. Chame-o pelo nome com naturalidade e calor — ao cumprimentar, ao iniciar respostas importantes ou para deixar o papo mais próximo. Não force em toda frase, mas seja um colega simpático, não um manual.` }]
+                : []),
+            ],
           },
           ...history,
         ],
