@@ -51,14 +51,11 @@
   position: fixed;
   inset: 0;
   z-index: 500;
-  background: #FAF9F6 url("../img/splash.png") center center / cover no-repeat;
+  /* "contain" garante que a logomarca nunca seja cortada, em nenhuma
+     proporção de tela — a mesma cor de fundo preenche a sobra. */
+  background: #FAF9F6 url("../img/splash.png") center center / contain no-repeat;
   opacity: 1;
   transition: opacity 0.5s ease;
-}
-/* Em telas bem mais largas que altas, "cover" deixaria a arte gigante;
-   "contain" evita o exagero, usando a mesma cor de fundo como moldura. */
-@media (min-aspect-ratio: 3/5) {
-  .splash-screen { background-size: contain; }
 }
 .splash-screen.hiding { opacity: 0; }
 .splash-screen.gone { display: none; }
@@ -1336,10 +1333,7 @@ html, body {
   justify-content: center;
   gap: 24px;
   padding: 24px;
-  background: #FAF9F6 url("../img/splash.png") center center / cover no-repeat;
-}
-@media (min-aspect-ratio: 3/5) {
-  .auth-page { background-size: contain; }
+  background: #FAF9F6 url("../img/splash.png") center center / contain no-repeat;
 }
 .auth-card {
   width: 100%;
