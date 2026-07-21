@@ -2,9 +2,14 @@ import { buildSystemPrompt } from "../lib/system-prompt.js";
 import { applyCors, getBearerToken, verifyToken, isJwtConfigured } from "../lib/http.js";
 import { isRateLimited } from "../lib/rate-limit.js";
 import { getServiceRoleClient } from "../lib/supabase-admin.js";
+import { sendAdminEmail } from "../lib/notify.js";
 
 const MODEL = process.env.OPENROUTER_MODEL || "anthropic/claude-sonnet-4.5";
 const MAX_HISTORY = 20;
+
+// Alerta por e-mail quando o consumo do dia passa desse tanto de tokens.
+// Sem essa env var, a checagem fica desligada (custo zero extra).
+const DAILY_TOKEN_LIMIT = process.env.DAILY_TOKEN_LIMIT ? parseInt(process.env.DAILY_TOKEN_LIMIT, 10) : null;
 
 // Limites de payload de imagem (base64) para evitar abuso/custo/DoS.
 const MAX_IMAGES = 4;
@@ -35,6 +40,46 @@ async function logTokenUsage(userId, usage) {
     if (error) console.error("Falha ao registrar consumo de tokens:", error);
   } catch (err) {
     console.error("Falha ao registrar consumo de tokens:", err);
+  }
+
+  await maybeAlertDailyLimit(supabase);
+}
+
+// Verifica se o consumo de hoje passou do limite configurado e, se sim,
+// manda um e-mail — só uma vez por dia (dedupe via daily_alert_log).
+async function maybeAlertDailyLimit(supabase) {
+  if (!DAILY_TOKEN_LIMIT || !supabase) return;
+
+  try {
+    const todayStart = new Date();
+    todayStart.setUTCHours(0, 0, 0, 0);
+
+    const { data, error } = await supabase
+      .from("token_usage")
+      .select("total_tokens")
+      .gte("created_at", todayStart.toISOString());
+    if (error) throw error;
+
+    const todayTotal = (data || []).reduce((sum, row) => sum + (row.total_tokens || 0), 0);
+    if (todayTotal < DAILY_TOKEN_LIMIT) return;
+
+    const alertDate = todayStart.toISOString().slice(0, 10);
+    const { error: insertError } = await supabase
+      .from("daily_alert_log")
+      .insert({ alert_date: alertDate });
+
+    if (insertError) {
+      // 23505 = unique_violation: já alertou hoje, não manda de novo.
+      if (insertError.code !== "23505") console.error("Falha ao registrar alerta diário:", insertError);
+      return;
+    }
+
+    await sendAdminEmail({
+      subject: "Limite diário de tokens atingido no O Mister",
+      text: `O consumo de hoje (${alertDate}) chegou a ${todayTotal} tokens, passando do limite configurado (${DAILY_TOKEN_LIMIT}).`,
+    });
+  } catch (err) {
+    console.error("Falha ao checar limite diário de tokens:", err);
   }
 }
 

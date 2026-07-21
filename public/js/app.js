@@ -352,6 +352,7 @@ const imagePreview = document.getElementById("image-preview");
 const pdfInput = document.getElementById("pdf-input");
 const pdfBtn = document.getElementById("pdf-btn");
 const settingsBtn = document.getElementById("settings-btn");
+const adminLinkBtn = document.getElementById("admin-link-btn");
 const settingsModal = document.getElementById("settings-modal");
 const settingsCloseBtn = document.getElementById("settings-close");
 const settingsSaveBtn = document.getElementById("settings-save");
@@ -669,6 +670,7 @@ async function initAuth() {
             sidebarProfileEmail.textContent = user.email || "Conectado";
             accountEl.hidden = false;
             console.log("Account element shown", accountEl);
+            checkAdminAccess(session.access_token);
 
             // Se não tem perfil, abre modal
             const finalProfile = JSON.parse(localStorage.getItem(key) || "{}");
@@ -705,6 +707,27 @@ logoutBtn.addEventListener("click", async () => {
   await OMISTER.auth.signOut();
   window.location.replace("login.html");
 });
+
+// Botão de admin: fica escondido por padrão, só aparece se /api/is-admin confirmar.
+if (adminLinkBtn) {
+  adminLinkBtn.addEventListener("click", () => {
+    window.location.href = "admin.html";
+  });
+}
+
+async function checkAdminAccess(accessToken) {
+  if (!adminLinkBtn || !accessToken) return;
+  try {
+    const res = await fetch("/api/is-admin", {
+      headers: { Authorization: `Bearer ${accessToken}` },
+    });
+    if (!res.ok) return;
+    const data = await res.json();
+    adminLinkBtn.hidden = !data.isAdmin;
+  } catch (e) {
+    console.error("Falha ao checar acesso de admin:", e);
+  }
+}
 
 // Botão de alternar tema
 const themeBtn = document.getElementById("theme-btn");

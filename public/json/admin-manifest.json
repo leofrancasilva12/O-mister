@@ -1,0 +1,15 @@
+{
+  "name": "MIOG Admin",
+  "short_name": "MIOG Admin",
+  "description": "Painel de administração do MIOG: consumo de tokens e contas cadastradas.",
+  "start_url": "../admin.html",
+  "scope": "../admin.html",
+  "display": "standalone",
+  "orientation": "portrait",
+  "background_color": "#FAF9F6",
+  "theme_color": "#FAF9F6",
+  "icons": [
+    { "src": "../icons/admin-icon-192.png", "sizes": "192x192", "type": "image/png", "purpose": "maskable" },
+    { "src": "../icons/admin-icon-512.png", "sizes": "512x512", "type": "image/png", "purpose": "maskable" }
+  ]
+}
