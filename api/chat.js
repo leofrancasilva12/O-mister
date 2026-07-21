@@ -4,7 +4,7 @@ import { isRateLimited } from "../lib/rate-limit.js";
 import { getServiceRoleClient } from "../lib/supabase-admin.js";
 import { sendAdminEmail } from "../lib/notify.js";
 
-const MODEL = process.env.OPENROUTER_MODEL || "anthropic/claude-sonnet-4.5";
+const MODEL = process.env.OPENROUTER_MODEL || "anthropic/claude-haiku-4.5";
 const MAX_HISTORY = 20;
 
 // Alerta por e-mail quando o consumo do dia passa desse tanto de tokens.

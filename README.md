@@ -70,7 +70,7 @@ Depois cadastre as variáveis de ambiente no painel da Vercel, em **Settings →
 | Variável | Obrigatória | Observação |
 |---|---|---|
 | `OPENROUTER_API_KEY` | sim | Sua chave da OpenRouter |
-| `OPENROUTER_MODEL` | não | Padrão: `anthropic/claude-sonnet-4.5` |
+| `OPENROUTER_MODEL` | não | Padrão: `anthropic/claude-haiku-4.5` |
 | `SITE_URL` | não | A URL pública do projeto |
 | `SUPABASE_URL` | para login/registro de uso | URL do projeto Supabase |
 | `SUPABASE_JWT_SECRET` | para login (modo legado HS256) | Ver `SUPABASE-SETUP.md` |
@@ -87,13 +87,13 @@ O `.env` está no `.gitignore`. A chave nunca chega ao navegador — todas as ch
 
 ## Trocar de modelo
 
-O padrão é **Claude Sonnet 4.5**. Para mudar, edite a variável de ambiente:
+O padrão é **Claude Haiku 4.5**. Para mudar, edite a variável de ambiente:
 
 ```bash
 # Na Vercel Settings → Environment Variables:
-OPENROUTER_MODEL=anthropic/claude-sonnet-4.5   # Padrão atual (mais inteligente)
-OPENROUTER_MODEL=anthropic/claude-haiku-4.5    # Mais rápido e barato, menos capaz
-OPENROUTER_MODEL=anthropic/claude-opus-4-6     # Mais preciso, mais caro
+OPENROUTER_MODEL=anthropic/claude-haiku-4.5    # Padrão atual (mais rápido e barato)
+OPENROUTER_MODEL=anthropic/claude-sonnet-4.5   # Mais inteligente, mais caro
+OPENROUTER_MODEL=anthropic/claude-opus-4-6     # Mais preciso, mais caro ainda
 ```
 
 O roteamento de normas API exige precisão — teste bem antes de trocar em produção. Confira preços em [openrouter.ai/models](https://openrouter.ai/models).
