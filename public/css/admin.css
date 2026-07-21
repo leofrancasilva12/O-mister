@@ -79,11 +79,6 @@
   font-weight: 600;
 }
 
-.admin-logout {
-  margin-top: auto;
-  opacity: 0.75;
-}
-
 .admin-close-sidebar {
   display: flex;
   margin-left: auto;
@@ -254,8 +249,15 @@
   margin-top: 32px;
 }
 
+.admin-table-wrap {
+  width: 100%;
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+}
+
 .admin-table {
   width: 100%;
+  min-width: 480px;
   border-collapse: collapse;
   font-size: 14px;
 }
