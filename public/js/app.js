@@ -73,15 +73,6 @@ function toggleTheme() {
 // Aplica o tema imediatamente (antes do DOM completo) para evitar flash
 initTheme();
 
-// A splash só aparece quando o usuário acabou de fazer login (não em refresh).
-// A decisão de exibir é feita por um script no <head> (classe no-splash);
-// aqui apenas limpamos a flag para valer só uma vez.
-let cameFromLogin = false;
-try {
-  cameFromLogin = sessionStorage.getItem("omister.justLoggedIn") === "1";
-  if (cameFromLogin) sessionStorage.removeItem("omister.justLoggedIn");
-} catch (e) {}
-
 /* =========================================================
    STT (Speech-to-Text) — Gravação de voz
    ========================================================= */

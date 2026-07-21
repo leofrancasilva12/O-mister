@@ -28,8 +28,6 @@
   // Monitora mudanças de autenticação (inclui OAuth redirect)
   OMISTER.auth.onAuthStateChange(function (event, session) {
     if (session) {
-      // Marca que veio de um login → mostra a splash uma vez no app
-      try { sessionStorage.setItem("omister.justLoggedIn", "1"); } catch (e) {}
       window.location.replace("index.html");
     }
   });
