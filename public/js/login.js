@@ -3,7 +3,6 @@
   var form = document.getElementById("email-form");
   var emailInput = document.getElementById("email-input");
   var emailBtn = document.getElementById("email-btn");
-  var webauthnBtn = document.getElementById("webauthn-login-btn");
   var msg = document.getElementById("auth-msg");
   var configWarn = document.getElementById("auth-config-warn");
 
@@ -34,41 +33,6 @@
       window.location.replace("index.html");
     }
   });
-
-  // Mostra o botão de biometria só se o navegador/aparelho suportar
-  // (checagem nativa, sem baixar a biblioteca de WebAuthn ainda).
-  if (webauthnBtn && window.OMISTER_WEBAUTHN) {
-    OMISTER_WEBAUTHN.isPlatformAuthenticatorAvailable().then(function (available) {
-      if (available) webauthnBtn.hidden = false;
-    });
-
-    webauthnBtn.addEventListener("click", function () {
-      var email = emailInput.value.trim();
-      if (!email) {
-        showMsg("Digite seu e-mail acima pra entrar com biometria.", "error");
-        emailInput.focus();
-        return;
-      }
-
-      webauthnBtn.disabled = true;
-      OMISTER_WEBAUTHN.loginWithCredential(email)
-        .then(function (result) {
-          return OMISTER.auth.verifyOtp({ token_hash: result.tokenHash, type: result.type });
-        })
-        .then(function (res) {
-          webauthnBtn.disabled = false;
-          if (res && res.error) {
-            showMsg("Não foi possível entrar: " + res.error.message, "error");
-          }
-          // Sucesso: onAuthStateChange acima já cuida do redirecionamento.
-        })
-        .catch(function (err) {
-          webauthnBtn.disabled = false;
-          if (err && err.name === "NotAllowedError") return; // usuário cancelou o prompt
-          showMsg("Erro: " + err.message, "error");
-        });
-    });
-  }
 
   googleBtn.addEventListener("click", function () {
     googleBtn.disabled = true;

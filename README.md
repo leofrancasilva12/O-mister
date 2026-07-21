@@ -80,7 +80,6 @@ Depois cadastre as variáveis de ambiente no painel da Vercel, em **Settings →
 | `RESEND_API_KEY` | para notificação de cadastro/exclusão por e-mail | Chave da API do [Resend](https://resend.com) |
 | `NOTIFY_FROM_EMAIL` | não | Remetente do e-mail de notificação. Padrão: `O Mister <onboarding@resend.dev>` |
 | `DAILY_TOKEN_LIMIT` | não | Se configurada, manda um e-mail pro admin quando o consumo de tokens do dia passa desse número |
-| `WEBAUTHN_CHALLENGE_SECRET` | para login por biometria | Segredo aleatório usado para assinar o desafio do WebAuthn. Sem essa variável, o login por biometria fica desligado |
 
 O `.env` está no `.gitignore`. A chave nunca chega ao navegador — todas as chamadas passam pela função serverless.
 
@@ -134,23 +133,6 @@ Manda um e-mail pro admin quando o consumo de tokens do dia ultrapassa um valor 
 4. Redeploy o projeto na Vercel pra aplicar a nova variável.
 
 Sem `DAILY_TOKEN_LIMIT` configurada, essa checagem fica desligada e não tem custo extra nenhum.
-
----
-
-## Login por biometria (impressão digital / Face ID)
-
-Depois de entrar uma vez por e-mail ou Google, o usuário pode ativar a biometria do próprio aparelho (Touch ID, Face ID, digital do Android) como atalho pra entrar da próxima vez — sem precisar do link por e-mail. É baseado em [WebAuthn](https://webauthn.guide/), o padrão que os navegadores usam pra falar com o leitor biométrico do aparelho; não existe "senha" nem dado biométrico guardado no servidor, só uma chave pública por dispositivo.
-
-Pra habilitar:
-
-1. Rode `db/webauthn-credentials.sql` no SQL Editor do Supabase (cria a tabela `webauthn_credentials`, uma linha por dispositivo cadastrado).
-2. Escolha um segredo (qualquer string aleatória, ex. `openssl rand -hex 32`) e configure em `WEBAUTHN_CHALLENGE_SECRET` na Vercel.
-3. Confirme que `SUPABASE_SERVICE_ROLE_KEY` já está configurada (mesma variável usada pelo painel de admin).
-4. Redeploy o projeto na Vercel pra aplicar a nova variável.
-
-Depois disso, quem logar normalmente vai ver a opção "Ativar neste dispositivo" em Configurações, e "Entrar com biometria" na tela de login (só aparece em aparelhos com leitor biométrico disponível). Cada credencial fica presa ao domínio onde foi cadastrada — ativar em `mister-intelligence.vercel.app` não funciona em um preview deployment com outra URL, é preciso cadastrar de novo lá.
-
-Sem `WEBAUTHN_CHALLENGE_SECRET` configurada, o recurso fica desligado (nenhum botão aparece) e não tem custo nem risco extra.
 
 ---
 
