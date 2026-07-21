@@ -59,6 +59,10 @@
 .splash-screen.gone { display: none; }
 /* Refresh normal (sem login): não mostra a splash */
 .no-splash .splash-screen { display: none; }
+/* Desktop: sem splash, só em celular/tablet */
+@media (min-width: 1025px) {
+  .splash-screen { display: none !important; }
+}
 .splash-inner {
   position: relative;
   width: 100%;
