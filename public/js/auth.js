@@ -79,6 +79,9 @@
       signInWithOtp: function (opts) {
         return getClient().then(function (c) { return c.auth.signInWithOtp(opts); });
       },
+      verifyOtp: function (opts) {
+        return getClient().then(function (c) { return c.auth.verifyOtp(opts); });
+      },
       signOut: function () {
         return getClient().then(function (c) { return c.auth.signOut(); });
       },

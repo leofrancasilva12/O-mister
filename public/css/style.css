@@ -1374,7 +1374,8 @@ html, body {
   margin: 0 0 24px;
   line-height: 1.5;
 }
-.auth-google {
+.auth-google,
+.auth-outline-btn {
   width: 100%;
   display: flex;
   align-items: center;
@@ -1391,8 +1392,11 @@ html, body {
   font-family: inherit;
   transition: background-color 0.15s ease, border-color 0.15s ease;
 }
-.auth-google:hover:not(:disabled) { background: var(--sidebar-bg); }
-.auth-google:disabled { opacity: 0.5; cursor: not-allowed; }
+.auth-google:hover:not(:disabled),
+.auth-outline-btn:hover:not(:disabled) { background: var(--sidebar-bg); }
+.auth-google:disabled,
+.auth-outline-btn:disabled { opacity: 0.5; cursor: not-allowed; }
+.auth-outline-btn { margin-top: 10px; }
 .auth-divider {
   display: flex;
   align-items: center;
@@ -1723,6 +1727,64 @@ html, body {
   margin-bottom: 6px;
   color: var(--text);
 }
+
+.webauthn-devices-list {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  margin-bottom: 10px;
+}
+
+.webauthn-device-row {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 10px;
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  font-size: 13px;
+}
+
+.webauthn-device-info {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 1px;
+}
+
+.webauthn-device-name {
+  color: var(--text);
+  font-weight: 500;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.webauthn-device-date {
+  color: var(--text-fainter);
+  font-size: 11px;
+}
+
+.webauthn-device-remove {
+  border: none;
+  background: transparent;
+  color: var(--text-fainter);
+  cursor: pointer;
+  padding: 6px;
+  border-radius: 6px;
+  display: flex;
+  flex-shrink: 0;
+}
+.webauthn-device-remove:hover { background: var(--sidebar-hover); color: #C0392B; }
+
+.webauthn-settings-msg {
+  margin: 8px 0 0;
+  font-size: 12.5px;
+  color: var(--text-fainter);
+}
+.webauthn-settings-msg.error { color: #8C3A2B; }
+.webauthn-settings-msg.ok { color: #1E6B3A; }
 
 .profile-photo-preview-container {
   width: 80px;
