@@ -51,9 +51,7 @@
   position: fixed;
   inset: 0;
   z-index: 500;
-  /* "contain" garante que a logomarca nunca seja cortada, em nenhuma
-     proporção de tela — a mesma cor de fundo preenche a sobra. */
-  background: #FAF9F6 url("../img/splash.png") center center / contain no-repeat;
+  background: #FAF9F6 url("../img/splash.png") center center / cover no-repeat;
   opacity: 1;
   transition: opacity 0.5s ease;
 }
@@ -1353,7 +1351,7 @@ html, body {
   justify-content: center;
   gap: 24px;
   padding: 24px;
-  background: #FAF9F6 url("../img/splash.png") center center / contain no-repeat;
+  background: #FAF9F6 url("../img/splash.png") center center / cover no-repeat;
 }
 .auth-card {
   width: 100%;
