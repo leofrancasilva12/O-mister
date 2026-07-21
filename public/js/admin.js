@@ -2,7 +2,7 @@
    (/api/admin-stats), que só libera para o e-mail em ADMIN_EMAIL. */
 (function () {
   var THEME_KEY = "omister.theme.v1"; // mesma chave do chat, para o tema ficar sincronizado
-  var STATES = ["admin-state-loading", "admin-state-login", "admin-state-denied", "admin-state-error", "admin-content"];
+  var STATES = ["admin-state-login", "admin-state-denied", "admin-state-error", "admin-content"];
   var currentAccounts = [];
   var currentToken = null;
 
@@ -11,7 +11,28 @@
       var el = document.getElementById(elId);
       if (el) el.hidden = elId !== id;
     });
+    hideSplash();
   }
+
+  // Mesma splash de marca usada no chat: some suavemente assim que o
+  // estado real (logado/negado/erro/conteúdo) é conhecido.
+  function hideSplash() {
+    var splash = document.getElementById("admin-splash-screen");
+    if (!splash || splash.classList.contains("gone")) return;
+    setTimeout(function () {
+      splash.classList.add("hiding");
+      setTimeout(function () { splash.classList.add("gone"); }, 500);
+    }, 900);
+  }
+
+  // Failsafe: nunca deixa a splash travada mais de 6s.
+  setTimeout(function () {
+    var splash = document.getElementById("admin-splash-screen");
+    if (splash && !splash.classList.contains("gone")) {
+      splash.classList.add("hiding");
+      setTimeout(function () { splash.classList.add("gone"); }, 500);
+    }
+  }, 6000);
 
   function formatNumber(n) {
     return new Intl.NumberFormat("pt-BR").format(n || 0);
