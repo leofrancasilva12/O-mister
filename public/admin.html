@@ -57,25 +57,27 @@
           <div class="admin-stat-label">Tokens consumidos (total)</div>
           <div class="admin-stat-value" id="stat-tokens-total">—</div>
         </div>
+        <div class="admin-stat-card">
+          <div class="admin-stat-label">Custo estimado</div>
+          <div class="admin-stat-value" id="stat-cost-total">—</div>
+          <div class="admin-stat-sub" id="stat-cost-sub"></div>
+        </div>
       </div>
 
       <h2 class="admin-section-title">Consumo por dia</h2>
-      <table class="admin-table">
-        <thead>
-          <tr><th>Data</th><th>Tokens</th></tr>
-        </thead>
-        <tbody id="admin-daily-body"></tbody>
-      </table>
+      <div id="admin-daily-chart" class="admin-chart"></div>
       <p id="admin-daily-empty" class="admin-empty" hidden>Ainda não há dados de consumo registrados.</p>
 
       <h2 class="admin-section-title admin-section-title-spaced">E-mails cadastrados</h2>
+      <input id="admin-accounts-search" class="admin-search" type="search" placeholder="Buscar por e-mail…">
       <table class="admin-table">
         <thead>
-          <tr><th>E-mail</th><th>Cadastrado em</th></tr>
+          <tr><th>E-mail</th><th>Cadastrado em</th><th>Tokens</th><th></th></tr>
         </thead>
         <tbody id="admin-accounts-body"></tbody>
       </table>
       <p id="admin-accounts-empty" class="admin-empty" hidden>Ainda não há contas cadastradas.</p>
+      <p id="admin-accounts-no-match" class="admin-empty" hidden>Nenhum e-mail bate com essa busca.</p>
     </div>
   </main>
 </div>

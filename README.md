@@ -79,6 +79,7 @@ Depois cadastre as variáveis de ambiente no painel da Vercel, em **Settings →
 | `NOTIFY_WEBHOOK_SECRET` | para notificação de cadastro/exclusão por e-mail | Segredo compartilhado com o trigger do Supabase (`db/admin-notifications.sql`) |
 | `RESEND_API_KEY` | para notificação de cadastro/exclusão por e-mail | Chave da API do [Resend](https://resend.com) |
 | `NOTIFY_FROM_EMAIL` | não | Remetente do e-mail de notificação. Padrão: `O Mister <onboarding@resend.dev>` |
+| `DAILY_TOKEN_LIMIT` | não | Se configurada, manda um e-mail pro admin quando o consumo de tokens do dia passa desse número |
 
 O `.env` está no `.gitignore`. A chave nunca chega ao navegador — todas as chamadas passam pela função serverless.
 
@@ -121,6 +122,17 @@ Toda vez que alguém cria ou deleta uma conta, o admin recebe um e-mail. Pra hab
 4. Escolha um segredo (qualquer string aleatória) e configure em `NOTIFY_WEBHOOK_SECRET` na Vercel.
 5. Abra `db/admin-notifications.sql`, troque `SEGREDO_AQUI` pelo mesmo segredo do passo 4, e rode o script no SQL Editor do Supabase (cria a extensão `pg_net` e os triggers em `auth.users`).
 6. Redeploy o projeto na Vercel pra aplicar as novas variáveis.
+
+### Alerta de limite diário de tokens
+
+Manda um e-mail pro admin quando o consumo de tokens do dia ultrapassa um valor configurado (útil pra perceber uso fora do normal antes de virar surpresa na fatura). Pra habilitar:
+
+1. Rode `db/admin-daily-alert.sql` no SQL Editor do Supabase (cria a tabela `daily_alert_log`, usada só para não mandar o alerta mais de uma vez no mesmo dia).
+2. Configure `RESEND_API_KEY` e `ADMIN_EMAIL` (mesmas variáveis da notificação de cadastro/exclusão acima).
+3. Configure `DAILY_TOKEN_LIMIT` na Vercel com o número de tokens do dia que deve disparar o alerta (ex.: `500000`).
+4. Redeploy o projeto na Vercel pra aplicar a nova variável.
+
+Sem `DAILY_TOKEN_LIMIT` configurada, essa checagem fica desligada e não tem custo extra nenhum.
 
 ---
 

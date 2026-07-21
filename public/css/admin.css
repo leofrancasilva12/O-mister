@@ -118,6 +118,75 @@
   color: var(--text);
 }
 
+.admin-stat-sub {
+  font-size: 12px;
+  color: var(--text-muted, var(--text));
+  opacity: 0.65;
+  margin-top: 2px;
+}
+
+.admin-chart {
+  display: flex;
+  align-items: flex-end;
+  gap: 4px;
+  height: 140px;
+  padding: 8px 4px 0;
+  border-bottom: 1px solid var(--border);
+  margin-bottom: 24px;
+  overflow-x: auto;
+}
+
+.admin-chart-bar {
+  flex: 1 0 14px;
+  min-width: 10px;
+  max-width: 28px;
+  background: var(--accent);
+  border-radius: 3px 3px 0 0;
+  opacity: 0.85;
+  cursor: default;
+  transition: opacity 0.15s ease;
+}
+
+.admin-chart-bar:hover {
+  opacity: 1;
+}
+
+.admin-search {
+  width: 100%;
+  box-sizing: border-box;
+  padding: 9px 12px;
+  margin-bottom: 12px;
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  background: var(--sidebar-bg);
+  color: var(--text);
+  font-size: 14px;
+  font-family: inherit;
+}
+
+.admin-search:focus {
+  outline: none;
+  border-color: var(--border-hover);
+}
+
+.admin-row-delete {
+  border: none;
+  background: transparent;
+  color: var(--text-muted, var(--text));
+  opacity: 0.6;
+  cursor: pointer;
+  padding: 6px 8px;
+  border-radius: 6px;
+  font-size: 13px;
+  font-family: inherit;
+}
+
+.admin-row-delete:hover {
+  opacity: 1;
+  background: var(--sidebar-hover);
+  color: #D9432E;
+}
+
 .admin-section-title {
   font-size: 15px;
   font-weight: 600;
