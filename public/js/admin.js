@@ -181,7 +181,35 @@
     });
   }
 
+  function wireSidebarToggle() {
+    var sidebar = document.getElementById("admin-sidebar");
+    var overlay = document.getElementById("admin-overlay");
+    var openBtn = document.getElementById("admin-open-sidebar");
+    var closeBtn = document.getElementById("admin-close-sidebar");
+    if (!sidebar || !overlay || !openBtn || !closeBtn) return;
+
+    function open() {
+      sidebar.classList.add("open");
+      overlay.classList.add("visible");
+    }
+    function close() {
+      sidebar.classList.remove("open");
+      overlay.classList.remove("visible");
+    }
+
+    openBtn.addEventListener("click", open);
+    closeBtn.addEventListener("click", close);
+    overlay.addEventListener("click", close);
+
+    // Fecha o menu automaticamente ao navegar (mobile/tablet).
+    sidebar.querySelectorAll(".admin-nav-link").forEach(function (link) {
+      link.addEventListener("click", close);
+    });
+  }
+
   async function init() {
+    wireSidebarToggle();
+
     if (!window.OMISTER || !window.OMISTER.isConfigured) {
       show("admin-state-login");
       return;

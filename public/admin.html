@@ -20,10 +20,13 @@
 <body>
 
 <div class="admin-layout">
-  <aside class="admin-sidebar">
+  <aside class="admin-sidebar" id="admin-sidebar">
     <div class="admin-sidebar-brand">
       <img src="img/logo.png" alt="MIOG" class="admin-logo">
       <span>MIOG Admin</span>
+      <button id="admin-close-sidebar" class="icon-btn admin-close-sidebar" aria-label="Fechar menu" type="button">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+      </button>
     </div>
 
     <nav class="admin-nav">
@@ -35,7 +38,17 @@
     <button id="admin-logout-btn" class="admin-nav-link admin-logout" type="button" hidden>Sair</button>
   </aside>
 
+  <div id="admin-overlay" class="admin-overlay"></div>
+
   <main class="admin-main">
+    <header id="admin-mobile-header" class="admin-mobile-header">
+      <button id="admin-open-sidebar" class="icon-btn" aria-label="Abrir menu" type="button">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="18" x2="21" y2="18"/></svg>
+      </button>
+      <img src="img/logo.png" alt="MIOG" class="admin-logo admin-mobile-logo">
+      <span class="admin-mobile-title">MIOG Admin</span>
+    </header>
+
     <p id="admin-state-loading" class="admin-state">Carregando…</p>
 
     <div id="admin-state-login" class="admin-state" hidden>
