@@ -76,6 +76,9 @@ Depois cadastre as variáveis de ambiente no painel da Vercel, em **Settings →
 | `SUPABASE_JWT_SECRET` | para login (modo legado HS256) | Ver `SUPABASE-SETUP.md` |
 | `SUPABASE_SERVICE_ROLE_KEY` | para deletar conta e para o painel de admin | Chave `service_role` do Supabase (nunca expor no front-end) |
 | `ADMIN_EMAIL` | para o painel de admin (`/admin.html`) | E-mail autorizado a ver `/api/admin-stats`. Sem essa variável, o painel fica bloqueado para todo mundo |
+| `NOTIFY_WEBHOOK_SECRET` | para notificação de cadastro/exclusão por e-mail | Segredo compartilhado com o trigger do Supabase (`db/admin-notifications.sql`) |
+| `RESEND_API_KEY` | para notificação de cadastro/exclusão por e-mail | Chave da API do [Resend](https://resend.com) |
+| `NOTIFY_FROM_EMAIL` | não | Remetente do e-mail de notificação. Padrão: `O Mister <onboarding@resend.dev>` |
 
 O `.env` está no `.gitignore`. A chave nunca chega ao navegador — todas as chamadas passam pela função serverless.
 
@@ -98,8 +101,8 @@ O roteamento de normas API exige precisão — teste bem antes de trocar em prod
 
 ## Painel de admin (consumo de tokens e contas)
 
-Em `/admin.html` (ex.: `https://mister-intelligence.vercel.app/admin.html`) fica um painel simples com:
-- Total de contas cadastradas no Supabase Auth.
+Em `/admin.html` (ex.: `https://mister-intelligence.vercel.app/admin.html`) fica um painel simples, com sidebar (Painel / Chat / Landing page / Sair), mostrando:
+- Total de contas cadastradas no Supabase Auth, e a lista de e-mails (mais recente primeiro).
 - Total de tokens consumidos e consumo por dia (últimos 30 dias).
 
 Pra habilitar:
@@ -107,6 +110,17 @@ Pra habilitar:
 2. Configure `SUPABASE_SERVICE_ROLE_KEY` (se ainda não tiver, ela também é necessária para excluir conta).
 3. Configure `ADMIN_EMAIL` com o e-mail que você usa pra logar no app — só esse e-mail consegue ver a página. Sem essa variável, o painel fica bloqueado pra todo mundo (inclusive você).
 4. Entre em `/admin.html` já logado com esse e-mail.
+
+### Notificação por e-mail (novo cadastro / conta deletada)
+
+Toda vez que alguém cria ou deleta uma conta, o admin recebe um e-mail. Pra habilitar:
+
+1. Crie uma conta grátis em [resend.com](https://resend.com) e gere uma API Key (**API Keys → Create API Key**).
+2. Configure `RESEND_API_KEY` na Vercel com essa chave.
+3. Enquanto não configurar um domínio próprio no Resend, o remetente padrão (`onboarding@resend.dev`) só consegue enviar para o e-mail com o qual você criou a conta no Resend — use o mesmo e-mail em `ADMIN_EMAIL`.
+4. Escolha um segredo (qualquer string aleatória) e configure em `NOTIFY_WEBHOOK_SECRET` na Vercel.
+5. Abra `db/admin-notifications.sql`, troque `SEGREDO_AQUI` pelo mesmo segredo do passo 4, e rode o script no SQL Editor do Supabase (cria a extensão `pg_net` e os triggers em `auth.users`).
+6. Redeploy o projeto na Vercel pra aplicar as novas variáveis.
 
 ---
 

@@ -14,16 +14,25 @@
     return new Intl.NumberFormat("pt-BR").format(n || 0);
   }
 
+  function formatDate(iso) {
+    if (!iso) return "—";
+    try {
+      return new Intl.DateTimeFormat("pt-BR", { dateStyle: "short", timeStyle: "short" }).format(new Date(iso));
+    } catch (e) {
+      return iso;
+    }
+  }
+
   function renderStats(data) {
     document.getElementById("stat-accounts").textContent = formatNumber(data.totalAccounts);
     document.getElementById("stat-tokens-total").textContent = formatNumber(data.tokens && data.tokens.total);
 
-    var tbody = document.getElementById("admin-daily-body");
-    var empty = document.getElementById("admin-daily-empty");
-    tbody.innerHTML = "";
+    var dailyBody = document.getElementById("admin-daily-body");
+    var dailyEmpty = document.getElementById("admin-daily-empty");
+    dailyBody.innerHTML = "";
 
     var byDay = (data.tokens && data.tokens.byDay) || [];
-    empty.hidden = byDay.length > 0;
+    dailyEmpty.hidden = byDay.length > 0;
 
     byDay.forEach(function (row) {
       var tr = document.createElement("tr");
@@ -33,10 +42,42 @@
       tdTotal.textContent = formatNumber(row.total);
       tr.appendChild(tdDate);
       tr.appendChild(tdTotal);
-      tbody.appendChild(tr);
+      dailyBody.appendChild(tr);
+    });
+
+    var accountsBody = document.getElementById("admin-accounts-body");
+    var accountsEmpty = document.getElementById("admin-accounts-empty");
+    accountsBody.innerHTML = "";
+
+    var accounts = data.accounts || [];
+    accountsEmpty.hidden = accounts.length > 0;
+
+    accounts.forEach(function (account) {
+      var tr = document.createElement("tr");
+      var tdEmail = document.createElement("td");
+      tdEmail.textContent = account.email;
+      var tdDate = document.createElement("td");
+      tdDate.textContent = formatDate(account.createdAt);
+      tr.appendChild(tdEmail);
+      tr.appendChild(tdDate);
+      accountsBody.appendChild(tr);
     });
 
     show("admin-content");
+  }
+
+  function wireLogout() {
+    var btn = document.getElementById("admin-logout-btn");
+    if (!btn) return;
+    btn.hidden = false;
+    btn.addEventListener("click", async function () {
+      try {
+        await window.OMISTER.auth.signOut();
+      } catch (err) {
+        console.error("Falha ao sair:", err);
+      }
+      window.location.href = "login.html";
+    });
   }
 
   async function init() {
@@ -57,6 +98,8 @@
       show("admin-state-login");
       return;
     }
+
+    wireLogout();
 
     try {
       var res = await fetch("/api/admin-stats", {

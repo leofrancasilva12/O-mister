@@ -15,44 +15,65 @@
 </head>
 <body>
 
-<div class="admin-page">
-  <header class="admin-header">
-    <img src="img/logo.png" alt="MIOG" class="admin-logo">
-    <h1>Painel de admin</h1>
-  </header>
-
-  <p id="admin-state-loading" class="admin-state">Carregando…</p>
-
-  <div id="admin-state-login" class="admin-state" hidden>
-    <p>Você precisa entrar para ver esta página.</p>
-    <a href="login.html" class="auth-submit admin-login-link">Entrar</a>
-  </div>
-
-  <p id="admin-state-denied" class="admin-state" hidden>Acesso negado. Essa página é restrita.</p>
-
-  <p id="admin-state-error" class="admin-state" hidden>Não foi possível carregar as estatísticas. Tente recarregar a página.</p>
-
-  <div id="admin-content" class="admin-content" hidden>
-    <div class="admin-stats-grid">
-      <div class="admin-stat-card">
-        <div class="admin-stat-label">Contas cadastradas</div>
-        <div class="admin-stat-value" id="stat-accounts">—</div>
-      </div>
-      <div class="admin-stat-card">
-        <div class="admin-stat-label">Tokens consumidos (total)</div>
-        <div class="admin-stat-value" id="stat-tokens-total">—</div>
-      </div>
+<div class="admin-layout">
+  <aside class="admin-sidebar">
+    <div class="admin-sidebar-brand">
+      <img src="img/logo.png" alt="MIOG" class="admin-logo">
+      <span>MIOG Admin</span>
     </div>
 
-    <h2 class="admin-section-title">Consumo por dia</h2>
-    <table class="admin-table">
-      <thead>
-        <tr><th>Data</th><th>Tokens</th></tr>
-      </thead>
-      <tbody id="admin-daily-body"></tbody>
-    </table>
-    <p id="admin-daily-empty" class="admin-empty" hidden>Ainda não há dados de consumo registrados.</p>
-  </div>
+    <nav class="admin-nav">
+      <a href="admin.html" class="admin-nav-link active">Painel</a>
+      <a href="index.html" class="admin-nav-link">Chat</a>
+      <a href="https://landing-page-miog.vercel.app/" target="_blank" rel="noopener noreferrer" class="admin-nav-link">Landing page</a>
+    </nav>
+
+    <button id="admin-logout-btn" class="admin-nav-link admin-logout" type="button" hidden>Sair</button>
+  </aside>
+
+  <main class="admin-main">
+    <p id="admin-state-loading" class="admin-state">Carregando…</p>
+
+    <div id="admin-state-login" class="admin-state" hidden>
+      <p>Você precisa entrar para ver esta página.</p>
+      <a href="login.html" class="auth-submit admin-login-link">Entrar</a>
+    </div>
+
+    <p id="admin-state-denied" class="admin-state" hidden>Acesso negado. Essa página é restrita.</p>
+
+    <p id="admin-state-error" class="admin-state" hidden>Não foi possível carregar as estatísticas. Tente recarregar a página.</p>
+
+    <div id="admin-content" class="admin-content" hidden>
+      <div class="admin-stats-grid">
+        <div class="admin-stat-card">
+          <div class="admin-stat-label">Contas cadastradas</div>
+          <div class="admin-stat-value" id="stat-accounts">—</div>
+        </div>
+        <div class="admin-stat-card">
+          <div class="admin-stat-label">Tokens consumidos (total)</div>
+          <div class="admin-stat-value" id="stat-tokens-total">—</div>
+        </div>
+      </div>
+
+      <h2 class="admin-section-title">Consumo por dia</h2>
+      <table class="admin-table">
+        <thead>
+          <tr><th>Data</th><th>Tokens</th></tr>
+        </thead>
+        <tbody id="admin-daily-body"></tbody>
+      </table>
+      <p id="admin-daily-empty" class="admin-empty" hidden>Ainda não há dados de consumo registrados.</p>
+
+      <h2 class="admin-section-title admin-section-title-spaced">E-mails cadastrados</h2>
+      <table class="admin-table">
+        <thead>
+          <tr><th>E-mail</th><th>Cadastrado em</th></tr>
+        </thead>
+        <tbody id="admin-accounts-body"></tbody>
+      </table>
+      <p id="admin-accounts-empty" class="admin-empty" hidden>Ainda não há contas cadastradas.</p>
+    </div>
+  </main>
 </div>
 
 <script src="js/auth.js"></script>

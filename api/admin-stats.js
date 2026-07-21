@@ -37,33 +37,41 @@ export default async function handler(req, res) {
   }
 
   try {
-    const [totalAccounts, tokens] = await Promise.all([
-      countTotalAccounts(supabase),
+    const [accounts, tokens] = await Promise.all([
+      listAccounts(supabase),
       getTokenStats(supabase),
     ]);
 
-    return res.status(200).json({ totalAccounts, tokens });
+    return res.status(200).json({
+      totalAccounts: accounts.length,
+      accounts: accounts.slice(0, 500), // limite defensivo de payload
+      tokens,
+    });
   } catch (err) {
     console.error("Erro ao gerar estatísticas de admin:", err);
     return res.status(500).json({ error: "Falha ao carregar estatísticas." });
   }
 }
 
-// Conta o total de contas cadastradas no Supabase Auth, paginando a admin API.
-async function countTotalAccounts(supabase) {
+// Lista as contas cadastradas no Supabase Auth (email + data de criação),
+// mais recentes primeiro, paginando a admin API.
+async function listAccounts(supabase) {
   const perPage = 1000;
-  let total = 0;
+  const accounts = [];
 
   // Limite de segurança: até 50 páginas (50 mil contas), para nunca rodar indefinidamente.
   for (let page = 1; page <= 50; page++) {
     const { data, error } = await supabase.auth.admin.listUsers({ page, perPage });
     if (error) throw error;
     const users = data?.users || [];
-    total += users.length;
+    for (const user of users) {
+      accounts.push({ email: user.email || "(sem e-mail)", createdAt: user.created_at });
+    }
     if (users.length < perPage) break;
   }
 
-  return total;
+  accounts.sort((a, b) => (a.createdAt < b.createdAt ? 1 : -1));
+  return accounts;
 }
 
 // Soma total de tokens e agrega por dia (mais recentes primeiro) a partir da token_usage.

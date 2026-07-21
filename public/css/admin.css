@@ -1,30 +1,81 @@
-/* Painel de admin — página enxuta, reaproveita as variáveis de tema
+/* Painel de admin — sidebar + conteúdo, reaproveita as variáveis de tema
    já definidas em style.css (cores, bordas, etc.) */
 
-.admin-page {
-  max-width: 720px;
-  margin: 0 auto;
-  padding: 32px 20px 64px;
+.admin-layout {
+  display: flex;
+  min-height: 100vh;
 }
 
-.admin-header {
+.admin-sidebar {
+  width: 220px;
+  flex-shrink: 0;
+  background: var(--sidebar-bg);
+  border-right: 1px solid var(--sidebar-border);
+  padding: 20px 14px;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.admin-sidebar-brand {
   display: flex;
   align-items: center;
-  gap: 12px;
-  margin-bottom: 28px;
+  gap: 10px;
+  padding: 0 6px;
 }
 
 .admin-logo {
-  width: 36px;
-  height: 36px;
+  width: 30px;
+  height: 30px;
   object-fit: contain;
+  flex-shrink: 0;
 }
 
-.admin-header h1 {
-  font-size: 20px;
+.admin-sidebar-brand span {
+  font-size: 15px;
   font-weight: 600;
   color: var(--text);
-  margin: 0;
+}
+
+.admin-nav {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.admin-nav-link {
+  display: block;
+  padding: 9px 10px;
+  border-radius: 8px;
+  color: var(--text);
+  text-decoration: none;
+  font-size: 14px;
+  border: none;
+  background: transparent;
+  text-align: left;
+  cursor: pointer;
+  font-family: inherit;
+}
+
+.admin-nav-link:hover {
+  background: var(--sidebar-hover);
+}
+
+.admin-nav-link.active {
+  background: var(--sidebar-hover);
+  font-weight: 600;
+}
+
+.admin-logout {
+  margin-top: auto;
+  opacity: 0.75;
+}
+
+.admin-main {
+  flex: 1;
+  min-width: 0;
+  max-width: 760px;
+  padding: 32px 24px 64px;
 }
 
 .admin-state {
@@ -74,6 +125,10 @@
   margin: 0 0 12px;
 }
 
+.admin-section-title-spaced {
+  margin-top: 32px;
+}
+
 .admin-table {
   width: 100%;
   border-collapse: collapse;
@@ -101,4 +156,32 @@
   color: var(--text-muted, var(--text));
   opacity: 0.75;
   padding: 16px 0;
+}
+
+@media (max-width: 640px) {
+  .admin-layout {
+    flex-direction: column;
+  }
+
+  .admin-sidebar {
+    width: auto;
+    flex-direction: row;
+    align-items: center;
+    border-right: none;
+    border-bottom: 1px solid var(--sidebar-border);
+    overflow-x: auto;
+  }
+
+  .admin-nav {
+    flex-direction: row;
+  }
+
+  .admin-logout {
+    margin-top: 0;
+    margin-left: auto;
+  }
+
+  .admin-main {
+    padding: 20px 16px 48px;
+  }
 }
