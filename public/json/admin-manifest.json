@@ -1,6 +1,6 @@
 {
-  "name": "MIOG Admin",
-  "short_name": "MIOG Admin",
+  "name": "Adm — Painel MIOG",
+  "short_name": "Adm",
   "description": "Painel de administração do MIOG: consumo de tokens e contas cadastradas.",
   "start_url": "../admin.html",
   "scope": "../admin.html",
