@@ -1286,6 +1286,26 @@ html, body {
   color: #fff;
 }
 .modal-danger:hover { background: #9E2A1E; }
+.modal-primary {
+  background: #1B3A63;
+  color: #fff;
+}
+.modal-primary:hover { background: #142C4C; }
+.modal-danger,
+.modal-primary {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+}
+
+#settings-modal .modal-actions {
+  flex-wrap: wrap;
+}
+#settings-modal .modal-btn {
+  flex: 1 1 auto;
+  justify-content: center;
+  white-space: nowrap;
+}
 
 @keyframes modal-fade {
   from { opacity: 0; }
@@ -1718,10 +1738,73 @@ html, body {
   color: var(--text);
 }
 
+.settings-photo-row {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  margin-top: 8px;
+}
+
+.settings-photo-upload {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 6px;
+}
+
+.settings-upload-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 9px 16px;
+  border: 1px solid var(--border-hover);
+  border-radius: 10px;
+  background: var(--white);
+  color: var(--text);
+  font-size: 13.5px;
+  font-weight: 500;
+  cursor: pointer;
+  font-family: inherit;
+  transition: background-color 0.15s ease;
+}
+.settings-upload-btn:hover { background: var(--sidebar-bg); }
+
+.settings-photo-hint {
+  font-size: 11.5px;
+  color: var(--text-fainter);
+}
+
+.settings-input-icon {
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+.settings-input-icon svg {
+  position: absolute;
+  left: 12px;
+  color: var(--text-fainter);
+  pointer-events: none;
+}
+.settings-form .settings-input-icon input { padding-left: 36px; }
+
+.settings-security-note {
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+  margin: 16px 0 4px;
+  padding: 12px 14px;
+  border-radius: 10px;
+  background: var(--sidebar-bg);
+  border: 1px solid var(--border);
+}
+.settings-security-note svg { flex-shrink: 0; margin-top: 2px; color: var(--text-muted); }
+.settings-security-note strong { display: block; font-size: 13px; color: var(--text); margin-bottom: 2px; }
+.settings-security-note p { margin: 0; font-size: 12px; line-height: 1.5; color: var(--text-muted); }
+
 .profile-photo-preview-container {
   width: 80px;
   height: 80px;
-  margin-top: 8px;
+  flex-shrink: 0;
   border-radius: 12px;
   background: var(--sidebar-hover);
   display: flex;
@@ -1762,8 +1845,7 @@ html, body {
   display: none !important;
 }
 
-.settings-form input,
-.settings-file-input {
+.settings-form input {
   width: 100%;
   padding: 8px 12px;
   border: 1px solid var(--sidebar-border);
@@ -1772,9 +1854,4 @@ html, body {
   font-size: 13px;
   background: var(--white);
   color: var(--text);
-}
-
-.settings-file-input {
-  padding: 6px 8px;
-  cursor: pointer;
 }
