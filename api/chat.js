@@ -6,6 +6,11 @@ import { sendAdminEmail } from "../lib/notify.js";
 
 const MODEL = process.env.OPENROUTER_MODEL || "anthropic/claude-haiku-4.5";
 const MAX_HISTORY = 20;
+// Trava de segurança contra payload abusivo — bem acima do que o app envia
+// normalmente (ver MAX_SEND_MESSAGES em public/js/app.js), só pra rejeitar
+// requisições fora do padrão. Não é o limite de contexto real (isso é
+// MAX_HISTORY, aplicado no slice() abaixo).
+const MAX_MESSAGES_PER_REQUEST = 200;
 
 // Alerta por e-mail quando o consumo do dia passa desse tanto de tokens.
 // Sem essa env var, a checagem fica desligada (custo zero extra).
@@ -134,8 +139,8 @@ export default async function handler(req, res) {
     return res.status(400).json({ error: "Envie ao menos uma mensagem." });
   }
 
-  if (messages.length > MAX_HISTORY * 2) {
-    return res.status(400).json({ error: "Histórico muito longo." });
+  if (messages.length > MAX_MESSAGES_PER_REQUEST) {
+    return res.status(400).json({ error: "Histórico muito longo. Abra uma nova conversa." });
   }
 
   // Sanitiza userName: apenas alphanuméricas, espaços e hífen, máx 50 caracteres

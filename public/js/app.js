@@ -7,6 +7,12 @@ const STORE_KEY = "omister.chats.v1";
 const ACTIVE_KEY = "omister.activeChat.v1";
 const COLLAPSE_KEY = "omister.sidebarCollapsed.v1";
 const THEME_KEY = "omister.theme.v1";
+// Quantas mensagens recentes mandar pra API por requisição (o servidor só
+// usa as últimas mesmo — ver MAX_HISTORY em api/chat.js).
+const MAX_SEND_MESSAGES = 40;
+// A partir de quantas mensagens numa conversa recomendamos abrir uma nova
+// (mesmo limite de segurança do servidor — ver MAX_MESSAGES_PER_REQUEST).
+const LONG_CHAT_WARNING_AT = 200;
 
 let chats = [];
 let activeId = localStorage.getItem(ACTIVE_KEY) || null;
@@ -1754,6 +1760,15 @@ async function sendMessage(rawText) {
   await saveChat(chat);
   renderChatList();
 
+  // Conversa ficando grande: sugere abrir uma nova (a cada 50 mensagens
+  // a partir do limite, pra não incomodar toda hora).
+  if (
+    chat.messages.length >= LONG_CHAT_WARNING_AT &&
+    chat.messages.length % 50 === 0
+  ) {
+    showToast("Essa conversa está grande — considere abrir uma nova para melhor desempenho.");
+  }
+
   input.value = "";
   input.style.height = "auto";
   selectedImage = null;
@@ -1781,8 +1796,11 @@ async function sendMessage(rawText) {
       }
     }
 
-    // Transforma mensagens para formato OpenRouter (vision compatible)
-    const formattedMessages = chat.messages.map((m) => {
+    // Manda só as trocas mais recentes pra API — o servidor só usa as
+    // últimas mesmo (ver MAX_HISTORY em api/chat.js), então enviar a
+    // conversa inteira só desperdiça banda (e ainda pode ultrapassar o
+    // limite de segurança do servidor em conversas bem longas).
+    const formattedMessages = chat.messages.slice(-MAX_SEND_MESSAGES).map((m) => {
       if (m.role === "user" && (m.image || m.pdf)) {
         const contentArray = [];
         if (m.content) contentArray.push({ type: "text", text: m.content });
