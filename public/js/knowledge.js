@@ -80,13 +80,42 @@
     });
   }
 
-  /* ---------- Envolve tabelas em wrapper com scroll horizontal ---------- */
+  /* ---------- Envolve tabelas em wrapper com scroll horizontal e prepara
+     os dados pra virarem cartão empilhado no celular (data-label por célula) ---------- */
   function wrapTables(article) {
+    var wraps = [];
     article.querySelectorAll("table").forEach(function (table) {
+      var headers = Array.prototype.map.call(table.querySelectorAll("thead th"), function (th) {
+        return th.textContent.trim();
+      });
+      table.querySelectorAll("tbody tr").forEach(function (tr) {
+        Array.prototype.forEach.call(tr.children, function (td, i) {
+          if (headers[i]) td.setAttribute("data-label", headers[i]);
+        });
+      });
+
       var wrap = document.createElement("div");
-      wrap.className = "docs-table-wrap";
+      wrap.className = "docs-table-wrap docs-stacked";
       table.parentNode.insertBefore(wrap, table);
       wrap.appendChild(table);
+      wraps.push(wrap);
+    });
+    return wraps;
+  }
+
+  /* ---------- Mostra uma sombra na borda quando a tabela ainda cabe
+     horizontalmente na tela (tablet/desktop) mas é mais larga que o card ---------- */
+  function markScrollableTables(wraps) {
+    function update() {
+      wraps.forEach(function (wrap) {
+        wrap.classList.toggle("docs-scrollable", wrap.scrollWidth > wrap.clientWidth + 1);
+      });
+    }
+    update();
+    var resizeTimer = null;
+    window.addEventListener("resize", function () {
+      clearTimeout(resizeTimer);
+      resizeTimer = setTimeout(update, 150);
     });
   }
 
@@ -284,7 +313,7 @@
     if (!article || !tocEl) return;
 
     wrapSections(article);
-    wrapTables(article);
+    markScrollableTables(wrapTables(article));
     hideManualIndex(article);
     buildToc(article, tocEl);
     initScrollspy(article, tocEl);
