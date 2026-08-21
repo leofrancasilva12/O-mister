@@ -6,6 +6,7 @@
 #docs-app {
   display: flex;
   height: 100vh;
+  height: 100dvh;
   overflow: hidden;
 }
 
@@ -233,22 +234,40 @@
 #docs-article > ol:first-of-type.docs-md-index { display: none; }
 
 .docs-table-wrap {
+  position: relative;
   overflow-x: auto;
   margin: 0 0 20px;
   border: 1px solid var(--border);
   border-radius: 10px;
   -webkit-overflow-scrolling: touch;
 }
+/* Sombra na borda direita quando a tabela é mais larga que a tela — sinaliza
+   que dá pra arrastar o dedo pro lado pra ver mais colunas. */
+.docs-table-wrap.docs-scrollable::after {
+  content: "";
+  position: sticky;
+  top: 0;
+  right: 0;
+  float: right;
+  width: 18px;
+  height: 100%;
+  margin-left: -18px;
+  pointer-events: none;
+  background: linear-gradient(to right, transparent, rgba(0, 0, 0, 0.10));
+}
+:root[data-theme="dark"] .docs-table-wrap.docs-scrollable::after {
+  background: linear-gradient(to right, transparent, rgba(0, 0, 0, 0.35));
+}
 #docs-article table {
   border-collapse: collapse;
   width: 100%;
   font-size: 13px;
-  white-space: nowrap;
 }
 #docs-article th, #docs-article td {
   padding: 7px 12px;
   border-bottom: 1px solid var(--border);
   text-align: left;
+  vertical-align: top;
 }
 #docs-article thead th {
   background: var(--sidebar-bg);
@@ -257,6 +276,7 @@
   font-size: 11.5px;
   text-transform: uppercase;
   letter-spacing: 0.02em;
+  white-space: nowrap;
   position: sticky;
   top: 0;
 }
@@ -290,12 +310,15 @@ mark.docs-mark {
   z-index: 20;
 }
 
-/* ---------- Mobile ---------- */
+/* ---------- Tablet / celular (sidebar vira gaveta) ---------- */
 @media (max-width: 860px) {
   #docs-mobile-header { display: flex; }
   #docs-sidebar {
     position: fixed;
-    inset: 0 25% 0 0;
+    top: 0;
+    left: 0;
+    bottom: 0;
+    width: min(320px, 86vw);
     z-index: 30;
     transform: translateX(-100%);
     transition: transform 0.2s ease;
@@ -305,4 +328,48 @@ mark.docs-mark {
   #docs-app.docs-sidebar-open #docs-overlay { display: block; }
   #docs-content { padding: 24px 16px 80px; }
   #docs-article h1 { font-size: 19px; }
+
+  /* Alvo de toque maior nos botões de ícone (recomendado: 44x44px) */
+  #docs-app .icon-btn { padding: 12px; }
+  #docs-mobile-header, .docs-sidebar-header { padding-top: 8px; padding-bottom: 8px; }
+
+  /* Impede o zoom automático do Safari/iOS ao focar um input com fonte < 16px */
+  #docs-search-input { font-size: 16px; }
+}
+
+/* ---------- Celular (tabelas viram cartões empilhados) ---------- */
+@media (max-width: 640px) {
+  #docs-content { padding: 20px 14px 80px; }
+
+  .docs-table-wrap.docs-stacked { overflow-x: visible; border: none; }
+  .docs-table-wrap.docs-stacked::after { display: none; }
+  .docs-stacked table { display: block; }
+  .docs-stacked thead { display: none; }
+  .docs-stacked tbody, .docs-stacked tr { display: block; }
+  .docs-stacked tr {
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    margin-bottom: 10px;
+    padding: 4px 12px;
+    background: var(--bg);
+  }
+  .docs-stacked tr:last-child { margin-bottom: 0; }
+  .docs-stacked td {
+    display: block;
+    text-align: left;
+    padding: 7px 0;
+    border-bottom: 1px solid var(--border);
+  }
+  .docs-stacked td:last-child { border-bottom: none; }
+  .docs-stacked td::before {
+    content: attr(data-label);
+    display: block;
+    margin-bottom: 2px;
+    font-size: 10.5px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.02em;
+    color: var(--text-fainter);
+  }
+  .docs-stacked td:empty::after { content: "—"; color: var(--text-fainter); }
 }
