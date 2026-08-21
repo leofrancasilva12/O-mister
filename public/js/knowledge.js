@@ -298,12 +298,45 @@
     var overlay = document.getElementById("docs-overlay");
     function open() { app.classList.add("docs-sidebar-open"); }
     function close() { app.classList.remove("docs-sidebar-open"); }
+    function isOpen() { return app.classList.contains("docs-sidebar-open"); }
     if (openBtn) openBtn.addEventListener("click", open);
     if (closeBtn) closeBtn.addEventListener("click", close);
     if (overlay) overlay.addEventListener("click", close);
     document.getElementById("docs-toc").addEventListener("click", function (e) {
       if (e.target.tagName === "A") close();
     });
+    return { open: open, close: close, isOpen: isOpen };
+  }
+
+  /* ---------- Botão de busca do cabeçalho mobile + atalho Ctrl/Cmd+K ---------- */
+  function initSearchShortcuts(mobileNav, searchInput) {
+    if (!searchInput) return;
+
+    function focusSearch() {
+      var mobile = window.matchMedia("(max-width: 860px)").matches;
+      if (mobile && mobileNav && !mobileNav.isOpen()) {
+        mobileNav.open();
+        setTimeout(function () { searchInput.focus(); }, 220);
+      } else {
+        searchInput.focus();
+      }
+    }
+
+    var mobileSearchBtn = document.getElementById("docs-mobile-search-btn");
+    if (mobileSearchBtn) mobileSearchBtn.addEventListener("click", focusSearch);
+
+    document.addEventListener("keydown", function (e) {
+      var isShortcut = (e.ctrlKey || e.metaKey) && !e.shiftKey && !e.altKey && e.key.toLowerCase() === "k";
+      if (!isShortcut) return;
+      e.preventDefault();
+      focusSearch();
+    });
+
+    var searchWrap = document.getElementById("docs-search-wrap");
+    if (searchWrap) {
+      searchInput.addEventListener("focus", function () { searchWrap.classList.add("docs-search-focused"); });
+      searchInput.addEventListener("blur", function () { searchWrap.classList.remove("docs-search-focused"); });
+    }
   }
 
   /* ---------- Boot ---------- */
@@ -325,7 +358,8 @@
     var searchWrap = document.getElementById("docs-search-wrap");
     if (searchInput) initSearch(article, searchInput, searchClear, searchCount, emptyState, searchWrap);
 
-    initMobileNav();
+    var mobileNav = initMobileNav();
+    initSearchShortcuts(mobileNav, searchInput);
 
     var themeBtn = document.getElementById("docs-theme-btn");
     if (themeBtn) themeBtn.addEventListener("click", toggleTheme);

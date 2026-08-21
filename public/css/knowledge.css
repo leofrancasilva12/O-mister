@@ -101,6 +101,22 @@
 #docs-search-clear:hover { color: var(--text); background: var(--sidebar-hover); }
 #docs-search-wrap.has-value #docs-search-clear { display: block; }
 
+#docs-search-shortcut {
+  position: absolute;
+  right: 20px;
+  top: 50%;
+  transform: translateY(-50%);
+  font: 10px -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  color: var(--text-fainter);
+  background: var(--bg);
+  border: 1px solid var(--border);
+  border-radius: 5px;
+  padding: 2px 5px;
+  pointer-events: none;
+}
+#docs-search-wrap.has-value #docs-search-shortcut,
+#docs-search-wrap.docs-search-focused #docs-search-shortcut { display: none; }
+
 #docs-search-count {
   display: block;
   padding: 0 16px 10px;
@@ -157,7 +173,15 @@
   background: var(--bg);
   border-bottom: 1px solid var(--border);
 }
-.docs-mobile-title { font-size: 14px; font-weight: 600; color: var(--text); }
+.docs-mobile-title {
+  flex: 1;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--text);
+}
 
 #docs-content {
   max-width: 880px;
@@ -335,6 +359,8 @@ mark.docs-mark {
 
   /* Impede o zoom automático do Safari/iOS ao focar um input com fonte < 16px */
   #docs-search-input { font-size: 16px; }
+  /* Atalho de teclado não faz sentido sem teclado físico */
+  #docs-search-shortcut { display: none; }
 }
 
 /* ---------- Celular (tabelas viram cartões empilhados) ---------- */
