@@ -138,6 +138,7 @@
   color: var(--text-file);
   text-decoration: none;
   line-height: 1.35;
+  overflow-wrap: anywhere;
   transition: background-color 0.15s ease, color 0.15s ease;
 }
 #docs-toc a:hover { background: var(--sidebar-hover); color: var(--text); }
@@ -206,7 +207,11 @@
 .docs-disclaimer svg { flex-shrink: 0; color: var(--accent); margin-top: 1px; }
 .docs-disclaimer strong { color: var(--text); }
 
-#docs-article { color: var(--text); }
+/* overflow-wrap:anywhere garante que um termo comprido sem espaço (ex.:
+   "verificação/validação/monitoramento/medição/inspeção/teste") quebre linha
+   em vez de vazar pra fora da tela — sem isso a página fica presa pelo
+   overflow:hidden do #docs-app e o texto simplesmente some cortado. */
+#docs-article { color: var(--text); overflow-wrap: anywhere; word-break: break-word; }
 
 #docs-article h1 {
   font-size: 22px;
