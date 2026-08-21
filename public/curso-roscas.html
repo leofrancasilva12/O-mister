@@ -1,0 +1,1994 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+  <title>Curso de Roscas API — MIOG</title>
+  <meta name="theme-color" content="#FAF9F6">
+  <link rel="icon" type="image/x-icon" href="icons/favicon.ico">
+  <link rel="icon" type="image/png" sizes="256x256" href="icons/favicon.png">
+  <link rel="apple-touch-icon" href="icons/apple-touch-icon.png">
+  <link rel="stylesheet" href="css/style.css">
+  <link rel="stylesheet" href="css/knowledge.css">
+</head>
+<body>
+
+<div id="docs-app">
+  <aside id="docs-sidebar">
+    <div class="docs-sidebar-header">
+      <a class="docs-back" href="index.html"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="19" y1="12" x2="5" y2="12"/><polyline points="12 19 5 12 12 5"/></svg> Voltar ao chat</a>
+      <div class="docs-header-actions">
+        <button id="docs-theme-btn" class="icon-btn" aria-label="Alternar tema" title="Alternar tema claro/escuro">
+          <span id="docs-theme-icon-moon"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg></span>
+          <span id="docs-theme-icon-sun" hidden><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="5"/><line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/><line x1="1" y1="12" x2="3" y2="12"/><line x1="21" y1="12" x2="23" y2="12"/><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/></svg></span>
+        </button>
+        <button id="docs-close-toc" class="icon-btn" aria-label="Fechar menu" title="Fechar menu"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg></button>
+      </div>
+    </div>
+    <div class="docs-title-block">
+      <p class="docs-doc-title">Curso de Roscas API</p>
+      <p class="docs-doc-subtitle">Treinamento — Imídio Queiroz Engenharia</p>
+    </div>
+    <div id="docs-search-wrap" class="docs-search-wrap">
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+      <input id="docs-search-input" type="search" placeholder="Buscar (ex.: 2.3/8 IF, TPI, Q1)..." autocomplete="off">
+      <button id="docs-search-clear" aria-label="Limpar busca" title="Limpar busca"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg></button>
+    </div>
+    <span id="docs-search-count"></span>
+    <nav id="docs-toc" aria-label="Sumário"></nav>
+    <div class="docs-sidebar-footer">
+      Resumo de apoio. Não substitui o texto oficial da norma.<br>
+      <a href="normas-api.html">Ver Normas API (consolidado) →</a>
+    </div>
+  </aside>
+
+  <div id="docs-overlay"></div>
+
+  <main id="docs-main">
+    <header id="docs-mobile-header">
+      <button id="docs-open-toc" class="icon-btn" aria-label="Abrir menu" title="Abrir menu"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="4" y1="7" x2="20" y2="7"/><line x1="4" y1="12" x2="20" y2="12"/><line x1="4" y1="17" x2="20" y2="17"/></svg></button>
+      <span class="docs-mobile-title">Curso de Roscas API</span>
+    </header>
+    <div id="docs-content">
+      <article id="docs-article">
+<h1 id="curso-de-roscas-conforme-normas-api-notas-de-treinamento">Curso de Roscas Conforme Normas API — Notas de Treinamento</h1>
+<blockquote>
+<p>Fonte: material de treinamento interno <strong>"Treinamento Sobre Roscas Conforme Normas API's"</strong>,
+elaborado por <strong>Eng. Lourenço Loy</strong> (Imídio Queiroz Engenharia Ltda., Salvador-BA).
+Transcrito e reorganizado a partir do PDF original para uso como material de apoio.
+<strong>Não é a norma oficial</strong> — é uma tabela de identificação rápida / material didático.
+Para fabricação, inspeção e decisões de engenharia, sempre confirme os valores contra as
+normas oficiais citadas na seção 9 (API 5B, 5CT, 7-1, 7-2, 11B, RP 5A5, RP 5C1, RP 7G, Bull 5A2).</p>
+</blockquote>
+<hr />
+<h2 id="indice">ÍNDICE</h2>
+<ol>
+<li><a href="#1-fundamentos-de-rosca">Fundamentos de Rosca</a></li>
+<li><a href="#2-conexões-api-x-conexões-premium">Conexões API x Conexões Premium</a></li>
+<li><a href="#3-conexões-api-para-coluna-de-perfuração">Conexões API para Coluna de Perfuração</a></li>
+<li><a href="#4-conexões-api-para-coluna-de-revestimento-casing">Conexões API para Coluna de Revestimento (Casing)</a></li>
+<li><a href="#5-conexões-api-para-coluna-de-produção-tubing">Conexões API para Coluna de Produção (Tubing)</a></li>
+<li><a href="#6-outras-conexões-line-pipe-npt-bsp">Outras Conexões (Line Pipe, NPT, BSP)</a></li>
+<li><a href="#7-conexões-para-haste-de-bombeio">Conexões para Haste de Bombeio</a></li>
+<li><a href="#8-referências-normativas">Referências Normativas</a></li>
+</ol>
+<hr />
+<h1 id="1-fundamentos-de-rosca">1. FUNDAMENTOS DE ROSCA</h1>
+<h2 id="11-o-que-e-rosca">1.1 O que é rosca</h2>
+<p>Rosca é um conjunto de filetes em torno da superfície externa ou interna de um cilindro. É
+fundamental na indústria e tem três aplicações básicas:</p>
+<ul>
+<li>Ajustar peças com referência entre si.</li>
+<li>Unir peças, permitindo também a desmontagem.</li>
+<li>Transmitir esforços e permitir movimento.</li>
+</ul>
+<h2 id="12-principais-elementos-da-rosca">1.2 Principais elementos da rosca</h2>
+<table>
+<thead>
+<tr>
+<th>Elemento</th>
+<th>Definição</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Diâmetro maior</strong></td>
+<td>Diâmetro medido na crista da rosca.</td>
+</tr>
+<tr>
+<td><strong>Diâmetro médio (pitch)</strong></td>
+<td>Diâmetro médio da rosca.</td>
+</tr>
+<tr>
+<td><strong>Diâmetro menor</strong></td>
+<td>Diâmetro medido na raiz da rosca.</td>
+</tr>
+<tr>
+<td><strong>Filete (ou fio)</strong></td>
+<td>Cada uma das voltas completas do helicoide de uma rosca; saliência de seção constante, em forma helicoidal, produzida por um ou mais sulcos na superfície externa ou interna de um cilindro ou cone.</td>
+</tr>
+<tr>
+<td><strong>Crista (ou coroa)</strong></td>
+<td>Superfície que liga os lados dos filetes na parte mais afastada da superfície sobre a qual foi construído o filete.</td>
+</tr>
+<tr>
+<td><strong>Fundo (ou raiz)</strong></td>
+<td>Superfície que une os lados dos filetes na parte mais próxima da superfície sobre a qual foi construído o filete.</td>
+</tr>
+<tr>
+<td><strong>Flanco</strong></td>
+<td>Superfícies que ligam as cristas com os fundos adjacentes a um filete.</td>
+</tr>
+<tr>
+<td><strong>Profundidade (altura do filete)</strong></td>
+<td>Distância radial entre a crista e a raiz.</td>
+</tr>
+<tr>
+<td><strong>Ângulo do filete</strong></td>
+<td>Ângulo formado pelos flancos de um filete, medido em um plano axial.</td>
+</tr>
+<tr>
+<td><strong>Ângulo do flanco</strong></td>
+<td>Ângulo formado por uma perpendicular ao eixo com os flancos.</td>
+</tr>
+<tr>
+<td><strong>Número de fios</strong></td>
+<td>Número de filetes compreendido em uma polegada (25,4 mm) de comprimento da rosca (= TPI, threads per inch).</td>
+</tr>
+<tr>
+<td><strong>Conicidade (taper)</strong></td>
+<td>Acréscimo do diâmetro primitivo da rosca por unidade de comprimento (TPF, taper per foot).</td>
+</tr>
+</tbody>
+</table>
+<h2 id="13-conicidades-usadas-nas-roscas-api">1.3 Conicidades usadas nas roscas API</h2>
+<table>
+<thead>
+<tr>
+<th>Conicidade (pol/pé — TPF)</th>
+<th>3/4</th>
+<th>1</th>
+<th>1.1/4</th>
+<th>1.1/2</th>
+<th>2</th>
+<th>3</th>
+<th>3.373</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Ângulo (grau, minuto, segundo)</td>
+<td>1°47'24"</td>
+<td>2°23'10"</td>
+<td>2°58'53"</td>
+<td>3°34'35"</td>
+<td>4°45'49"</td>
+<td>7°7'30"</td>
+<td>8°0'0"</td>
+</tr>
+<tr>
+<td>Acréscimo de diâmetro em 1" de comprimento</td>
+<td>0,062"</td>
+<td>0,083"</td>
+<td>0,104"</td>
+<td>0,125"</td>
+<td>0,166"</td>
+<td>0,250"</td>
+<td>0,281"</td>
+</tr>
+<tr>
+<td>Fração equivalente</td>
+<td>1/16</td>
+<td>1/12</td>
+<td>1/9,6</td>
+<td>1/8</td>
+<td>1/6</td>
+<td>1/4</td>
+<td>1/3,557</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h1 id="2-conexoes-api-x-conexoes-premium">2. CONEXÕES API X CONEXÕES PREMIUM</h1>
+<ul>
+<li><strong>Conexões API</strong>: produtos padronizados, geralmente usados para poços não críticos, com produção
+  de petróleo em pressão limitada. Qualquer fabricante qualificado pela API está autorizado a
+  produzir e vender esse tipo de conexão.</li>
+<li><strong>Conexões Premium</strong>: projetadas pelos fabricantes de tubos para atender demandas de desempenho
+  não cobertas pelas conexões API. Cada fabricante tem seu próprio desenho (geralmente patenteado)
+  e testa/garante padrões de desempenho próprios de tração, compressão, vedação e pressão interna/externa.
+  Em geral possuem selo de vedação metal/metal, ombro de torque, e são internamente <em>flush</em> (lisas no
+  acoplamento).</li>
+</ul>
+<h3 id="tipos-de-conexao-premium">Tipos de conexão Premium</h3>
+<table>
+<thead>
+<tr>
+<th>Tipo</th>
+<th>Descrição</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>A — Tubo e luva</strong></td>
+<td>Pino no tubo e caixa acoplada (luva separada).</td>
+</tr>
+<tr>
+<td><strong>B-1 — Integral Flush</strong></td>
+<td>Pino e caixa usinados no próprio tubo. Sem diferenciação de diâmetro interno/externo.</td>
+</tr>
+<tr>
+<td><strong>B-2 — Integral Semi-Flush</strong></td>
+<td>Pino e caixa usinados no próprio tubo. Há diferenciação de diâmetro interno/externo.</td>
+</tr>
+<tr>
+<td><strong>B-3 — Integral Upset</strong></td>
+<td>Possui reforço na parede (upset); muito comum em drill pipe e tubing.</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h1 id="3-conexoes-api-para-coluna-de-perfuracao">3. CONEXÕES API PARA COLUNA DE PERFURAÇÃO</h1>
+<blockquote>
+<p>Referência oficial para fabricação e inspeção: <strong>API SPEC 7</strong> e <strong>API SPEC 7G</strong>. As tabelas abaixo
+servem só para identificação rápida.</p>
+</blockquote>
+<h2 id="31-api-regular-reg">3.1 API Regular (REG)</h2>
+<p>Rosca de mesmo nome, com o menor orifício de passagem entre uniões do mesmo diâmetro nominal. É a
+pioneira das uniões normalizadas; hoje é usada só para brocas, comandos, hastes quadradas e peças
+especiais. Conicidade de 2 ou 3 polegadas por pé, passo de 4 ou 5 fios por polegada.</p>
+<h2 id="32-api-internal-flush-if">3.2 API Internal Flush (IF)</h2>
+<p>Rosca API modificada, oferecendo orifício de passagem igual ao do tubo de reforço externo em que é
+colocada. Criada para melhores condições de circulação de fluido de perfuração pelo interior da
+coluna — é a que apresenta as maiores dimensões externas entre uniões de mesmo diâmetro nominal.
+Conicidade de 2 polegadas por pé, passo de 4 fios por polegada.</p>
+<h2 id="33-api-full-hole-fh">3.3 API Full Hole (FH)</h2>
+<p>Usa a rosca API Regular, com orifício de passagem igual ao do tubo de reforço interno em que é
+colocada — essencialmente uma API Regular aumentada. Conicidade de 2 ou 3 polegadas por pé, passo
+de 4 ou 5 fios por polegada.</p>
+<h2 id="34-tabela-de-identificacao-rapida-reg-if-fh">3.4 Tabela de identificação rápida — REG / IF / FH</h2>
+<p>Todas as dimensões em <strong>mm</strong>. TPI = fios por polegada; TPF = conicidade (polegadas por pé).
+DL = diâmetro maior do pino (máx.); LPC = comprimento do pino (mín.); LBT = comprimento da rosca da
+caixa (mín.); LBC = comprimento da caixa (mín.); QC = diâmetro do bore da caixa (máx.).
+Lpb = 14,29 máx. e Lqc = 14,29 mín. em todos os casos.</p>
+<table>
+<thead>
+<tr>
+<th>Rosca</th>
+<th>Intercambiável com</th>
+<th>TPI</th>
+<th>TPF</th>
+<th>DL (máx.)</th>
+<th>LPC (mín.)</th>
+<th>LBT (mín.)</th>
+<th>LBC (mín.)</th>
+<th>QC (máx.)</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>2.3/8" REG</td>
+<td>—</td>
+<td>5</td>
+<td>3</td>
+<td>69,85</td>
+<td>73,03</td>
+<td>77,79</td>
+<td>90,49</td>
+<td>69,85</td>
+</tr>
+<tr>
+<td>2.7/8" REG</td>
+<td>—</td>
+<td>5</td>
+<td>3</td>
+<td>79,38</td>
+<td>85,73</td>
+<td>90,49</td>
+<td>103,19</td>
+<td>79,38</td>
+</tr>
+<tr>
+<td>3.1/2" REG</td>
+<td>—</td>
+<td>5</td>
+<td>3</td>
+<td>92,08</td>
+<td>92,08</td>
+<td>96,84</td>
+<td>109,54</td>
+<td>92,08</td>
+</tr>
+<tr>
+<td>4.1/2" REG</td>
+<td>—</td>
+<td>5</td>
+<td>3</td>
+<td>120,65</td>
+<td>104,78</td>
+<td>109,54</td>
+<td>122,24</td>
+<td>120,65</td>
+</tr>
+<tr>
+<td>5.1/2" REG</td>
+<td>—</td>
+<td>4</td>
+<td>3</td>
+<td>143,27</td>
+<td>117,48</td>
+<td>122,24</td>
+<td>134,94</td>
+<td>143,27</td>
+</tr>
+<tr>
+<td>6.5/8" REG</td>
+<td>—</td>
+<td>4</td>
+<td>2</td>
+<td>155,58</td>
+<td>123,83</td>
+<td>128,59</td>
+<td>141,29</td>
+<td>155,58</td>
+</tr>
+<tr>
+<td>7.5/8" REG</td>
+<td>—</td>
+<td>4</td>
+<td>3</td>
+<td>181,77</td>
+<td>130,18</td>
+<td>134,94</td>
+<td>147,64</td>
+<td>181,77</td>
+</tr>
+<tr>
+<td>8.5/8" REG</td>
+<td>—</td>
+<td>4</td>
+<td>3</td>
+<td>205,98</td>
+<td>133,35</td>
+<td>138,11</td>
+<td>150,81</td>
+<td>205,98</td>
+</tr>
+<tr>
+<td>2.3/8" IF</td>
+<td>NC26 – 2.7/8" SH</td>
+<td>4</td>
+<td>2</td>
+<td>76,20</td>
+<td>73,02</td>
+<td>77,79</td>
+<td>90,49</td>
+<td>76,20</td>
+</tr>
+<tr>
+<td>2.7/8" IF</td>
+<td>NC31 – 3.1/2" SH</td>
+<td>4</td>
+<td>2</td>
+<td>89,30</td>
+<td>85,72</td>
+<td>90,49</td>
+<td>103,19</td>
+<td>89,30</td>
+</tr>
+<tr>
+<td>3.1/2" IF</td>
+<td>NC38 – 4.1/2" SH</td>
+<td>4</td>
+<td>2</td>
+<td>105,17</td>
+<td>98,42</td>
+<td>103,19</td>
+<td>115,89</td>
+<td>105,17</td>
+</tr>
+<tr>
+<td>4" IF</td>
+<td>NC46 – 4.1/2" XH</td>
+<td>4</td>
+<td>2</td>
+<td>126,21</td>
+<td>111,12</td>
+<td>115,89</td>
+<td>128,59</td>
+<td>126,21</td>
+</tr>
+<tr>
+<td>4.1/2" IF</td>
+<td>NC50 – 5" XH – 5.1/2" DSL</td>
+<td>4</td>
+<td>2</td>
+<td>136,52</td>
+<td>111,12</td>
+<td>115,89</td>
+<td>128,59</td>
+<td>136,52</td>
+</tr>
+<tr>
+<td>5.1/2" IF</td>
+<td>—</td>
+<td>4</td>
+<td>2</td>
+<td>165,50</td>
+<td>123,82</td>
+<td>128,59</td>
+<td>141,29</td>
+<td>165,50</td>
+</tr>
+<tr>
+<td>6.5/8" IF</td>
+<td>—</td>
+<td>4</td>
+<td>2</td>
+<td>192,48</td>
+<td>123,82</td>
+<td>128,59</td>
+<td>141,29</td>
+<td>192,48</td>
+</tr>
+<tr>
+<td>3.1/2" FH</td>
+<td>—</td>
+<td>5</td>
+<td>3</td>
+<td>104,38</td>
+<td>92,08</td>
+<td>96,84</td>
+<td>109,54</td>
+<td>104,38</td>
+</tr>
+<tr>
+<td>4" FH</td>
+<td>NC24 – 4.1/2" DSL</td>
+<td>4</td>
+<td>2</td>
+<td>111,92</td>
+<td>111,12</td>
+<td>115,89</td>
+<td>128,59</td>
+<td>111,92</td>
+</tr>
+<tr>
+<td>4.1/2" FH</td>
+<td>—</td>
+<td>5</td>
+<td>3</td>
+<td>125,41</td>
+<td>98,42</td>
+<td>103,19</td>
+<td>141,29</td>
+<td>125,41</td>
+</tr>
+<tr>
+<td>5.1/2" FH</td>
+<td>—</td>
+<td>4</td>
+<td>2</td>
+<td>139,30</td>
+<td>123,82</td>
+<td>128,59</td>
+<td>141,29</td>
+<td>139,30</td>
+</tr>
+<tr>
+<td>6.5/8" FH</td>
+<td>—</td>
+<td>4</td>
+<td>2</td>
+<td>175,42</td>
+<td>123,82</td>
+<td>128,59</td>
+<td>141,29</td>
+<td>175,42</td>
+</tr>
+</tbody>
+</table>
+<h2 id="35-outras-conexoes-api-para-coluna-de-perfuracao">3.5 Outras conexões API para coluna de perfuração</h2>
+<p>TPI = fios por polegada; TPF = conicidade (pol/pé, exceto onde indicado em fração).</p>
+<table>
+<thead>
+<tr>
+<th>Símbolo</th>
+<th>Tipo</th>
+<th>Diâmetros nominais (DN) disponíveis</th>
+<th>TPI</th>
+<th>TPF</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>NC</strong></td>
+<td>API Connection</td>
+<td>NC23, NC26, NC31, NC35, NC38, NC40, NC44, NC46, NC50</td>
+<td>4</td>
+<td>2</td>
+</tr>
+<tr>
+<td><strong>NC</strong></td>
+<td>API Connection</td>
+<td>NC56, NC61, NC70, NC35, NC71</td>
+<td>4</td>
+<td>3</td>
+</tr>
+<tr>
+<td><strong>FH</strong></td>
+<td>Full Hole</td>
+<td>3.1/2" / 4" / 4.1/2" / 5.1/2" / 6.5/8"</td>
+<td>5 / 4 / 5 / 4 / 4</td>
+<td>3 / 2 / 3 / 2 / 2</td>
+</tr>
+<tr>
+<td><strong>XH</strong></td>
+<td>Extra Hole</td>
+<td>3.1/2" / 4.1/2" / 5"</td>
+<td>4</td>
+<td>2</td>
+</tr>
+<tr>
+<td><strong>SH</strong></td>
+<td>Slim Hole</td>
+<td>2.3/8" / 2.7/8" / 3.1/2" / 4" / 4.1/2"</td>
+<td>4</td>
+<td>2</td>
+</tr>
+<tr>
+<td><strong>EF</strong></td>
+<td>External Flush</td>
+<td>2.3/8" / 2.7/8" / 3.1/2" / 4.1/2"</td>
+<td>6 / 6 / 4 / 4</td>
+<td>2</td>
+</tr>
+<tr>
+<td><strong>DSL</strong></td>
+<td>Double Streamline</td>
+<td>3.1/2" / 4" / 4.1/2" / 5.1/2"</td>
+<td>4</td>
+<td>2</td>
+</tr>
+<tr>
+<td><strong>ACME</strong></td>
+<td>Acme Regular</td>
+<td>2.3/8" a 6.5/8"</td>
+<td>4</td>
+<td>3,337</td>
+</tr>
+<tr>
+<td><strong>ASL</strong></td>
+<td>Acme Streamline</td>
+<td>2.3/8" a 5.1/2"</td>
+<td>4</td>
+<td>3,337</td>
+</tr>
+<tr>
+<td><strong>WO</strong></td>
+<td>Wide Open</td>
+<td>2.3/8" / 2.7/8" / 3.1/2" / 4" / 4.1/2"</td>
+<td>4</td>
+<td>2</td>
+</tr>
+<tr>
+<td><strong>PAC</strong></td>
+<td>PAC</td>
+<td>2.3/8" / 2.7/8"</td>
+<td>4</td>
+<td>1.1/2</td>
+</tr>
+<tr>
+<td><strong>AOH</strong></td>
+<td>American Open Hole</td>
+<td>2.3/8" / 2.7/8"</td>
+<td>4</td>
+<td>1.1/2</td>
+</tr>
+<tr>
+<td><strong>H-90</strong></td>
+<td>H-90</td>
+<td>3.1/2" a 8.5/8"</td>
+<td>3,1/2</td>
+<td>2 (até 6.5/8") / 3 (7", 7.5/8", 8.5/8")</td>
+</tr>
+<tr>
+<td><strong>SL-H90</strong></td>
+<td>Slimline H-90</td>
+<td>2.3/8" / 2.7/8" / 3.1/2"</td>
+<td>3</td>
+<td>1.1/4</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h1 id="4-conexoes-api-para-coluna-de-revestimento-casing">4. CONEXÕES API PARA COLUNA DE REVESTIMENTO (CASING)</h1>
+<h2 id="41-rosca-buttress-bcsg-btc">4.1 Rosca Buttress (BCSG / BTC)</h2>
+<p>Conexão de formato trapezoidal (Buttress Thread Casing). Origem ligada às roscas quadradas usadas
+a partir de 1850 na indústria — evolução de formatos trapezoidais como outros buttress e a rosca
+ACME. Projetada para oferecer resistência ao vazamento sob tensões axiais ou cargas de compressão
+somadas.</p>
+<ul>
+<li>Bitolas de 4.1/2" a 13.3/8": <strong>5 fios por polegada</strong>, conicidade de <strong>3/4" por pé</strong> no diâmetro.</li>
+<li>Ângulo de entrada: <strong>10°</strong>. Ângulo de carga: <strong>3°</strong>.</li>
+</ul>
+<h3 id="dimensoes-basicas-da-rosca-externa-bcsgbtc">Dimensões básicas da rosca externa (BCSG/BTC)</h3>
+<table>
+<thead>
+<tr>
+<th>Diâm. nominal</th>
+<th>A (ref.)</th>
+<th>B (mín.)</th>
+<th>C (±0,020")</th>
+<th>D (±0,050")</th>
+<th>E (±0,015")</th>
+<th>F (ref.)</th>
+<th>G (ref.)</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>5.1/2"</td>
+<td>1,841" [46,76mm]</td>
+<td>3,825" [97,15mm]</td>
+<td>4,13" [104,90mm]</td>
+<td>4,63" [117,60mm]</td>
+<td>5,516" [140,10mm]</td>
+<td>5,23" [132,84mm]</td>
+<td>5,401" [137,18mm]</td>
+</tr>
+<tr>
+<td>7"</td>
+<td>2,216" [56,28mm]</td>
+<td>4,200" [106,68mm]</td>
+<td>4,500" [114,30mm]</td>
+<td>5,00" [127,0mm]</td>
+<td>7,016" [178,20mm]</td>
+<td>6,71" [170,43mm]</td>
+<td>6,878" [174,70mm]</td>
+</tr>
+<tr>
+<td>9.5/8"</td>
+<td>2,528" [64,21mm]</td>
+<td>4,512" [114,60mm]</td>
+<td>4,81" [122,17mm]</td>
+<td>5,31" [134,87mm]</td>
+<td>9,641" [244,88mm]</td>
+<td>9,31" [236,47mm]</td>
+<td>9,483" [240,87mm]</td>
+</tr>
+<tr>
+<td>13.3/8"</td>
+<td>2,528" [64,21mm]</td>
+<td>4,512" [114,60mm]</td>
+<td>4,81" [122,17mm]</td>
+<td>5,31" [134,87mm]</td>
+<td>13,391" [340,13mm]</td>
+<td>13,06" [331,72mm]</td>
+<td>13,233" [336,12mm]</td>
+</tr>
+</tbody>
+</table>
+<h3 id="dimensoes-basicas-da-rosca-interna-bcsgbtc">Dimensões básicas da rosca interna (BCSG/BTC)</h3>
+<table>
+<thead>
+<tr>
+<th>Diâm. nominal</th>
+<th>A ±1% (0,125" máx.)</th>
+<th>B (+0,250"/-0,000")</th>
+<th>C (±0,125")</th>
+<th>D (+0,025"/-0,000")</th>
+<th>E (ref.)</th>
+<th>F (ref.)</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>5.1/2"</td>
+<td>6,050" [153,67mm]</td>
+<td>4,625" [117,47mm]</td>
+<td>5,125" [130,17mm]</td>
+<td>5,640" [143,25mm]</td>
+<td>5,504" [139,80mm]</td>
+<td>5,215" [132,46mm]</td>
+</tr>
+<tr>
+<td>7"</td>
+<td>7,656" [194,46mm]</td>
+<td>5,000" [127,00mm]</td>
+<td>5,500" [139,70mm]</td>
+<td>7,140" [181,35mm]</td>
+<td>7,004" [177,90mm]</td>
+<td>6,692" [169,97mm]</td>
+</tr>
+<tr>
+<td>9.5/8"</td>
+<td>10,625" [269,87mm]</td>
+<td>5,312" [134,92mm]</td>
+<td>5,812" [147,62mm]</td>
+<td>9,765" [248,03mm]</td>
+<td>9,628" [244,55mm]</td>
+<td>9,296" [236,12mm]</td>
+</tr>
+<tr>
+<td>13.3/8"</td>
+<td>14,375" [365,12mm]</td>
+<td>5,312" [134,92mm]</td>
+<td>5,812" [147,62mm]</td>
+<td>13,515" [343,28mm]</td>
+<td>13,378" [339,80mm]</td>
+<td>13,046" [331,36mm]</td>
+</tr>
+</tbody>
+</table>
+<h2 id="42-rosca-redonda-casing-round-thread-casing">4.2 Rosca Redonda Casing (Round Thread Casing)</h2>
+<p>Forma basicamente igual à Line Pipe, exceto que cristas e raízes são truncadas com raios. Objetivo
+dos raios nas cristas/raízes:</p>
+<ul>
+<li>Melhorar a resistência da rosca contra danos no aperto mecânico.</li>
+<li>Diminuir a contaminação do espaço vazio entre cristas e raízes por partículas estranhas.</li>
+<li>Tornar as cristas menos suscetíveis a danos.</li>
+</ul>
+<p>Perfil em "V" com ângulo entre flancos de 60°; cristas e raízes truncadas num cone paralelo à
+conicidade. Variantes: <strong>Short Thread Casing (CSG/STC)</strong> e <strong>Long Thread Casing (LCSG/LTC)</strong> — a
+diferença básica está no comprimento da rosca.</p>
+<p>Legenda: <strong>Lc</strong> = comprimento mínimo de rosca perfeita; <strong>Lm</strong> = comprimento de medição (até 4
+filetes incompletos); <strong>L4</strong> = comprimento total de rosca; <strong>J</strong> = distância entre o centro da luva
+e a ponta do tubo após o aperto mecânico. Todas as dimensões em mm.</p>
+<h3 id="rosca-redonda-casing-curta-stc">Rosca redonda casing — curta (STC)</h3>
+<table>
+<thead>
+<tr>
+<th>Diâm. externo</th>
+<th>Parede</th>
+<th>Fios/pol</th>
+<th>L4 (total)</th>
+<th>Lm (rosca perfeita)</th>
+<th>Lc (mín. rosca perfeita)</th>
+<th>J</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>4.1/2" (114,3mm)</td>
+<td>5,21</td>
+<td>8</td>
+<td>50,80</td>
+<td>34,92</td>
+<td>22,22</td>
+<td>28,6</td>
+</tr>
+<tr>
+<td>4.1/2" (114,3mm)</td>
+<td>outras</td>
+<td>8</td>
+<td>66,68</td>
+<td>50,80</td>
+<td>38,10</td>
+<td>12,7</td>
+</tr>
+<tr>
+<td>5" (127,0mm)</td>
+<td>5,59</td>
+<td>8</td>
+<td>63,50</td>
+<td>47,62</td>
+<td>34,92</td>
+<td>19,0</td>
+</tr>
+<tr>
+<td>5" (127,0mm)</td>
+<td>outras</td>
+<td>8</td>
+<td>69,85</td>
+<td>53,97</td>
+<td>41,27</td>
+<td>12,7</td>
+</tr>
+<tr>
+<td>5.1/2" (139,7mm)</td>
+<td>todas</td>
+<td>8</td>
+<td>73,02</td>
+<td>57,14</td>
+<td>44,44</td>
+<td>12,7</td>
+</tr>
+<tr>
+<td>6.5/8" (168,3mm)</td>
+<td>todas</td>
+<td>8</td>
+<td>79,38</td>
+<td>63,50</td>
+<td>50,80</td>
+<td>12,7</td>
+</tr>
+<tr>
+<td>7" (177,8mm)</td>
+<td>5,87</td>
+<td>8</td>
+<td>60,32</td>
+<td>44,44</td>
+<td>31,74</td>
+<td>31,8</td>
+</tr>
+<tr>
+<td>7" (177,8mm)</td>
+<td>outras</td>
+<td>8</td>
+<td>79,38</td>
+<td>63,50</td>
+<td>50,80</td>
+<td>12,7</td>
+</tr>
+<tr>
+<td>7.5/8" (193,5mm)</td>
+<td>todas</td>
+<td>8</td>
+<td>82,55</td>
+<td>66,68</td>
+<td>53,97</td>
+<td>12,7</td>
+</tr>
+<tr>
+<td>8.5/8" (219,1mm)</td>
+<td>6,71</td>
+<td>8</td>
+<td>76,20</td>
+<td>60,32</td>
+<td>47,62</td>
+<td>22,2</td>
+</tr>
+<tr>
+<td>8.5/8" (219,1mm)</td>
+<td>outras</td>
+<td>8</td>
+<td>85,72</td>
+<td>69,85</td>
+<td>57,14</td>
+<td>12,7</td>
+</tr>
+<tr>
+<td>9.5/8" (244,5mm)</td>
+<td>todas</td>
+<td>8</td>
+<td>85,72</td>
+<td>69,85</td>
+<td>57,14</td>
+<td>12,7</td>
+</tr>
+<tr>
+<td>10.3/4" (273,0mm)</td>
+<td>7,09</td>
+<td>8</td>
+<td>69,85</td>
+<td>53,97</td>
+<td>41,27</td>
+<td>12,7</td>
+</tr>
+<tr>
+<td>10.3/4" (273,0mm)</td>
+<td>outras</td>
+<td>8</td>
+<td>88,90</td>
+<td>73,02</td>
+<td>60,32</td>
+<td>31,8</td>
+</tr>
+<tr>
+<td>11.3/4" (298,5mm)</td>
+<td>todas</td>
+<td>8</td>
+<td>88,90</td>
+<td>73,02</td>
+<td>60,32</td>
+<td>12,7</td>
+</tr>
+<tr>
+<td>13.3/8" (339,7mm)</td>
+<td>todas</td>
+<td>8</td>
+<td>88,90</td>
+<td>73,02</td>
+<td>60,32</td>
+<td>12,7</td>
+</tr>
+</tbody>
+</table>
+<h3 id="rosca-redonda-casing-longa-ltc">Rosca redonda casing — longa (LTC)</h3>
+<table>
+<thead>
+<tr>
+<th>Diâm. externo</th>
+<th>Fios/pol</th>
+<th>L4 (total)</th>
+<th>Lm (rosca perfeita)</th>
+<th>Lc (mín. rosca perfeita)</th>
+<th>J</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>4.1/2" (114,3mm)</td>
+<td>8</td>
+<td>76,20</td>
+<td>60,32</td>
+<td>47,62</td>
+<td>12,7</td>
+</tr>
+<tr>
+<td>5" (127,0mm)</td>
+<td>8</td>
+<td>85,72</td>
+<td>69,85</td>
+<td>57,14</td>
+<td>12,7</td>
+</tr>
+<tr>
+<td>5.1/2" (139,7mm)</td>
+<td>8</td>
+<td>88,90</td>
+<td>73,02</td>
+<td>60,32</td>
+<td>12,7</td>
+</tr>
+<tr>
+<td>6.5/8" (168,3mm)</td>
+<td>8</td>
+<td>98,42</td>
+<td>82,55</td>
+<td>69,85</td>
+<td>12,7</td>
+</tr>
+<tr>
+<td>7" (177,8mm)</td>
+<td>8</td>
+<td>101,60</td>
+<td>85,72</td>
+<td>73,02</td>
+<td>12,7</td>
+</tr>
+<tr>
+<td>7.5/8" (193,7mm)</td>
+<td>8</td>
+<td>104,78</td>
+<td>88,90</td>
+<td>76,20</td>
+<td>12,7</td>
+</tr>
+<tr>
+<td>8.5/8" (219,1mm)</td>
+<td>8</td>
+<td>114,30</td>
+<td>98,42</td>
+<td>85,72</td>
+<td>12,7</td>
+</tr>
+<tr>
+<td>9.5/8" (244,5mm)</td>
+<td>8</td>
+<td>120,65</td>
+<td>104,78</td>
+<td>92,07</td>
+<td>12,7</td>
+</tr>
+</tbody>
+</table>
+<h2 id="43-rosca-extreme-line-xcsg-elc">4.3 Rosca Extreme Line (XCSG / ELC)</h2>
+<p>Conexão integral com selo de vedação contra gás (metal-metal). A conexão é reforçada com um
+recalque de pino e caixa que aumenta a resistência à tração. Não possui luva. Vantagens: alta
+resistência da conexão e ótima resistência a vazamentos (mesmo sob altas pressões ou em poços com
+injeção de vapor).</p>
+<table>
+<thead>
+<tr>
+<th>DN</th>
+<th>5"</th>
+<th>5.1/2"</th>
+<th>6.5/8"</th>
+<th>7"</th>
+<th>7.5/8"</th>
+<th>8.5/8"</th>
+<th>9.5/8"</th>
+<th>10.3/4"</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>TPI</td>
+<td>6</td>
+<td>6</td>
+<td>6</td>
+<td>6</td>
+<td>6</td>
+<td>5</td>
+<td>5</td>
+<td>5</td>
+</tr>
+<tr>
+<td>TPF</td>
+<td>1.1/2"</td>
+<td>1.1/2"</td>
+<td>1.1/2"</td>
+<td>1.1/2"</td>
+<td>1.1/2"</td>
+<td>1.1/4"</td>
+<td>1.1/4"</td>
+<td>1.1/4"</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h1 id="5-conexoes-api-para-coluna-de-producao-tubing">5. CONEXÕES API PARA COLUNA DE PRODUÇÃO (TUBING)</h1>
+<p>Rosca redonda com a mesma forma da Line Pipe, exceto cristas/raízes truncadas com raios (mesma
+lógica da rosca redonda casing, seção 4.2).</p>
+<h2 id="51-integral-joint-tubing-ij-tbg">5.1 Integral Joint Tubing (IJ-TBG)</h2>
+<table>
+<thead>
+<tr>
+<th>Diâm. externo</th>
+<th>Fios/pol (TPI)</th>
+<th>Intercambiável com</th>
+<th>Conicidade (TPF)</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>1.315" (33,4mm)</td>
+<td>10</td>
+<td>1.315" NU / 1.050" EU</td>
+<td>3/4</td>
+</tr>
+<tr>
+<td>1.660" (42,2mm)</td>
+<td>10</td>
+<td>1.660" NU</td>
+<td>3/4</td>
+</tr>
+<tr>
+<td>1.900" (48,3mm)</td>
+<td>10</td>
+<td>1.900" NU</td>
+<td>3/4</td>
+</tr>
+</tbody>
+</table>
+<h2 id="52-non-upset-tubing-nutbg">5.2 Non-Upset Tubing (NU/TBG)</h2>
+<p>Rosca redonda sem recalque externo — não possui reforço na parede do pino.
+Conicidade em todos os diâmetros: <strong>3/4" por pé no diâmetro</strong> (+0,0625"/-0,0312"), ou 1/16" por
+polegada no diâmetro (+0,0052"/-0,0026").</p>
+<h3 id="dimensoes-basicas-da-rosca-interna-nutbg">Dimensões básicas da rosca interna (NU/TBG)</h3>
+<p>Colunas: <strong>Q</strong> = comprimento roscado; <strong>q</strong> = comprimento de rosca perfeita; <strong>A</strong> = diâmetro maior
+na face; <strong>B</strong> e <strong>C</strong> = diâmetros de referência. Cada coluna tem valor em polegada e mm.</p>
+<table>
+<thead>
+<tr>
+<th>DN</th>
+<th>Fios/"</th>
+<th>q (pol / mm)</th>
+<th>A (pol / mm)</th>
+<th>B (pol / mm)</th>
+<th>C (pol / mm)</th>
+<th>b (pol / mm)</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>1.050</td>
+<td>10</td>
+<td>0,313 / 7,94</td>
+<td>0,964 / 24,47</td>
+<td>1,594 / 40,5</td>
+<td>1,719 / 43,7</td>
+<td>0,063 / 1,59</td>
+</tr>
+<tr>
+<td>1.315</td>
+<td>10</td>
+<td>0,313 / 7,94</td>
+<td>1,229 / 31,21</td>
+<td>1,625 / 41,3</td>
+<td>1,750 / 44,5</td>
+<td>0,094 / 2,38</td>
+</tr>
+<tr>
+<td>1.660</td>
+<td>10</td>
+<td>0,313 / 7,94</td>
+<td>1,574 / 39,97</td>
+<td>1,750 / 44,5</td>
+<td>1,875 / 47,6</td>
+<td>0,125 / 3,18</td>
+</tr>
+<tr>
+<td>1.900</td>
+<td>10</td>
+<td>0,313 / 7,94</td>
+<td>1,814 / 46,06</td>
+<td>1,875 / 47,6</td>
+<td>2,000 / 50,8</td>
+<td>0,063 / 1,59</td>
+</tr>
+<tr>
+<td>2.3/8</td>
+<td>10</td>
+<td>0,313 / 7,94</td>
+<td>2,289 / 58,13</td>
+<td>2,125 / 54,0</td>
+<td>2,250 / 57,2</td>
+<td>0,188 / 4,76</td>
+</tr>
+<tr>
+<td>2.7/8</td>
+<td>10</td>
+<td>0,313 / 7,94</td>
+<td>2,789 / 70,83</td>
+<td>2,563 / 65,1</td>
+<td>2,688 / 68,3</td>
+<td>0,188 / 4,76</td>
+</tr>
+<tr>
+<td>3.1/2</td>
+<td>10</td>
+<td>0,313 / 7,94</td>
+<td>3,414 / 86,70</td>
+<td>2,813 / 71,4</td>
+<td>2,938 / 74,6</td>
+<td>0,188 / 4,76</td>
+</tr>
+<tr>
+<td>4</td>
+<td>8</td>
+<td>0,375 / 9,53</td>
+<td>3,879 / 98,53</td>
+<td>2,875 / 73,0</td>
+<td>3,000 / 76,2</td>
+<td>0,188 / 4,76</td>
+</tr>
+<tr>
+<td>4.1/2</td>
+<td>8</td>
+<td>0,375 / 9,53</td>
+<td>4,379 / 111,23</td>
+<td>3,063 / 77,8</td>
+<td>3,188 / 81,0</td>
+<td>0,188 / 4,76</td>
+</tr>
+</tbody>
+</table>
+<h3 id="dimensoes-basicas-da-rosca-externa-nutbg">Dimensões básicas da rosca externa (NU/TBG)</h3>
+<p>Colunas A–F e "fios perf." (fios de rosca perfeita), todas em pol / mm.</p>
+<table>
+<thead>
+<tr>
+<th>DN</th>
+<th>Fios/"</th>
+<th>A</th>
+<th>B</th>
+<th>C</th>
+<th>D</th>
+<th>E</th>
+<th>F</th>
+<th>Fios perf.</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>1.050"</td>
+<td>10</td>
+<td>1,013 / 25,7</td>
+<td>0,925 / 23,5</td>
+<td>1,094 / 27,8</td>
+<td>1,594 / 40,5</td>
+<td>1,050 / 26,7</td>
+<td>0,874 / 22,2</td>
+<td>0,300 / 7,6</td>
+</tr>
+<tr>
+<td>1.315"</td>
+<td>10</td>
+<td>1,276 / 32,4</td>
+<td>0,956 / 24,3</td>
+<td>1,125 / 28,6</td>
+<td>1,625 / 41,3</td>
+<td>1,315 / 33,4</td>
+<td>1,137 / 28,9</td>
+<td>0,300 / 7,6</td>
+</tr>
+<tr>
+<td>1.660"</td>
+<td>10</td>
+<td>1,613 / 41,0</td>
+<td>1,081 / 27,5</td>
+<td>1,250 / 31,8</td>
+<td>1,750 / 44,5</td>
+<td>1,660 / 42,2</td>
+<td>1,474 / 37,4</td>
+<td>0,300 / 7,6</td>
+</tr>
+<tr>
+<td>1.900"</td>
+<td>10</td>
+<td>1,845 / 46,9</td>
+<td>1,206 / 30,6</td>
+<td>1,375 / 34,9</td>
+<td>1,875 / 47,6</td>
+<td>1,900 / 48,3</td>
+<td>1,706 / 43,3</td>
+<td>0,475 / 12,1</td>
+</tr>
+<tr>
+<td>2.3/8"</td>
+<td>10</td>
+<td>2,305 / 58,5</td>
+<td>1,456 / 37,0</td>
+<td>1,625 / 41,3</td>
+<td>2,125 / 54,0</td>
+<td>2,375 / 60,3</td>
+<td>2,165 / 55,0</td>
+<td>0,725 / 18,4</td>
+</tr>
+<tr>
+<td>2.7/8"</td>
+<td>10</td>
+<td>2,777 / 70,5</td>
+<td>1,894 / 48,1</td>
+<td>2,063 / 52,4</td>
+<td>2,563 / 65,1</td>
+<td>2,875 / 73,0</td>
+<td>2,638 / 67,0</td>
+<td>1,163 / 29,5</td>
+</tr>
+<tr>
+<td>3.1/2"</td>
+<td>10</td>
+<td>3,387 / 86,0</td>
+<td>2,144 / 54,5</td>
+<td>2,313 / 58,8</td>
+<td>2,813 / 71,5</td>
+<td>3,500 / 88,9</td>
+<td>3,247 / 82,5</td>
+<td>1,413 / 35,9</td>
+</tr>
+<tr>
+<td>4"</td>
+<td>8</td>
+<td>3,883 / 98,6</td>
+<td>2,140 / 54,4</td>
+<td>2,375 / 60,3</td>
+<td>2,875 / 73,0</td>
+<td>4,000 / 101,6</td>
+<td>3,706 / 94,1</td>
+<td>1,375 / 34,9</td>
+</tr>
+<tr>
+<td>4.1/2"</td>
+<td>8</td>
+<td>4,371 / 111,0</td>
+<td>2,328 / 59,1</td>
+<td>2,563 / 65,1</td>
+<td>3,063 / 77,8</td>
+<td>4,500 / 114,3</td>
+<td>4,195 / 106,5</td>
+<td>1,563 / 39,7</td>
+</tr>
+</tbody>
+</table>
+<h2 id="53-external-upset-tubing-euup-tbg">5.3 External Upset Tubing (EU/UP TBG)</h2>
+<p>Rosca redonda com recalque externo — possui reforço na parede do pino chamado <em>upset</em>, cujo
+objetivo é aumentar a seção crítica do tubo e, com isso, a resistência à tração.
+Mesma conicidade da NU/TBG (3/4" por pé, ou 1/16" por polegada, no diâmetro).</p>
+<h3 id="dimensoes-basicas-da-rosca-interna-euup-tbg">Dimensões básicas da rosca interna (EU/UP TBG)</h3>
+<table>
+<thead>
+<tr>
+<th>DN</th>
+<th>Fios/"</th>
+<th>q (pol / mm)</th>
+<th>A (pol / mm)</th>
+<th>B (pol / mm)</th>
+<th>C (pol / mm)</th>
+<th>b (pol / mm)</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>1.050</td>
+<td>10</td>
+<td>0,313 / 7,94</td>
+<td>1,229 / 31,21</td>
+<td>1,625 / 41,3</td>
+<td>1,750 / 44,5</td>
+<td>0,094 / 2,38</td>
+</tr>
+<tr>
+<td>1.315</td>
+<td>10</td>
+<td>0,313 / 7,94</td>
+<td>1,382 / 35,11</td>
+<td>1,750 / 44,5</td>
+<td>1,875 / 47,6</td>
+<td>0,094 / 2,38</td>
+</tr>
+<tr>
+<td>1.660</td>
+<td>10</td>
+<td>0,313 / 7,94</td>
+<td>1,726 / 43,84</td>
+<td>1,875 / 47,6</td>
+<td>2,000 / 50,8</td>
+<td>0,125 / 3,18</td>
+</tr>
+<tr>
+<td>1.900</td>
+<td>10</td>
+<td>0,313 / 7,94</td>
+<td>2,007 / 50,99</td>
+<td>1,938 / 49,2</td>
+<td>2,063 / 52,4</td>
+<td>0,125 / 3,18</td>
+</tr>
+<tr>
+<td>2.3/8</td>
+<td>8</td>
+<td>0,375 / 9,53</td>
+<td>2,473 / 62,81</td>
+<td>2,438 / 61,9</td>
+<td>2,563 / 65,1</td>
+<td>0,156 / 3,97</td>
+</tr>
+<tr>
+<td>2.7/8</td>
+<td>8</td>
+<td>0,375 / 9,53</td>
+<td>2,973 / 75,51</td>
+<td>2,625 / 66,7</td>
+<td>2,750 / 69,9</td>
+<td>0,219 / 5,56</td>
+</tr>
+<tr>
+<td>3.1/2</td>
+<td>8</td>
+<td>0,375 / 9,53</td>
+<td>3,629 / 92,18</td>
+<td>2,875 / 73,0</td>
+<td>3,000 / 76,2</td>
+<td>0,250 / 6,35</td>
+</tr>
+<tr>
+<td>4</td>
+<td>8</td>
+<td>0,375 / 9,53</td>
+<td>4,129 / 104,88</td>
+<td>3,000 / 76,2</td>
+<td>3,125 / 79,4</td>
+<td>0,250 / 6,35</td>
+</tr>
+<tr>
+<td>4.1/2</td>
+<td>8</td>
+<td>0,375 / 9,53</td>
+<td>4,629 / 117,58</td>
+<td>3,125 / 79,4</td>
+<td>3,250 / 82,6</td>
+<td>0,250 / 6,35</td>
+</tr>
+</tbody>
+</table>
+<h3 id="dimensoes-basicas-da-rosca-externa-euup-tbg">Dimensões básicas da rosca externa (EU/UP TBG)</h3>
+<table>
+<thead>
+<tr>
+<th>DN</th>
+<th>Fios/"</th>
+<th>A</th>
+<th>B</th>
+<th>C</th>
+<th>D</th>
+<th>E</th>
+<th>F</th>
+<th>Fios perf.</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>1.050"</td>
+<td>10</td>
+<td>1,276 / 32,4</td>
+<td>0,956 / 24,3</td>
+<td>1,125 / 28,6</td>
+<td>1,625 / 41,3</td>
+<td>1,315 / 33,4</td>
+<td>1,137 / 28,9</td>
+<td>0,300 / 7,6</td>
+</tr>
+<tr>
+<td>1.315"</td>
+<td>10</td>
+<td>1,422 / 36,1</td>
+<td>1,081 / 27,5</td>
+<td>1,250 / 31,8</td>
+<td>1,750 / 44,5</td>
+<td>1,469 / 37,3</td>
+<td>1,283 / 32,6</td>
+<td>0,350 / 8,9</td>
+</tr>
+<tr>
+<td>1.660"</td>
+<td>10</td>
+<td>1,758 / 44,6</td>
+<td>1,206 / 30,6</td>
+<td>1,375 / 34,9</td>
+<td>1,875 / 47,6</td>
+<td>1,812 / 46,0</td>
+<td>1,619 / 41,1</td>
+<td>0,475 / 12,1</td>
+</tr>
+<tr>
+<td>1.900"</td>
+<td>10</td>
+<td>2,035 / 51,7</td>
+<td>1,269 / 32,2</td>
+<td>1,438 / 36,5</td>
+<td>1,938 / 49,2</td>
+<td>2,094 / 53,2</td>
+<td>1,896 / 48,2</td>
+<td>0,538 / 13,7</td>
+</tr>
+<tr>
+<td>2.3/8"</td>
+<td>8</td>
+<td>2,504 / 63,6</td>
+<td>1,703 / 43,3</td>
+<td>1,938 / 49,2</td>
+<td>2,438 / 61,9</td>
+<td>2,594 / 65,9</td>
+<td>2,327 / 59,1</td>
+<td>1,038 / 26,4</td>
+</tr>
+<tr>
+<td>2.7/8"</td>
+<td>8</td>
+<td>2,992 / 76,0</td>
+<td>1,890 / 48,0</td>
+<td>2,125 / 54,0</td>
+<td>2,625 / 66,7</td>
+<td>3,094 / 78,6</td>
+<td>2,816 / 71,5</td>
+<td>1,225 / 31,1</td>
+</tr>
+<tr>
+<td>3.1/2"</td>
+<td>8</td>
+<td>3,633 / 92,3</td>
+<td>2,140 / 54,4</td>
+<td>2,375 / 60,3</td>
+<td>2,875 / 73,0</td>
+<td>3,750 / 95,3</td>
+<td>3,456 / 87,8</td>
+<td>1,375 / 34,9</td>
+</tr>
+<tr>
+<td>4"</td>
+<td>8</td>
+<td>4,125 / 104,8</td>
+<td>2,265 / 57,5</td>
+<td>2,500 / 63,5</td>
+<td>3,000 / 76,2</td>
+<td>4,250 / 108,0</td>
+<td>3,948 / 100,3</td>
+<td>1,500 / 38,1</td>
+</tr>
+<tr>
+<td>4.1/2"</td>
+<td>8</td>
+<td>4,617 / 117,3</td>
+<td>2,390 / 60,7</td>
+<td>2,625 / 66,7</td>
+<td>3,125 / 79,4</td>
+<td>4,750 / 120,7</td>
+<td>4,441 / 112,8</td>
+<td>1,625 / 41,3</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h1 id="6-outras-conexoes-line-pipe-npt-bsp">6. OUTRAS CONEXÕES (LINE PIPE, NPT, BSP)</h1>
+<h2 id="61-line-pipe-lp">6.1 Line Pipe (LP)</h2>
+<p>Conexão geralmente usada para condução hidráulica de superfície do poço (<em>on shore</em>) até algum
+local de armazenagem. Geralmente trabalha com baixas pressões de linha.
+Conicidade: <strong>3/4" por pé no diâmetro</strong> (+0,0625"/-0,0312"), ou 1/16" por polegada no diâmetro
+(+0,0052"/-0,0026").</p>
+<h3 id="dimensoes-basicas-da-rosca-interna-lp">Dimensões básicas da rosca interna (LP)</h3>
+<table>
+<thead>
+<tr>
+<th>DN</th>
+<th>Fios/"</th>
+<th>q (pol / mm)</th>
+<th>A (pol / mm)</th>
+<th>B (pol / mm)</th>
+<th>C (pol / mm)</th>
+<th>b (pol / mm)</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>1/8"</td>
+<td>27</td>
+<td>0,052 / 1,33</td>
+<td>0,354 / 9,00</td>
+<td>0,531 / 13,5</td>
+<td>0,656 / 16,7</td>
+<td>0,031 / 0,79</td>
+</tr>
+<tr>
+<td>1/4"</td>
+<td>18</td>
+<td>0,121 / 3,06</td>
+<td>0,464 / 11,79</td>
+<td>0,813 / 20,6</td>
+<td>0,938 / 23,8</td>
+<td>0,031 / 0,79</td>
+</tr>
+<tr>
+<td>3/8"</td>
+<td>18</td>
+<td>0,115 / 2,91</td>
+<td>0,599 / 15,22</td>
+<td>0,813 / 20,6</td>
+<td>0,938 / 23,8</td>
+<td>0,031 / 0,79</td>
+</tr>
+<tr>
+<td>1/2"</td>
+<td>14</td>
+<td>0,158 / 4,02</td>
+<td>0,742 / 18,86</td>
+<td>1,063 / 27,0</td>
+<td>1,188 / 30,2</td>
+<td>0,063 / 1,59</td>
+</tr>
+<tr>
+<td>3/4"</td>
+<td>14</td>
+<td>0,152 / 3,85</td>
+<td>0,952 / 24,19</td>
+<td>1,063 / 27,0</td>
+<td>1,188 / 30,2</td>
+<td>0,063 / 1,59</td>
+</tr>
+<tr>
+<td>1"</td>
+<td>11,5</td>
+<td>0,224 / 5,69</td>
+<td>1,196 / 30,38</td>
+<td>1,313 / 33,3</td>
+<td>1,438 / 36,5</td>
+<td>0,094 / 2,38</td>
+</tr>
+<tr>
+<td>1.1/4"</td>
+<td>11,5</td>
+<td>0,228 / 5,79</td>
+<td>1,541 / 39,15</td>
+<td>1,375 / 34,9</td>
+<td>1,500 / 38,1</td>
+<td>0,094 / 2,38</td>
+</tr>
+<tr>
+<td>1.1/2"</td>
+<td>11,5</td>
+<td>0,244 / 6,20</td>
+<td>1,781 / 45,24</td>
+<td>1,375 / 34,9</td>
+<td>1,500 / 38,1</td>
+<td>0,094 / 2,38</td>
+</tr>
+<tr>
+<td>2"</td>
+<td>11,5</td>
+<td>0,238 / 6,04</td>
+<td>2,256 / 57,31</td>
+<td>1,438 / 36,5</td>
+<td>1,563 / 39,7</td>
+<td>0,125 / 3,18</td>
+</tr>
+<tr>
+<td>2.1/2"</td>
+<td>8</td>
+<td>0,492 / 12,48</td>
+<td>2,712 / 68,89</td>
+<td>2,063 / 52,4</td>
+<td>2,188 / 55,6</td>
+<td>0,188 / 4,76</td>
+</tr>
+<tr>
+<td>3"</td>
+<td>8</td>
+<td>0,471 / 11,96</td>
+<td>3,337 / 84,76</td>
+<td>2,125 / 54,0</td>
+<td>2,250 / 57,2</td>
+<td>0,188 / 4,76</td>
+</tr>
+<tr>
+<td>3.1/2"</td>
+<td>8</td>
+<td>0,466 / 11,84</td>
+<td>3,837 / 97,46</td>
+<td>2,188 / 55,6</td>
+<td>2,313 / 58,7</td>
+<td>0,188 / 4,76</td>
+</tr>
+<tr>
+<td>4"</td>
+<td>8</td>
+<td>0,492 / 12,50</td>
+<td>4,337 / 110,16</td>
+<td>2,250 / 57,2</td>
+<td>2,375 / 60,3</td>
+<td>0,250 / 6,35</td>
+</tr>
+<tr>
+<td>5"</td>
+<td>8</td>
+<td>0,505 / 12,82</td>
+<td>5,400 / 137,16</td>
+<td>2,313 / 58,7</td>
+<td>2,438 / 61,9</td>
+<td>0,250 / 6,35</td>
+</tr>
+<tr>
+<td>6"</td>
+<td>8</td>
+<td>0,586 / 14,89</td>
+<td>6,462 / 164,14</td>
+<td>2,438 / 61,9</td>
+<td>2,563 / 65,1</td>
+<td>0,250 / 6,35</td>
+</tr>
+</tbody>
+</table>
+<h3 id="dimensoes-basicas-da-rosca-externa-lp">Dimensões básicas da rosca externa (LP)</h3>
+<table>
+<thead>
+<tr>
+<th>DN</th>
+<th>Fios/"</th>
+<th>A</th>
+<th>B</th>
+<th>C</th>
+<th>D</th>
+<th>E</th>
+<th>F</th>
+<th>Fios perf.</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>1/8"</td>
+<td>27</td>
+<td>0,390 / 9,9</td>
+<td>0,264 / 6,7</td>
+<td>0,392 / 10,0</td>
+<td>0,892 / 22,7</td>
+<td>0,405 / 10,3</td>
+<td>0,331 / 8,4</td>
+<td>—</td>
+</tr>
+<tr>
+<td>1/4"</td>
+<td>18</td>
+<td>0,517 / 13,1</td>
+<td>0,402 / 10,2</td>
+<td>0,595 / 15,1</td>
+<td>1,095 / 27,8</td>
+<td>0,540 / 13,7</td>
+<td>0,429 / 10,9</td>
+<td>—</td>
+</tr>
+<tr>
+<td>3/8"</td>
+<td>18</td>
+<td>0,652 / 16,6</td>
+<td>0,408 / 10,4</td>
+<td>0,601 / 15,3</td>
+<td>1,101 / 28,0</td>
+<td>0,675 / 17,1</td>
+<td>0,564 / 14,3</td>
+<td>—</td>
+</tr>
+<tr>
+<td>1/2"</td>
+<td>14</td>
+<td>0,810 / 20,6</td>
+<td>0,534 / 13,6</td>
+<td>0,782 / 19,9</td>
+<td>1,282 / 32,6</td>
+<td>0,840 / 21,3</td>
+<td>0,697 / 17,7</td>
+<td>—</td>
+</tr>
+<tr>
+<td>3/4"</td>
+<td>14</td>
+<td>1,019 / 25,9</td>
+<td>0,546 / 13,9</td>
+<td>0,794 / 20,2</td>
+<td>1,294 / 32,9</td>
+<td>1,050 / 26,7</td>
+<td>0,906 / 23,0</td>
+<td>—</td>
+</tr>
+<tr>
+<td>1"</td>
+<td>11,5</td>
+<td>1,276 / 32,4</td>
+<td>0,683 / 17,3</td>
+<td>0,985 / 25,0</td>
+<td>1,485 / 37,7</td>
+<td>1,315 / 33,4</td>
+<td>1,138 / 28,9</td>
+<td>0,333 / 8,4</td>
+</tr>
+<tr>
+<td>1.1/4"</td>
+<td>11,5</td>
+<td>1,620 / 41,1</td>
+<td>0,707 / 18,0</td>
+<td>1,009 / 25,6</td>
+<td>1,509 / 38,3</td>
+<td>1,660 / 42,2</td>
+<td>1,482 / 37,6</td>
+<td>0,357 / 9,1</td>
+</tr>
+<tr>
+<td>1.1/2"</td>
+<td>11,5</td>
+<td>1,859 / 47,2</td>
+<td>0,724 / 18,4</td>
+<td>1,025 / 26,0</td>
+<td>1,525 / 38,7</td>
+<td>1,900 / 48,3</td>
+<td>1,721 / 43,7</td>
+<td>0,373 / 9,5</td>
+</tr>
+<tr>
+<td>2"</td>
+<td>11,5</td>
+<td>2,332 / 59,2</td>
+<td>0,757 / 19,2</td>
+<td>1,058 / 26,9</td>
+<td>1,558 / 39,6</td>
+<td>2,375 / 60,3</td>
+<td>2,194 / 55,7</td>
+<td>0,406 / 10,3</td>
+</tr>
+<tr>
+<td>2.1/2"</td>
+<td>8</td>
+<td>2,810 / 71,4</td>
+<td>1,138 / 28,9</td>
+<td>1,571 / 39,9</td>
+<td>2,071 / 52,6</td>
+<td>2,875 / 73,0</td>
+<td>2,611 / 66,3</td>
+<td>0,634 / 16,1</td>
+</tr>
+<tr>
+<td>3"</td>
+<td>8</td>
+<td>3,431 / 87,1</td>
+<td>1,200 / 30,5</td>
+<td>1,634 / 41,5</td>
+<td>2,134 / 54,2</td>
+<td>3,500 / 88,9</td>
+<td>3,232 / 82,1</td>
+<td>0,697 / 17,7</td>
+</tr>
+<tr>
+<td>3.1/2"</td>
+<td>8</td>
+<td>3,927 / 99,8</td>
+<td>1,250 / 31,8</td>
+<td>1,684 / 42,8</td>
+<td>2,184 / 55,5</td>
+<td>4,000 / 101,6</td>
+<td>3,729 / 94,7</td>
+<td>0,747 / 19,0</td>
+</tr>
+<tr>
+<td>4"</td>
+<td>8</td>
+<td>4,424 / 112,4</td>
+<td>1,300 / 33,0</td>
+<td>1,734 / 44,0</td>
+<td>2,234 / 56,7</td>
+<td>4,500 / 114,3</td>
+<td>4,226 / 107,3</td>
+<td>0,797 / 20,2</td>
+</tr>
+<tr>
+<td>5"</td>
+<td>8</td>
+<td>5,481 / 139,2</td>
+<td>1,406 / 35,7</td>
+<td>1,840 / 46,7</td>
+<td>2,340 / 59,4</td>
+<td>5,563 / 141,3</td>
+<td>5,283 / 134,2</td>
+<td>0,903 / 22,9</td>
+</tr>
+<tr>
+<td>6"</td>
+<td>8</td>
+<td>6,536 / 166,0</td>
+<td>1,513 / 38,4</td>
+<td>1,946 / 49,4</td>
+<td>2,446 / 62,1</td>
+<td>6,625 / 168,3</td>
+<td>6,338 / 161,0</td>
+<td>1,009 / 25,6</td>
+</tr>
+</tbody>
+</table>
+<h2 id="62-rosca-npt-national-pipe-thread">6.2 Rosca NPT (National Pipe Thread)</h2>
+<p>Mais robusta que a BSP: atende a requisitos mais elevados de pressão e confiabilidade, sendo mais
+indicada em instalações de maior responsabilidade. Deve ser executada apenas em tubos cujos
+diâmetros externos sejam iguais aos da norma <strong>NBR 5590 (ANSI B36.10)</strong>. Na rosca NPT, tanto a
+parte interna quanto a externa são cônicas, garantindo que a vedação ocorra em todos os filetes
+da rosca. Ângulo do filete: <strong>60°</strong>.</p>
+<h2 id="63-rosca-bsp-british-standard-pipe">6.3 Rosca BSP (British Standard Pipe)</h2>
+<p>Na rosca BSP para tubulação: a rosca externa (do tubo) é cônica; a rosca interna (conexão) é
+paralela — salvo especificação em contrário, é assim que o mercado oferece. Ângulo do filete: <strong>55°</strong>.</p>
+<blockquote>
+<p><strong>NPT x BSP não são intercambiáveis em teoria.</strong> Construções distintas: ângulo dos filetes (55°
+BSP x 60° NPT) e passo (fios por polegada) diferentes. Exceção: diâmetros de 1/2" e 3/4", que
+têm passos iguais — nesses dois diâmetros, a diferenciação visual entre BSP e NPT é praticamente
+impossível (exige calibre/gauge).</p>
+</blockquote>
+<hr />
+<h1 id="7-conexoes-para-haste-de-bombeio">7. CONEXÕES PARA HASTE DE BOMBEIO</h1>
+<p>Conexões API para coluna de haste de bombeio mecânico (sucker rod). Todas as dimensões abaixo em mm.</p>
+<p>Legenda: <strong>Df</strong> = diâmetro da cabeça (flange); <strong>Dc</strong> = diâmetro do corpo; <strong>DI</strong> = diâmetro interno
+da rosca; <strong>Ls</strong> = comprimento da haste roscada; <strong>Lr</strong> = comprimento de rebaixo/relevo.</p>
+<table>
+<thead>
+<tr>
+<th>Bitola nominal</th>
+<th>5/8" (15,88mm)</th>
+<th>3/4" (19,05mm)</th>
+<th>7/8" (22,23mm)</th>
+<th>1" (25,40mm)</th>
+<th>1.1/8" (28,58mm)</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Df mín.</td>
+<td>31,50</td>
+<td>37,85</td>
+<td>41,03</td>
+<td>50,55</td>
+<td>56,77</td>
+</tr>
+<tr>
+<td>Df máx.</td>
+<td>31,88</td>
+<td>38,23</td>
+<td>41,41</td>
+<td>50,93</td>
+<td>57,53</td>
+</tr>
+<tr>
+<td>Dc mín.</td>
+<td>29,90</td>
+<td>36,25</td>
+<td>39,42</td>
+<td>47,37</td>
+<td>53,59</td>
+</tr>
+<tr>
+<td>DI mín.</td>
+<td>19,94</td>
+<td>23,11</td>
+<td>26,29</td>
+<td>31,04</td>
+<td>35,79</td>
+</tr>
+<tr>
+<td>DI máx.</td>
+<td>20,20</td>
+<td>23,37</td>
+<td>26,55</td>
+<td>31,30</td>
+<td>36,05</td>
+</tr>
+<tr>
+<td>Ls mín.</td>
+<td>31,75</td>
+<td>36,50</td>
+<td>41,28</td>
+<td>47,63</td>
+<td>53,98</td>
+</tr>
+<tr>
+<td>Ls máx.</td>
+<td>33,32</td>
+<td>38,07</td>
+<td>42,85</td>
+<td>49,20</td>
+<td>55,55</td>
+</tr>
+<tr>
+<td>Lr mín.</td>
+<td>13,11</td>
+<td>15,09</td>
+<td>17,07</td>
+<td>20,24</td>
+<td>22,23</td>
+</tr>
+<tr>
+<td>Lr máx.</td>
+<td>13,90</td>
+<td>15,88</td>
+<td>17,86</td>
+<td>21,03</td>
+<td>23,02</td>
+</tr>
+<tr>
+<td>Tipo de rosca</td>
+<td>15/16"-10 FPP</td>
+<td>1.1/16"-10 FPP</td>
+<td>1.3/16"-10 FPP</td>
+<td>1.3/8"-10 FPP</td>
+<td>1.9/16"-10 FPP</td>
+</tr>
+<tr>
+<td>Diâm. maior da rosca mín.</td>
+<td>23,45</td>
+<td>26,62</td>
+<td>29,80</td>
+<td>34,56</td>
+<td>39,32</td>
+</tr>
+<tr>
+<td>Diâm. maior da rosca máx.</td>
+<td>23,78</td>
+<td>26,95</td>
+<td>30,13</td>
+<td>34,89</td>
+<td>39,65</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h1 id="8-referencias-normativas">8. REFERÊNCIAS NORMATIVAS</h1>
+<p>Normas e publicações citadas no material de origem:</p>
+<ul>
+<li><strong>API SPEC 5CT</strong> — Specification for Casing and Tubing.</li>
+<li><strong>API SPEC 5D</strong> — Specification for Drill Pipe.</li>
+<li><strong>API SPEC 7</strong> — Specification for Rotary Drilling Equipment.</li>
+<li><strong>API SPEC 5B</strong> — Specification for Threading, Gaging, and Thread Inspection of Casing, Tubing,
+  and Line Pipe Threads.</li>
+<li><strong>API SPEC 11B</strong> — Specification for Sucker Rods, Polished Rods and Liners, Couplings, Sinker
+  Bars, Polished Rod Clamps, Stuffing Boxes, and Pumping Tees (27ª edição, com Erratas 1 e 2).</li>
+<li><strong>API RP 5A5</strong> — Recommended Practice for Field Inspection of New Casing, Tubing and Plain-End
+  Drill Pipe.</li>
+<li><strong>API 5B1</strong> — Recommended Practice for Thread Inspection on Casing, Tubing and Line Pipe.</li>
+<li><strong>API RP 5C1</strong> — Recommended Practice for Care and Use of Casing and Tubing.</li>
+<li><strong>API RP 7G</strong> — Recommended Practice for Drill Stem Design and Operating Limits.</li>
+<li><strong>API Bull 5A2</strong> — Bulletin on Thread Compounds.</li>
+<li>PLÁCIDO, João Carlos Ribeiro. <em>Colunas de Perfuração de Poços de Petróleo.</em> Apostila não
+  publicada, 2009.</li>
+</ul>
+      </article>
+      <p id="docs-empty-state" class="docs-empty-state">Nenhum resultado encontrado pra essa busca.</p>
+    </div>
+  </main>
+</div>
+
+<script src="js/knowledge.js"></script>
+</body>
+</html>
