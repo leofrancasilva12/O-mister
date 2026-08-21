@@ -214,9 +214,10 @@ html, body {
   gap: 8px;
   font-size: 13px;
   color: var(--text-file);
+  text-decoration: none;
   padding: 6px 8px;
   border-radius: 8px;
-  cursor: default;
+  cursor: pointer;
   transition: background-color 0.15s ease;
 }
 .kb-file:hover { background: var(--sidebar-hover); }

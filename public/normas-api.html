@@ -1,0 +1,1367 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+  <title>Normas API (consolidado) — MIOG</title>
+  <meta name="theme-color" content="#FAF9F6">
+  <link rel="icon" type="image/x-icon" href="icons/favicon.ico">
+  <link rel="icon" type="image/png" sizes="256x256" href="icons/favicon.png">
+  <link rel="apple-touch-icon" href="icons/apple-touch-icon.png">
+  <link rel="stylesheet" href="css/style.css">
+  <link rel="stylesheet" href="css/knowledge.css">
+</head>
+<body>
+
+<div id="docs-app">
+  <aside id="docs-sidebar">
+    <div class="docs-sidebar-header">
+      <a class="docs-back" href="index.html"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="19" y1="12" x2="5" y2="12"/><polyline points="12 19 5 12 12 5"/></svg> Voltar ao chat</a>
+      <div class="docs-header-actions">
+        <button id="docs-theme-btn" class="icon-btn" aria-label="Alternar tema" title="Alternar tema claro/escuro">
+          <span id="docs-theme-icon-moon"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg></span>
+          <span id="docs-theme-icon-sun" hidden><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="5"/><line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/><line x1="1" y1="12" x2="3" y2="12"/><line x1="21" y1="12" x2="23" y2="12"/><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/></svg></span>
+        </button>
+        <button id="docs-close-toc" class="icon-btn" aria-label="Fechar menu" title="Fechar menu"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg></button>
+      </div>
+    </div>
+    <div class="docs-title-block">
+      <p class="docs-doc-title">Normas API (consolidado)</p>
+      <p class="docs-doc-subtitle">Roscas, tubos e Q1 — resumo técnico</p>
+    </div>
+    <div id="docs-search-wrap" class="docs-search-wrap">
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+      <input id="docs-search-input" type="search" placeholder="Buscar (ex.: 2.3/8 IF, TPI, Q1)..." autocomplete="off">
+      <button id="docs-search-clear" aria-label="Limpar busca" title="Limpar busca"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg></button>
+    </div>
+    <span id="docs-search-count"></span>
+    <nav id="docs-toc" aria-label="Sumário"></nav>
+    <div class="docs-sidebar-footer">
+      Resumo de apoio. Não substitui o texto oficial da norma.<br>
+      <a href="curso-roscas.html">Ver Curso de Roscas API →</a>
+    </div>
+  </aside>
+
+  <div id="docs-overlay"></div>
+
+  <main id="docs-main">
+    <header id="docs-mobile-header">
+      <button id="docs-open-toc" class="icon-btn" aria-label="Abrir menu" title="Abrir menu"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="4" y1="7" x2="20" y2="7"/><line x1="4" y1="12" x2="20" y2="12"/><line x1="4" y1="17" x2="20" y2="17"/></svg></button>
+      <span class="docs-mobile-title">Normas API (consolidado)</span>
+    </header>
+    <div id="docs-content">
+      <article id="docs-article">
+<h1 id="base-de-conhecimento-api-normas-de-roscas-tubos-e-qualidade">Base de Conhecimento API — Normas de Roscas, Tubos e Qualidade</h1>
+<blockquote>
+<p>Este documento consolida normas API de roscas/tubos + API Specification Q1 (Quality Management System).
+É um resumo original destinado a um agente de IA especializado. Para valores exatos, sempre consulte a norma oficial.</p>
+</blockquote>
+<hr />
+<h2 id="indice">ÍNDICE</h2>
+<ol>
+<li><a href="#1-visão-geral-das-normas-api">Visão Geral das Normas API</a></li>
+<li><a href="#2-api-specification-q1--quality-management-system">API Specification Q1 — Quality Management System</a></li>
+<li><a href="#3-normas-de-roscas-e-tubos">Normas de Roscas e Tubos (5B, 5CT, 5L, 7-1, 7-2, 11B)</a></li>
+<li><a href="#4-glossário-técnico-integrado">Glossário Técnico Integrado</a></li>
+<li><a href="#5-roteamento-de-perguntas--normas">Roteamento de Perguntas → Normas</a></li>
+<li><a href="#6-tabelas-de-roteamento-rápido">Tabelas de Roteamento Rápido</a></li>
+</ol>
+<hr />
+<h1 id="1-visao-geral-das-normas-api">1. VISÃO GERAL DAS NORMAS API</h1>
+<h2 id="normas-de-roscas-e-tubos">Normas de Roscas e Tubos</h2>
+<table>
+<thead>
+<tr>
+<th>Norma</th>
+<th>Título Típico</th>
+<th>Foco Principal</th>
+<th>Componentes</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>API 5B</strong></td>
+<td>Threading, Gauging, and Inspection of Casing, Tubing, and Line Pipe Threads</td>
+<td>Geometria de roscas, calibração, inspeção</td>
+<td>Casing, tubing, line pipe</td>
+</tr>
+<tr>
+<td><strong>API 5CT</strong></td>
+<td>Casing and Tubing</td>
+<td>Produtos, graus de aço, propriedades mecânicas</td>
+<td>Tubos de revestimento e produção</td>
+</tr>
+<tr>
+<td><strong>API 5L</strong></td>
+<td>Line Pipe</td>
+<td>Dutos de transporte de petróleo e gás</td>
+<td>Tubos para gasodutos e oleodutos</td>
+</tr>
+<tr>
+<td><strong>API 7-1</strong></td>
+<td>Rotary Drill Stem Elements</td>
+<td>Produtos de perfuração (pipe, collars, HWDP)</td>
+<td>Componentes da coluna de perfuração</td>
+</tr>
+<tr>
+<td><strong>API 7-2</strong></td>
+<td>Threading and Gauging of Rotary Shouldered Connections</td>
+<td>Roscas de perfuração com ombro</td>
+<td>Conexões NC, REG, IF, FH</td>
+</tr>
+<tr>
+<td><strong>API 7G-2</strong></td>
+<td>Inspection Procedures for Drill Stem Elements in Service</td>
+<td>Inspeção em serviço de componentes usados</td>
+<td>Drill pipe/collar usado em poço</td>
+</tr>
+<tr>
+<td><strong>API 11B</strong></td>
+<td>Sucker Rods and Rod-Related Products</td>
+<td>Hastes de bombeio mecânico</td>
+<td>Hastes e acoplamentos de bombeio</td>
+</tr>
+<tr>
+<td><strong>API 6A</strong></td>
+<td>Wellhead and Christmas Tree Equipment</td>
+<td>Equipamentos de cabeça de poço</td>
+<td>Wellhead, árvore de natal, válvulas</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h1 id="2-api-specification-q1-quality-management-system">2. API SPECIFICATION Q1 — QUALITY MANAGEMENT SYSTEM</h1>
+<blockquote>
+<p>Base desta seção: <strong>API Specification Q1, 10ª edição, setembro de 2023</strong> ("Quality Management System
+Requirements for Organizations Providing Products for the Petroleum and Natural Gas Industry"), incluindo
+Errata 1–3 (out/2023, out/2024, nov/2024) e Adendos 1–2 (out/2024, jun/2025). Data de vigência do Programa
+de Monograma API para esta edição: 18/set/2024 (adendos: 25/dez/2025).
+Texto <strong>traduzido e reorganizado em resumo próprio</strong> — não é cópia literal da norma, que é protegida por
+direitos autorais da API. Para linguagem exata e valores contratuais, sempre consulte o documento oficial.</p>
+</blockquote>
+<h2 id="21-escopo-e-aplicabilidade">2.1 Escopo e Aplicabilidade</h2>
+<p><strong>Escopo (Seção 1):</strong> Q1 estabelece os requisitos mínimos de sistema de gestão da qualidade (QMS) para
+organizações que fornecem <strong>produto</strong> para uso na indústria de petróleo e gás natural.</p>
+<p><strong>Referência normativa (Seção 2):</strong> ISO 9000:2015 (Quality management systems — Fundamentals and vocabulary).</p>
+<h3 id="o-que-mudou-na-10a-edicao-em-relacao-a-9a">O que mudou na 10ª edição (em relação à 9ª)</h3>
+<ul>
+<li>Alinhamento com os requisitos da ISO 9001:2015.</li>
+<li><strong>Escopo ampliado</strong>: antes cobria só quem fabricava produto físico, fazia serviço em produto físico ou
+  processos relacionados à manufatura. Agora cobre também engenharia/design isolado e atividades relacionadas
+  a produto (distribuição, logística, desenvolvimento de software).</li>
+<li>Definição de "produto" ampliada para acompanhar o novo escopo.</li>
+<li><strong>Prazo de retenção de registros ampliado para 10 anos</strong> (era menor antes).</li>
+<li>Removida referência a uma versão desatualizada da ISO 9000.</li>
+<li>Adicionadas alternativas ao Manual da Qualidade tradicional (não precisa mais ser um documento único).</li>
+<li>"Design and Development" virou apenas "<strong>Design</strong>".</li>
+<li>Esclarecimento sobre validação de processos.</li>
+<li>Linguagem revisada sobre inspeção de produto e processo de aceitação final.</li>
+<li>Processo de avaliação de fornecedores revisado.</li>
+<li><strong>Seção de ação preventiva removida</strong> (não existe mais como requisito separado).</li>
+<li>Definições novas e revisadas.</li>
+</ul>
+<h3 id="quem-precisa-atender-a-q1-organizacoes-cobertas">Quem precisa atender a Q1 (organizações cobertas)</h3>
+<ul>
+<li><strong>Manufatura</strong> de produto.</li>
+<li><strong>Engenharia/design.</strong></li>
+<li>Prestadores de atividades físicas de realização de produto: <strong>soldagem, tratamento térmico,
+  revestimento/pintura (coating/plating), usinagem, inspeção, teste, serviço (servicing)</strong>.</li>
+<li>Prestadores de atividades relacionadas a produto físico: <strong>distribuição, logística, desenvolvimento de
+  software</strong>.</li>
+</ul>
+<h3 id="definicao-de-produto-3116">Definição de "Produto" (3.1.16)</h3>
+<blockquote>
+<p>"Output (saída) de uma organização destinado a ser fornecido a um cliente."</p>
+</blockquote>
+<p>Inclui, sem se limitar a: hardware, software, atividades de produção, ou atividades relacionadas a produto
+como serviço (servicing), armazenagem, distribuição e logística.</p>
+<hr />
+<h2 id="22-termos-e-definicoes-essenciais-secao-3">2.2 Termos e Definições Essenciais (Seção 3)</h2>
+<table>
+<thead>
+<tr>
+<th>Termo (EN)</th>
+<th>Definição resumida</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Acceptance criteria</strong></td>
+<td>Requisitos especificados de aceitabilidade aplicados a características de produto ou processo.</td>
+</tr>
+<tr>
+<td><strong>Acceptance inspection</strong></td>
+<td>Demonstração, por monitoramento ou medição, de que o produto atende aos requisitos especificados.</td>
+</tr>
+<tr>
+<td><strong>Calibration</strong></td>
+<td>Comparação com um padrão de precisão conhecida, contra os critérios de aceitação do TMMDE, e ajuste se necessário. Equipamento não ajustável: chama-se "verificação".</td>
+</tr>
+<tr>
+<td><strong>Compliance</strong></td>
+<td>Ato de satisfazer (verbo) ou status de ter satisfeito (substantivo) requisitos <strong>legais</strong>.</td>
+</tr>
+<tr>
+<td><strong>Critical</strong></td>
+<td>Considerado pela organização, pela especificação do produto, ou pelo cliente como de importância significativa, exigindo ação específica.</td>
+</tr>
+<tr>
+<td><strong>Delivery</strong></td>
+<td>Momento em que ocorre a transferência de propriedade combinada.</td>
+</tr>
+<tr>
+<td><strong>DAC — Design acceptance criteria</strong></td>
+<td>Requisitos aplicados a características (ou combinações delas) de materiais, produtos ou componentes para atingir conformidade aos requisitos de design e/ou desempenho de design exigido. DAC <strong>pode</strong> ser igual ao MAC.</td>
+</tr>
+<tr>
+<td><strong>Design validation</strong></td>
+<td>Processo de provar o design por meio de testes, demonstrando que o produto atende aos requisitos de design e desempenha como pretendido (ex.: testes de protótipo, funcionais/operacionais, exigidos por norma/regulação, testes e revisões de campo).</td>
+</tr>
+<tr>
+<td><strong>Design verification</strong></td>
+<td>Processo de examinar as saídas do design para determinar conformidade com os requisitos especificados (ex.: cálculos alternativos, revisão de documentos de saída, comparação com designs similares comprovados).</td>
+</tr>
+<tr>
+<td><strong>KPI — Key performance indicator</strong></td>
+<td>Medida quantificável usada para avaliar ou comparar desempenho.</td>
+</tr>
+<tr>
+<td><strong>Legal requirement</strong></td>
+<td>Requisitos estatutários ou regulatórios.</td>
+</tr>
+<tr>
+<td><strong>Management personnel</strong></td>
+<td>Pessoa ou grupo com autoridade e responsabilidade pela condução e controle de toda ou parte de uma organização.</td>
+</tr>
+<tr>
+<td><strong>MAC — Manufacturing acceptance criteria</strong></td>
+<td>Requisitos aplicados a características (ou combinações) de materiais, produtos ou componentes para atingir conformidade ao DAC aplicável e a outros requisitos de manufatura do produto. MAC <strong>pode</strong> ser igual ao DAC. Para serviços, "manufacturing" pode ser lido como "realização do produto".</td>
+</tr>
+<tr>
+<td><strong>Outsource</strong></td>
+<td>Função ou processo desempenhado por um fornecedor externo em nome da organização.</td>
+</tr>
+<tr>
+<td><strong>Procedure</strong></td>
+<td>Método documentado da organização para desempenhar uma atividade sob condições controladas, visando conformidade com requisitos especificados. Pode ser instrução de trabalho, fluxograma ou manual.</td>
+</tr>
+<tr>
+<td><strong>Product realization</strong></td>
+<td>Conjunto de atividades inter-relacionadas ou interativas necessárias para fornecer o produto.</td>
+</tr>
+<tr>
+<td><strong>Remote assessment</strong></td>
+<td>Avaliação conduzida por pessoa(s) fisicamente ausente(s) do local avaliado.</td>
+</tr>
+<tr>
+<td><strong>Risk</strong></td>
+<td>Situação ou circunstância com probabilidade de ocorrer e consequência potencialmente negativa.</td>
+</tr>
+<tr>
+<td><strong>Servicing</strong></td>
+<td>Manutenção, ajuste e/ou reparo realizado após entrega e/ou instalação em campo.</td>
+</tr>
+<tr>
+<td><strong>Supply chain</strong></td>
+<td>Fornecedores e subfornecedores associados, necessários para a realização do produto.</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Abreviações principais:</strong> DAC, ITP (inspection test plan), KPI, MAC, MOC (management of change), MPS
+(manufacturing process specification), PCP (process control plan), QAP (quality activity plan), QMS, QP
+(quality plan), TMMDE (testing, measuring, monitoring, and detection equipment).</p>
+<hr />
+<h2 id="23-secao-4-requisitos-do-sistema-de-gestao-da-qualidade">2.3 Seção 4 — Requisitos do Sistema de Gestão da Qualidade</h2>
+<h3 id="41-quality-management-system">4.1 Quality Management System</h3>
+<ul>
+<li><strong>4.1.1 Geral:</strong> a organização deve planejar, estabelecer, documentar, implementar e manter <strong>a todo
+  momento</strong> um QMS conforme os requisitos da Q1, dentro do escopo definido por ela mesma. Deve medir e
+  melhorar a efetividade do QMS.</li>
+<li><strong>4.1.2 Política da Qualidade:</strong> definida, documentada, revisada e aprovada pela alta direção. Deve ser
+  apropriada à organização, servir de base para os objetivos da qualidade, ser comunicada/entendida/mantida,
+  disponível às partes interessadas relevantes, e incluir compromisso com conformidade e melhoria contínua.</li>
+<li><strong>4.1.3 Objetivos da Qualidade:</strong> estabelecidos nas funções e níveis relevantes, com aprovação da alta
+  direção. Devem ser mensuráveis, comunicados e coerentes com a política.</li>
+<li><strong>4.1.4 Planejamento do QMS:</strong></li>
+<li><strong>4.1.4.1 Geral</strong> — a organização deve: definir o escopo do QMS (produtos cobertos, limitações e
+    exclusões); identificar questões internas/externas relevantes; determinar partes interessadas e seus
+    requisitos; determinar sequência e interação dos processos; determinar critérios/métodos de operação e
+    controle; identificar objetivos da qualidade (ações, recursos, responsabilidades, prazo, forma de
+    monitoramento); endereçar riscos identificados (5.3) e oportunidades de melhoria (6.4); identificar
+    pessoal-chave.</li>
+<li><strong>4.1.4.2 Exclusões</strong> — se a organização desempenha atividades cobertas pela Q1 (inclusive terceirizadas),
+    <strong>não pode excluí-las</strong>. Exclusões só são permitidas nestas seções específicas, e exigem justificativa
+    documentada: <strong>5.4 Design</strong>, <strong>5.6.4 Validação de Processos</strong>, <strong>5.6.7 Propriedade de Terceiros</strong>,
+    <strong>5.6.8 Preservação do Produto</strong>, <strong>5.8 TMMDE</strong>.</li>
+<li><strong>4.1.5 Comunicação:</strong></li>
+<li><strong>Interna</strong> — processos para comunicar, nos níveis/funções relevantes, a importância de satisfazer
+    requisitos do cliente/legais e os resultados da análise de dados (6.3).</li>
+<li><strong>Externa</strong> — processo para comunicação com organizações externas, incluindo clientes: execução de
+    consultas/contratos/pedidos e suas alterações; determinação de requisitos ao longo do contrato;
+    fornecimento de informação de produto (incluindo não conformidades); feedback e reclamações de clientes;
+    comunicação de planos de qualidade e suas mudanças; comunicação de mudanças e riscos associados (MOC).</li>
+</ul>
+<h3 id="42-management-responsibility-responsabilidade-da-direcao">4.2 Management Responsibility (Responsabilidade da Direção)</h3>
+<ul>
+<li><strong>4.2.1 Geral</strong> — a alta direção deve demonstrar liderança e comprometimento: aprovando os objetivos da
+  qualidade; provendo recursos (humanos, infraestrutura, financeiros, tecnologia); engajando e apoiando o
+  pessoal; atribuindo responsabilidades e autoridades para que os processos atinjam os resultados pretendidos.</li>
+<li><strong>4.2.2 Responsabilidade e Autoridade</strong> — devem ser definidas, documentadas e comunicadas em toda a
+  organização.</li>
+<li><strong>4.2.3 Representante da Direção</strong> — a alta direção deve nomear um membro do pessoal de gestão responsável
+  por: garantir conformidade do QMS à Q1; garantir que os processos do QMS sejam estabelecidos/implementados/
+  mantidos; reportar à alta direção sobre desempenho do QMS e necessidade de melhoria; garantir ações para
+  tratar não conformidades; promover a consciência sobre requisitos do cliente na organização.</li>
+</ul>
+<h3 id="43-organization-capability-capacidade-organizacional">4.3 Organization Capability (Capacidade Organizacional)</h3>
+<ul>
+<li><strong>4.3.1 Recursos e Conhecimento</strong> — determinar e alocar recursos necessários; determinar o conhecimento
+  necessário para operar os processos e manter conformidade do produto (pode vir de experiência, estudo,
+  treinamento, lições aprendidas, boas práticas).</li>
+<li><strong>4.3.2 Recursos Humanos:</strong></li>
+<li><strong>Competência do pessoal</strong> — procedimento documentado que trate: como as competências são identificadas;
+    como educação/treinamento/experiência necessários são identificados; avaliação da eficácia das ações
+    tomadas; critérios e métodos de avaliação/reavaliação; responsáveis por avaliar competência. Registros
+    obrigatórios.</li>
+<li><strong>Treinamento</strong> — procedimento que trate: conteúdo e frequência exigidos; treinamento em QMS; treinamento
+    do cargo (incluindo relevância das atividades para os objetivos da qualidade); treinamento exigido/
+    fornecido pelo cliente; avaliação de eficácia; registros exigidos.</li>
+<li><strong>4.3.3 Ambiente de Trabalho</strong> — determinar, prover, gerenciar e manter: instalações/espaço de trabalho e
+  utilidades; equipamento de processo (hardware e software); serviços de apoio (transporte, comunicação,
+  sistemas de informação); condições físicas/ambientais do trabalho.</li>
+</ul>
+<h3 id="44-documentation-requirements-requisitos-de-documentacao">4.4 Documentation Requirements (Requisitos de Documentação)</h3>
+<ul>
+<li><strong>4.4.1 Geral</strong> — a documentação do QMS deve incluir: escopo do QMS e justificativa de exclusões; política
+  e objetivos da qualidade; requisitos legais/aplicáveis identificados; identificação dos processos que
+  exigem validação; procedimentos/documentos/registros necessários ao planejamento, operação e controle dos
+  processos. (Pode ser um único "manual da qualidade" ou vários documentos/formatos.)</li>
+<li><strong>4.4.2 Procedimentos</strong> — todos os procedimentos exigidos pela norma devem ser documentados, implementados
+  e mantidos atualizados. Um único procedimento pode cobrir vários requisitos, e vice-versa.</li>
+<li><strong>4.4.3 Controle de Documentos Internos</strong> — procedimento para identificação, distribuição e controle de
+  documentos internos (inclui revisões, traduções e atualizações), tratando: responsabilidades de aprovação/
+  reaprovação; revisão de adequação antes do uso; revisões periódicas; identificação de mudanças e status de
+  revisão atual; legibilidade e identificação; disponibilidade no local de uso. Documentos obsoletos devem ser
+  retirados de circulação ou sinalizados para evitar uso indevido.</li>
+<li><strong>4.4.4 Controle e Uso de Documentos Externos</strong> — procedimento para documentos de origem externa usados na
+  realização do produto (normas API e outras), tratando: identificação/documentação; acesso e distribuição
+  (versões relevantes); integração nos processos; identificação de mudanças (adendos, erratas, atualizações);
+  avaliação de impacto; integração das mudanças aplicáveis.</li>
+</ul>
+<h3 id="45-control-of-records-controle-de-registros">4.5 Control of Records (Controle de Registros)</h3>
+<p>Registros — incluindo os originados de atividades terceirizadas — devem existir e ser controlados como
+evidência de conformidade. Procedimento documentado deve tratar: identificação; coleta; legibilidade;
+correção; armazenamento; proteção contra alteração/dano/perda não intencional; recuperação; <strong>tempo de
+retenção</strong>; e destinação final.</p>
+<blockquote>
+<p><strong>Retenção mínima: 10 anos</strong>, ou conforme exigência do cliente/legal — o que for mais longo.</p>
+</blockquote>
+<hr />
+<h2 id="24-secao-5-product-realization-realizacao-do-produto">2.4 Seção 5 — Product Realization (Realização do Produto)</h2>
+<h3 id="51-contract-review-revisao-de-contrato">5.1 Contract Review (Revisão de Contrato)</h3>
+<p>Procedimento documentado para revisão dos requisitos ligados ao fornecimento do produto, tratando:
+- <strong>Determinação de requisitos</strong> — os especificados pelo cliente; requisitos legais/aplicáveis; requisitos
+  não declarados pelo cliente mas considerados necessários pela organização. Se o cliente não fornece
+  declaração documentada, a organização deve confirmar os requisitos com ele e registrar.
+- <strong>Revisão de requisitos</strong> — conduzida <strong>antes</strong> do compromisso de entrega, confirmando que os requisitos
+  estão identificados/documentados, que divergências foram resolvidas, e que a organização tem capacidade de
+  atendê-los. Mudanças de requisito exigem atualização dos documentos relevantes e comunicação ao pessoal.
+  Registros do resultado da revisão são obrigatórios.</p>
+<h3 id="52-planning-planejamento">5.2 Planning (Planejamento)</h3>
+<p>A organização deve identificar e planejar os processos e documentos necessários para a realização do produto,
+endereçando: recursos e ambiente de trabalho (4.3); requisitos do produto e do cliente (5.1); requisitos
+legais/aplicáveis; requisitos de design (5.4); planejamento de contingência (5.3.3); atividades de
+verificação/validação/monitoramento/medição/inspeção/teste e critérios de aceitação; MOC (5.10); registros
+que evidenciem conformidade (4.5). A saída do planejamento deve ser documentada e atualizada quando houver
+mudanças.</p>
+<h3 id="53-risk-management-gestao-de-risco">5.3 Risk Management (Gestão de Risco)</h3>
+<ul>
+<li><strong>5.3.1 Geral</strong> — procedimento documentado para identificar e controlar riscos associados à <strong>entrega</strong> e à
+  <strong>qualidade</strong> do produto, tratando: técnicas de identificação/avaliação de risco; ferramentas de avaliação;
+  critérios de severidade (incluindo consequências potenciais de falha do produto); ações de mitigação;
+  avaliação do risco remanescente; planejamento de contingência (quando exigido pela avaliação do risco
+  remanescente).</li>
+<li><strong>5.3.2 Avaliação de Risco:</strong></li>
+<li><strong>Entrega do produto</strong> — deve incluir disponibilidade de instalações/equipamentos (inclusive manutenção)
+    e desempenho de entrega/disponibilidade de material dos fornecedores.</li>
+<li><strong>Qualidade do produto</strong> — deve incluir entrega de produto não conforme (5.9) e disponibilidade de
+    pessoal competente.</li>
+<li><strong>Mudanças que impactam a qualidade</strong> — exigem nova avaliação de risco quando envolvem: mudança na
+    estrutura organizacional; mudança de pessoal-chave; mudança na cadeia de suprimento de produtos/
+    componentes/atividades críticas; mudança no escopo/procedimentos do sistema de gestão; mudança na
+    capacidade da organização de executar os processos de realização do produto.</li>
+<li><strong>5.3.3 Planejamento de Contingência</strong> — quando exigido pelo risco avaliado, o plano deve incluir no
+  mínimo: ações para reduzir efeitos de incidentes disruptivos; identificação/atribuição de responsabilidades
+  e autoridades; controles de comunicação interna/externa (4.1.5).</li>
+<li><strong>5.3.4 Registros</strong> — de avaliação e gestão de risco, incluindo ações tomadas.</li>
+</ul>
+<h3 id="54-design">5.4 Design</h3>
+<p><em>(Aplicável apenas quando a organização é responsável pelo design do produto — pode ser excluído do escopo
+com justificativa, ver 4.1.4.2.)</em></p>
+<ul>
+<li><strong>5.4.1 Geral</strong> — aplica-se quando a organização é responsável pelo design.</li>
+<li><strong>5.4.2 Planejamento do Design</strong> — procedimento documentado tratando: plano(s) de design e suas
+  atualizações; etapas do design; recursos/responsabilidades/autoridades e suas interfaces; atividades de
+  revisão/verificação/validação necessárias em cada etapa; requisitos para revisão final (5.4.6); requisitos
+  de revisão/aprovação de mudanças de design (5.4.8). Quando o design é terceirizado ou feito em local
+  diferente, o procedimento deve identificar os controles — a organização <strong>permanece responsável</strong> pelo
+  design mesmo terceirizando.</li>
+<li><strong>5.4.3 Entradas de Design (Design Inputs)</strong> — devem ser identificadas e revisadas quanto a adequação,
+  completude, falta de ambiguidade e de conflito. Incluem: requisitos especificados pelo cliente; requisitos
+  de fontes externas (inclusive especificações API); condições ambientais/operacionais; metodologia,
+  premissas e fórmulas; desempenho histórico de designs similares; requisitos legais; consequências de
+  potencial falha do produto (quando exigido por lei, norma, cliente, ou considerado necessário). Registros
+  obrigatórios.</li>
+<li><strong>5.4.4 Saídas de Design (Design Outputs)</strong> — documentadas para permitir verificação contra as entradas.
+  Devem: atender às entradas; fornecer informação para compras/produção/inspeção/teste/serviço; identificar
+  ou referenciar o <strong>DAC</strong>; identificar produtos/componentes/atividades críticos ao design; incluir resultados
+  de cálculos aplicáveis; especificar as características essenciais para a finalidade e funcionamento seguro
+  do produto. Registros obrigatórios.</li>
+<li><strong>5.4.5 Revisão de Design</strong> — em etapas adequadas, para avaliar adequação/efetividade dos resultados e
+  identificar problemas, com participação de representantes das funções envolvidas. Registros obrigatórios.</li>
+<li><strong>5.4.6 Verificação de Design e Revisão Final</strong> — para garantir que as saídas atendem às entradas.
+  Registros obrigatórios.</li>
+<li><strong>5.4.7 Validação e Aprovação de Design</strong> — validação conforme o procedimento, para garantir que o produto
+  resultante é capaz de satisfazer os requisitos especificados; completada antes da entrega, quando possível.
+  O design completo deve ser <strong>aprovado por pessoa competente diferente</strong> de quem o desenvolveu. Registros
+  obrigatórios.</li>
+<li><strong>5.4.8 Mudanças de Design</strong> — identificadas, revisadas/verificadas/validadas conforme apropriado, e
+  aprovadas antes da implementação. A revisão deve avaliar o efeito da mudança no produto e em produto já
+  entregue, e se a mudança exige notificação ao cliente (quando afeta negativamente a capacidade de
+  desempenho especificada). Registros obrigatórios.</li>
+</ul>
+<h3 id="55-purchasing-compras">5.5 Purchasing (Compras)</h3>
+<ul>
+<li><strong>5.5.1 Controle de Compras:</strong></li>
+<li><strong>Procedimento</strong> — deve tratar: determinação de produtos/componentes/atividades críticos; avaliação e
+    seleção inicial de fornecedores; uso do risco identificado para definir o método de avaliação inicial em
+    compras críticas; tipo/extensão do controle sobre a cadeia de suprimento; critérios/escopo/frequência de
+    reavaliação; identificação de fornecedores aprovados; fornecedores especificados pelo cliente ou limitados
+    por requisito proprietário/legal.</li>
+<li><strong>Avaliação inicial — compras críticas</strong> — deve ser específica por local do fornecedor e incluir:
+    verificação da implementação/conformidade do QMS do fornecedor; verificação do tipo/extensão de controle
+    aplicado pelo fornecedor (internamente e à própria cadeia dele); avaliação da capacidade do fornecedor por
+    um ou mais destes métodos, com base no risco identificado: <strong>avaliação in loco</strong>; <strong>avaliação remota</strong>
+    (verificação por áudio/vídeo em tempo real); <strong>inspeção/teste/verificação</strong> de características do produto
+    recebido. Fornecedores críticos de <strong>alto risco</strong> sem avaliação in loco exigem avaliação remota <strong>e</strong>
+    inspeção/teste/verificação.</li>
+<li><strong>Compras críticas especificadas pelo cliente ou limitadas por proprietário/legal</strong> — avaliação inicial
+    reduzida: verificação do QMS conforme requisitos da organização e/ou do cliente; identificação de como o
+    produto/componente/atividade fornecida atende aos requisitos especificados. Escopo de aprovação limitado
+    ao contrato do cliente relevante quando a avaliação completa não foi feita.</li>
+<li><strong>Compras não críticas</strong> — critérios de avaliação seguem os mesmos da compra crítica, ou: verificação de
+    conformidade do QMS do fornecedor; avaliação do atendimento aos requisitos de compra; avaliação do
+    produto/componente na entrega ou da atividade na conclusão.</li>
+<li><strong>Reavaliação de fornecedores</strong> — frequência definida com base em risco (5.3) e desempenho de qualidade;
+    segue os mesmos critérios da avaliação inicial (crítica, cliente-especificada, ou não crítica, conforme o
+    caso).</li>
+<li><strong>Registros</strong> — resultados de avaliações (com evidência objetiva) e ações resultantes; identificação de
+    fornecedores aprovados, especificados pelo cliente, e limitados por proprietário/legal.</li>
+<li><strong>Terceirização (Outsourcing)</strong> — ao terceirizar um processo/atividade do QMS, a organização deve
+    verificar que o fornecedor satisfaz os requisitos aplicáveis do próprio QMS da organização. Ao
+    terceirizar um processo/atividade de realização do produto, a organização <strong>mantém a responsabilidade</strong>
+    pela conformidade do produto, incluindo especificações API/externas aplicáveis. Registros obrigatórios.</li>
+<li><strong>5.5.2 Informação de Compra</strong> — a organização deve garantir a adequação da informação antes de comunicá-la
+  ao fornecedor, descrevendo o produto/componente/atividade, incluindo conforme aplicável: critérios de
+  aceitação; requisitos de aprovação de procedimentos/processos/equipamentos do fornecedor; versão aplicável
+  de especificações/desenhos/requisitos de processo/instruções de inspeção/rastreabilidade; requisitos de
+  qualificação de pessoal do fornecedor; requisitos do QMS; requisitos de aprovação de liberação do produto;
+  requisitos de verificação nas instalações do fornecedor (se a organização ou o cliente forem verificar lá).</li>
+<li><strong>5.5.3 Verificação de Produtos/Componentes/Atividades Comprados:</strong></li>
+<li><strong>Compras críticas</strong> — procedimento deve tratar: revisão da documentação exigida do fornecedor;
+    verificação de que as versões aplicáveis foram usadas (specs, desenhos, requisitos de processo,
+    rastreabilidade); requisitos/métodos/frequência/responsável pela inspeção/teste/verificação, definidos
+    com base no risco (5.3) e desempenho do fornecedor.</li>
+<li><strong>Compras não críticas</strong> — verificadas conforme procedimento documentado da organização.</li>
+<li><strong>Registros</strong> — de atividades de verificação e evidência de conformidade.</li>
+</ul>
+<h3 id="56-control-of-product-realization-controle-da-realizacao-do-produto">5.6 Control of Product Realization (Controle da Realização do Produto)</h3>
+<ul>
+<li><strong>5.6.1 Geral</strong> — procedimento tratando: determinação e implementação do <strong>MAC</strong>; identificação/
+  documentação de processos críticos à realização; implementação do plano de qualidade (quando aplicável);
+  conformidade a requisitos de design e mudanças relacionadas; disponibilidade e uso de equipamento de
+  realização e TMMDE; uso de instruções de trabalho aplicáveis; documentos de controle de processo (5.6.3);
+  manutenção de identificação/rastreabilidade (5.6.5); implementação de monitoramento/medição; implementação
+  da liberação do produto (5.7), incluindo entrega e pós-entrega; revisão e controle de mudanças na
+  realização, aprovações e registros.</li>
+<li><strong>5.6.2 Plano de Qualidade</strong> — quando exigido por contrato, deve especificar os processos do QMS
+  (incluindo realização do produto) e os recursos aplicados. No mínimo: descrição do produto/escopo do plano;
+  processos/documentação exigidos (inspeções, testes, registros); identificação de atividades terceirizadas;
+  identificação de cada procedimento/especificação/documento referenciado; pontos de retenção
+  (hold)/testemunho (witness)/monitoramento/revisão documental exigidos. Deve ser documentado, aprovado e
+  comunicado ao cliente (com revisões). <em>(Outros nomes usados na prática: PQP, ITP, MPS, PCP, QAP.)</em></li>
+<li><strong>5.6.3 Documentos de Controle de Processo</strong> — devem incluir ou referenciar: requisitos de verificação de
+  conformidade com planos de qualidade, especificações API, requisitos do cliente e outras normas/códigos
+  aplicáveis; instruções e critérios de aceitação para processos/testes/inspeções; pontos de retenção/
+  testemunho/monitoramento/revisão do cliente, quando aplicável.</li>
+<li><strong>5.6.4 Validação de Processos</strong> — exigida quando a saída de um processo <strong>não pode ser verificada</strong> por
+  monitoramento/medição subsequente (deficiências só aparecem depois de entregue/em uso). Se a especificação
+  do produto identifica quais processos exigem validação, só esses exigem. Se não houver especificação
+  aplicável (ou ela não identificar), a validação mínima aplicável cobre: <strong>NDE/NDT</strong> (ensaio não destrutivo),
+  <strong>soldagem</strong>, <strong>tratamento térmico</strong>, e <strong>coating/plating</strong> (quando identificado como crítico). Procedimento
+  documentado deve tratar: equipamento exigido; qualificação de pessoal; métodos e parâmetros operacionais;
+  critérios de aceitação do processo; registros; revalidação. Se terceirizado, a organização deve manter
+  evidência de que os requisitos foram atendidos.</li>
+<li><strong>5.6.5 Identificação e Rastreabilidade</strong> — estabelecidas e mantidas durante toda a realização (inclusive
+  entrega e pós-entrega); requisitos de rastreabilidade definidos pela organização, cliente e/ou especificação
+  do produto; procedimento documentado tratando: métodos de identificação; informação necessária para
+  rastreabilidade; requisitos de manutenção/reaplicação da identificação; ações para tratar perda de
+  identificação/rastreabilidade. Registros obrigatórios. <em>(Aplica-se também a componentes e matéria-prima.)</em></li>
+<li><strong>5.6.6 Status de Inspeção/Teste</strong> — procedimento para identificar o status de inspeção/teste ao longo da
+  realização, indicando conformidade ou não conformidade do produto.</li>
+<li><strong>5.6.7 Propriedade de Terceiros (Externally Owned Property)</strong> — procedimento para controle de propriedade
+  externa (inclusive do cliente) incorporada ao produto, incluindo propriedade intelectual e dados não
+  públicos, tratando: identificação; verificação; salvaguarda; preservação; manutenção; e comunicação ao
+  proprietário externo em caso de perda/dano/inadequação. Registros obrigatórios.</li>
+<li><strong>5.6.8 Preservação do Produto</strong> — procedimento descrevendo métodos de preservação do produto e componentes
+  durante realização e entrega: identificação/marcação de rastreabilidade; armazenamento (áreas/estoques
+  designados); avaliação periódica de condição; transporte; manuseio; embalagem; proteção. Registros dos
+  resultados das avaliações.</li>
+<li><strong>5.6.9 Inspeção, Teste e Verificação:</strong></li>
+<li><strong>Em processo</strong> — inspeção/teste/verificação em etapas planejadas, conforme plano de qualidade, documentos
+    de controle de processo e/ou procedimentos. Evidência de conformidade com os critérios de aceitação deve
+    ser mantida.</li>
+<li><strong>Final</strong> — determina e documenta a conformidade do produto acabado aos requisitos especificados. Salvo
+    quando feita por sistema automatizado, a <strong>inspeção de aceitação final</strong> deve ser feita por pessoal
+    <strong>diferente</strong> de quem executou ou supervisionou diretamente a realização.</li>
+<li><strong>Registros</strong> — de toda inspeção/teste/verificação/aceitação final exigida.</li>
+<li><strong>5.6.10 Manutenção Preventiva</strong> — procedimento para manutenção preventiva de equipamento usado na
+  realização do produto, tratando: tipo de equipamento coberto; frequência; pessoal responsável. Registros
+  obrigatórios. <em>(Pode basear-se em risco, histórico de uso, recomendações do fabricante, normas/códigos.)</em></li>
+</ul>
+<h3 id="57-product-release-liberacao-do-produto">5.7 Product Release (Liberação do Produto)</h3>
+<p>Procedimento para liberação do produto ao cliente. A liberação <strong>não deve prosseguir</strong> até que os arranjos
+planejados (Seção 5.6) tenham sido concluídos satisfatoriamente. A organização só deve liberar produto que
+<strong>esteja conforme</strong> os requisitos ou que <strong>esteja autorizado sob concessão</strong> (5.9.3). Registros devem permitir
+identificar quem liberou o produto.</p>
+<h3 id="58-testing-measuring-monitoring-and-detection-equipment-tmmde">5.8 Testing, Measuring, Monitoring, and Detection Equipment (TMMDE)</h3>
+<ul>
+<li><strong>5.8.1 Geral</strong> — a organização determina os requisitos de teste/medição/monitoramento/detecção e o TMMDE
+  necessário para evidenciar conformidade. TMMDE próprio, de funcionário, ou de outras fontes (terceiro,
+  proprietário, cliente) usado para evidenciar conformidade ou monitorar parâmetros que afetam conformidade
+  deve ser <strong>controlado</strong>. Deve ser calibrado em intervalos especificados; se o intervalo é baseado na data de
+  primeiro uso, essa data deve ser documentada.</li>
+<li><strong>5.8.2 Procedimento</strong> — procedimento documentado tratando: identificação única; status de calibração;
+  rastreabilidade a padrões internacionais/nacionais (ou base registrada, se não existirem); método de
+  calibração e critérios de aceitação; frequência e início do intervalo de calibração; documentação das
+  medições antes e depois de ajustes ("as-found"/"as-left"); ações para prevenir uso não intencional de TMMDE
+  fora de calibração; quando fora de calibração — avaliação da validade de medições anteriores e ações sobre
+  o TMMDE e o produto (incluindo notificação ao cliente se produto suspeito foi enviado); uso de TMMDE de
+  terceiro/proprietário/funcionário/cliente; manutenção; adequação às atividades planejadas.</li>
+<li><strong>5.8.3 Equipamento</strong> — o TMMDE deve: ser calibrado; ter status de calibração identificável antes/durante o
+  uso; ser protegido contra ajustes que invalidem o resultado/status; ser protegido contra dano/deterioração;
+  ser usado em condições ambientais adequadas. Software usado em teste/monitoramento/medição/detecção deve
+  ter sua capacidade confirmada antes do uso inicial e reconfirmada quando necessário.</li>
+<li><strong>5.8.4 TMMDE de Outras Fontes</strong> — quando terceiro/proprietário/cliente, a organização deve confirmar que
+  está calibrado antes do uso; se limitado por cliente/contrato/licenciamento, alguns subitens do 5.8.2 não
+  se aplicam.</li>
+<li><strong>5.8.5 Registros</strong> — registro de todo o TMMDE identificado, com identificação única; resultados de
+  calibração; e, quando a calibração de TMMDE de terceiro é limitada por cliente/contrato/licença, registro
+  dessa limitação.</li>
+</ul>
+<h3 id="59-control-of-nonconforming-product-controle-de-produto-nao-conforme">5.9 Control of Nonconforming Product (Controle de Produto Não Conforme)</h3>
+<ul>
+<li><strong>5.9.1 Procedimento:</strong></li>
+<li><strong>Durante a realização</strong> — deve tratar: identificação/controle do produto para prevenir uso ou entrega não
+    intencional; tratamento da não conformidade detectada (5.9.2); ação para impedir seu uso/entrega
+    pretendidos originalmente; autorização de uso/liberação/aceitação sob concessão pela autoridade
+    responsável e, quando exigido, pelo cliente (5.9.3).</li>
+<li><strong>Após a entrega</strong> — deve tratar: identificação/documentação/relato do produto não conforme; análise da
+    não conformidade (quando o produto ou evidência documentada está disponível, para apoiar a determinação
+    da causa); ação apropriada aos efeitos (ou efeitos potenciais); autorização sob concessão pela autoridade
+    responsável e, quando exigido, pelo cliente.</li>
+<li><strong>5.9.2 Produto Não Conforme</strong> — a organização deve tratá-lo por um ou mais destes: <strong>reparo/retrabalho</strong>
+  com inspeção subsequente; <strong>reclassificação (re-grade)</strong> para aplicação alternativa; <strong>liberação sob
+  concessão</strong> (5.9.3); e/ou <strong>rejeição/sucateamento</strong>.</li>
+<li><strong>5.9.3 Liberação de Produto Não Conforme Sob Concessão</strong> — permitida quando a autoridade responsável avaliou
+  e autorizou, desde que: (a) o produto continue satisfazendo o DAC aplicável e critérios do cliente; ou
+  (b) o MAC violado é determinado como desnecessário para satisfazer o DAC e/ou critérios do cliente; ou
+  (c) o DAC é alterado (5.4.8) e os produtos afetados satisfazem o DAC/MAC revisados — se o DAC foi
+  previamente acordado com o cliente, a mudança <strong>exige autorização do cliente</strong>. A organização <strong>não deve</strong>
+  liberar produto fora do DAC ou requisitos contratuais sem autorização do cliente.</li>
+<li><strong>5.9.4 Notificação ao Cliente de Produto Não Conforme</strong> — obrigatória quando o produto entregue não
+  atende ao DAC ou aos requisitos contratuais. Registros da notificação obrigatórios.</li>
+<li><strong>5.9.5 Registros</strong> — de não conformidades, incluindo: descrição; ações subsequentes (inclusive concessões
+  obtidas); justificativa para a liberação sob concessão; autoridade responsável.</li>
+</ul>
+<h3 id="510-management-of-change-moc-gestao-de-mudancas">5.10 Management of Change — MOC (Gestão de Mudanças)</h3>
+<ul>
+<li><strong>5.10.1 Geral</strong> — procedimento documentado para manter a integridade do QMS quando ocorrem mudanças,
+  tratando: descrição da mudança e sua necessidade; disponibilidade/alocação de recursos (inclusive pessoal);
+  riscos potenciais (5.3); revisão/aprovação/implementação; notificações (5.10.3); verificação da conclusão
+  das atividades de MOC e seu impacto no QMS.</li>
+<li><strong>5.10.2 Aplicação do MOC</strong> — usado para mudanças que <strong>podem impactar negativamente</strong> a qualidade do
+  produto (ver gatilhos em 5.3.2.3: estrutura organizacional, pessoal-chave, cadeia de suprimento crítica,
+  escopo/procedimentos do sistema de gestão, capacidade da organização).</li>
+<li><strong>5.10.3 Notificação do MOC</strong> — pessoal interno relevante deve ser notificado da mudança e do risco
+  associado; quando exigido por contrato, o cliente também deve ser notificado. Notificações documentadas.</li>
+<li><strong>5.10.4 Registros</strong> — das atividades de MOC.</li>
+</ul>
+<hr />
+<h2 id="25-secao-6-monitoramento-medicao-analise-e-melhoria-do-qms">2.5 Seção 6 — Monitoramento, Medição, Análise e Melhoria do QMS</h2>
+<h3 id="61-geral">6.1 Geral</h3>
+<p>A organização deve planejar e implementar os processos de monitoramento, medição, análise e melhoria
+necessários para assegurar conformidade do QMS à Q1 e melhorar continuamente sua efetividade, determinando os
+métodos aplicáveis (inclusive técnicas de análise de dados) e sua extensão de uso.</p>
+<h3 id="62-monitoring-measuring-and-improving">6.2 Monitoring, Measuring, and Improving</h3>
+<ul>
+<li><strong>6.2.1 Satisfação do Cliente</strong> — procedimento documentado tratando frequência/métodos de determinação e
+  KPIs de satisfação do cliente. Registros obrigatórios.</li>
+<li><strong>6.2.2 Auditoria Interna:</strong></li>
+<li><strong>Geral</strong> — auditorias internas para informar se o QMS está implementado, mantido e conforme à Q1 e aos
+    próprios requisitos da organização. Procedimento documentado define responsabilidades de
+    planejamento/condução/documentação. Critérios/escopo/frequência/métodos devem considerar resultados de
+    auditorias anteriores (internas e externas) e a criticidade do processo auditado. <strong>Todos os processos do
+    QMS devem ser auditados pelo menos a cada 12 meses</strong> (não além do mesmo mês-calendário do ano anterior) —
+    não precisa ser uma auditoria única consolidada, mas se dividida, o intervalo entre partes não pode passar
+    de 12 meses. Processos identificados como críticos à realização exigem observação da atividade sendo
+    executada.</li>
+<li><strong>Execução</strong> — realizada por pessoal competente e <strong>independente</strong> de quem executou/supervisionou
+    diretamente a atividade auditada, para garantir objetividade e imparcialidade. Registros devem evidenciar
+    que o QMS está implementado e mantido.</li>
+<li><strong>Revisão e Encerramento</strong> — a organização define prazos de resposta para tratar não conformidades
+    detectadas; o responsável pela área auditada garante que correções e ações corretivas sigam 6.4.2.
+    Registros das auditorias obrigatórios.</li>
+<li><strong>6.3 Análise de Dados</strong> — procedimento documentado para identificação, coleta e análise de dados,
+  demonstrando adequação e efetividade do QMS. A análise deve incluir dados de monitoramento/medição,
+  auditorias internas, auditorias externas, revisões da direção e outras fontes relevantes. A saída da análise
+  deve fornecer informação (incluindo tendências) sobre: satisfação do cliente; não conformidade a requisitos
+  durante a realização; não conformidades e falhas de produto identificadas após entrega/uso (quando produto
+  ou evidência disponível); desempenho de processo; desempenho de fornecedores; cumprimento dos objetivos da
+  qualidade. A organização deve usar esses dados para avaliar onde é possível melhorar continuamente o QMS.</li>
+</ul>
+<h3 id="64-improvement-melhoria">6.4 Improvement (Melhoria)</h3>
+<ul>
+<li><strong>6.4.1 Geral</strong> — melhoria contínua da efetividade do QMS por meio de objetivos da qualidade, auditoria
+  interna, análise de dados, ação corretiva e revisão da direção.</li>
+<li><strong>6.4.2 Ação Corretiva</strong> — procedimento documentado para tratar não conformidades (inclusive as resultantes
+  de reclamações de clientes) e tomar ações corretivas internamente e com fornecedores, proporcionais ao(s)
+  efeito(s) da não conformidade. Deve tratar: critérios para iniciar o processo; revisão da não conformidade;
+  determinação/implementação de correções; identificação da causa raiz; implementação de ação corretiva para
+  reduzir a probabilidade de recorrência; prazo e responsável; verificação da eficácia; critérios para
+  atualizar riscos/oportunidades identificados no planejamento (4.1.4); uso do MOC (5.10) quando a ação
+  corretiva exige novos controles; avaliação de não conformidades potenciais similares. Registros obrigatórios,
+  identificando as atividades de verificação da eficácia.</li>
+</ul>
+<h3 id="65-management-review-revisao-pela-direcao">6.5 Management Review (Revisão pela Direção)</h3>
+<ul>
+<li><strong>6.5.1 Geral</strong> — o QMS deve ser revisado <strong>pelo menos a cada 12 meses</strong> (não além do mesmo mês-calendário
+  do ano anterior) pelo pessoal de gestão, avaliando continuidade de adequação/suficiência/efetividade,
+  incluindo oportunidades de melhoria, adequação de recursos, e necessidade de mudanças (inclusive política e
+  objetivos da qualidade).</li>
+<li><strong>6.5.2 Entradas (mínimo)</strong> — status/eficácia de ações de revisões anteriores; resultados de auditorias
+  internas e externas; mudanças que possam afetar o QMS (requisitos legais, normas do setor, questões
+  internas/externas); análise de satisfação do cliente; feedback relevante de clientes/partes interessadas;
+  desempenho de processo; resultados de avaliação de risco e eficácia das ações; status de ações corretivas;
+  análise de desempenho de fornecedores; análise de conformidade de produto (inclusive não conformidades pós-
+  entrega); desempenho real vs. objetivos da qualidade; recomendações de melhoria.</li>
+<li><strong>6.5.3 Saídas</strong> — avaliação-resumo da efetividade do QMS; mudanças exigidas nos processos; decisões e
+  ações; recursos necessários; melhorias a produtos para atender requisitos do cliente. A alta direção deve
+  revisar e aprovar a saída. Revisões documentadas e registradas.</li>
+</ul>
+<hr />
+<h2 id="26-anexo-a-informativo-programa-de-monograma-api">2.6 Anexo A (informativo) — Programa de Monograma API</h2>
+<p>O <strong>Monograma API</strong> é uma marca de certificação registrada, licenciada pela API a fabricantes cujos produtos
+atendam às especificações de produto aplicáveis e sejam fabricados sob um QMS conforme a Q1. Pontos-chave:</p>
+<ul>
+<li>Licenças exigem <strong>auditoria in loco</strong> prévia confirmando implementação e manutenção contínua do QMS Q1 e
+  conformidade do produto à(s) especificação(ões) API aplicável(is).</li>
+<li><strong>Produto monogramável</strong>: recém-fabricado por um licenciado, sob QMS Q1 totalmente implementado, atendendo
+  a todos os requisitos da(s) especificação(ões)/norma(s) aplicável(is). Produto colocado em serviço/uso <strong>não</strong>
+  é "recém-fabricado".</li>
+<li>O Monograma e o número de licença são <strong>específicos do local (site)</strong> licenciado — só podem ser aplicados
+  lá, e sua aplicação constitui garantia de conformidade.</li>
+<li><strong>Capacidade de manufatura</strong>: instalações limitadas a inspeção/teste final, compra/venda/distribuição de
+  produto acabado, atividades de design isoladas, desmontagem/remontagem, ou reparo/remanufatura de produto
+  usado/desgastado <strong>não atendem</strong> aos requisitos de capacidade de manufatura e não podem ser licenciadas com
+  base só nisso.</li>
+<li><strong>Reaplicação do Monograma</strong>: só é permitida sob cenários e aprovação específicos da API (ex.: manutenção/
+  reparo/remanufatura que reinstale a placa de identificação original sem modificá-la).</li>
+<li><strong>Marcação</strong>: deve referenciar a especificação/norma API aplicável (ex. "API 6A"), usar as unidades
+  especificadas (padrão USC, salvo indicação contrária), e incluir Monograma + número de licença na plaqueta
+  de identificação, quando aplicável.</li>
+<li><strong>Relato de não conformidade</strong>: a API pede que clientes relatem produtos monogramados não conformes ou
+  falhas de campo pelo sistema API Nonconformance Reporting.</li>
+</ul>
+<p><em>(Este anexo é informativo — relevante para fabricantes licenciados. Não confundir exigência de Monograma com
+exigência geral de conformidade à Q1: qualquer organização pode alegar conformidade à Q1 sem ser licenciada
+para aplicar o Monograma.)</em></p>
+<hr />
+<h2 id="27-secoes-criticas-para-seguranca-tecnica">2.7 Seções Críticas para Segurança Técnica</h2>
+<h3 id="design-acceptance-criteria-dac-vs-manufacturing-acceptance-criteria-mac">Design Acceptance Criteria (DAC) vs. Manufacturing Acceptance Criteria (MAC)</h3>
+<ul>
+<li><strong>DAC</strong> (3.1.7 / 5.4.4): requisitos aplicados a características (ou combinações) de materiais, produtos ou
+  componentes para atingir conformidade aos <strong>requisitos de design</strong> e/ou desempenho de design exigido.</li>
+<li><strong>MAC</strong> (3.1.13 / 5.6.1): requisitos aplicados a características (ou combinações) para atingir conformidade
+  ao <strong>DAC aplicável</strong> e a outros requisitos de manufatura do produto.</li>
+</ul>
+<h3 id="regra-de-ouro">Regra de Ouro</h3>
+<blockquote>
+<p>A norma admite explicitamente que "DAC pode ser igual a MAC" — mas isso é uma possibilidade, não uma regra
+geral. <strong>Nunca assuma equivalência automaticamente.</strong> Verifique sempre a especificação do cliente e do
+produto antes de tratar os dois como idênticos.</p>
+</blockquote>
+<h3 id="retencao-de-registros-atencao-a-mudanca-de-edicao">Retenção de registros — atenção à mudança de edição</h3>
+<p>A 10ª edição ampliou a retenção mínima de registros para <strong>10 anos</strong>. Se o usuário perguntar sobre uma
+organização certificada sob edição anterior (9ª ou mais antiga), avise que o prazo pode ter sido menor
+naquela época — o prazo vigente hoje é 10 anos (ou o exigido por cliente/lei, se maior).</p>
+<hr />
+<h1 id="3-normas-de-roscas-e-tubos">3. NORMAS DE ROSCAS E TUBOS</h1>
+<h2 id="31-api-5b-threading-gauging-and-inspection">3.1 API 5B — Threading, Gauging, and Inspection</h2>
+<h3 id="escopo">Escopo</h3>
+<p>Define perfis de rosca, tolerâncias, calibração e inspeção para <strong>casing, tubing, line pipe</strong>.</p>
+<h3 id="tipos-de-rosca-abordados">Tipos de Rosca Abordados</h3>
+<p><strong>Casing:</strong>
+- <strong>LTC</strong> (Long Threaded and Coupled): rosca longa + acoplamento separado
+- <strong>STC</strong> (Short Threaded and Coupled): rosca curta + acoplamento separado
+- <strong>BTC</strong> (Buttress Thread and Coupled): rosca buttress (ombro interno) — alta capacidade axial</p>
+<p><strong>Tubing:</strong>
+- <strong>EUE</strong> (External Upset End): extremidade com ressalto externo (upset)
+- <strong>NUE</strong> (Non-Upset End): extremidade sem ressalto, rosca no corpo do tubo</p>
+<p><strong>Line pipe:</strong>
+- Roscas compatíveis com série API line pipe (geralmente retas, não cônicas)</p>
+<h3 id="conceitos-criticos">Conceitos Críticos</h3>
+<p><strong>Geometria da rosca:</strong>
+- <strong>Passo (pitch):</strong> distância axial entre um filete e o adjacente
+- <strong>TPI (Threads per inch):</strong> número de filetes por polegada (inverso do passo)
+- <strong>Conicidade (taper):</strong> variação de diâmetro ao longo do comprimento (ex: 1 em 16)
+- <strong>Ângulo do filete:</strong> entre os flancos da rosca (triangular, buttress, etc.)
+- <strong>Altura do filete:</strong> distância radial entre crista e raiz
+- <strong>Diâmetro de passo:</strong> referência para interferência e ajuste</p>
+<p><strong>Inspeção:</strong>
+- Verificação com calibres <strong>go / no-go</strong>
+- Critérios de aceitação: desgaste, danos, refileteamento
+- Diâmetro, passo, conicidade dentro de tolerância</p>
+<hr />
+<h2 id="32-api-5ct-casing-and-tubing">3.2 API 5CT — Casing and Tubing</h2>
+<h3 id="escopo_1">Escopo</h3>
+<p>Define <strong>graus de aço, propriedades mecânicas, dimensões, tipos de extremidade</strong> para casing e tubing.</p>
+<h3 id="graus-tipicos-de-casing">Graus Típicos de Casing</h3>
+<table>
+<thead>
+<tr>
+<th>Grau</th>
+<th>Resistência de Escoamento (min)</th>
+<th>Resistência Máxima (min-max)</th>
+<th>Aplicação Típica</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>H40</td>
+<td>40 ksi</td>
+<td>60–80 ksi</td>
+<td>Baixa profundidade, poços rascos</td>
+</tr>
+<tr>
+<td>J55</td>
+<td>55 ksi</td>
+<td>75–95 ksi</td>
+<td>Uso geral, profundidades moderadas</td>
+</tr>
+<tr>
+<td>K55</td>
+<td>55 ksi</td>
+<td>75–95 ksi</td>
+<td>Similar J55, diferentes requisitos</td>
+</tr>
+<tr>
+<td>N80</td>
+<td>80 ksi</td>
+<td>110–130 ksi</td>
+<td>Profundidades intermediárias</td>
+</tr>
+<tr>
+<td>L80</td>
+<td>80 ksi</td>
+<td>110–130 ksi</td>
+<td>Similar N80, diferentes propriedades</td>
+</tr>
+<tr>
+<td>C90</td>
+<td>90 ksi</td>
+<td>120–150 ksi</td>
+<td>Profundidades maiores, alta pressão</td>
+</tr>
+<tr>
+<td>T95</td>
+<td>95 ksi</td>
+<td>125–155 ksi</td>
+<td>Muito profundo, alta pressão</td>
+</tr>
+<tr>
+<td>P110</td>
+<td>110 ksi</td>
+<td>140–170 ksi</td>
+<td>Poços muito profundos, alta pressão</td>
+</tr>
+<tr>
+<td>Q125</td>
+<td>125 ksi</td>
+<td>150–180 ksi</td>
+<td>Ultra-profundo, extrema pressão</td>
+</tr>
+</tbody>
+</table>
+<h3 id="relacao-api-5b-api-5ct">Relação API 5B ↔ API 5CT</h3>
+<ul>
+<li><strong>API 5CT</strong> especifica tipos de extremidade (LTC, STC, BTC, EUE, NUE)</li>
+<li>Remete à <strong>API 5B</strong> para geometria e inspeção de roscas</li>
+<li>Para <strong>grau, classe, resistência, colapso, burst → API 5CT</strong></li>
+<li>Para <strong>perfil de rosca, diâmetro de passo, tolerâncias de geometria → API 5B</strong></li>
+</ul>
+<hr />
+<h2 id="33-api-5l-line-pipe">3.3 API 5L — Line Pipe</h2>
+<h3 id="escopo_2">Escopo</h3>
+<p>Define tubos para <strong>transporte de petróleo, gás e fluidos</strong> em dutos.</p>
+<h3 id="graus-tipicos-de-line-pipe">Graus Típicos de Line Pipe</h3>
+<table>
+<thead>
+<tr>
+<th>Grau</th>
+<th>Resistência de Escoamento (min)</th>
+<th>Aplicação</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>A</td>
+<td>30 ksi</td>
+<td>Baixa pressão, aplicações antigas</td>
+</tr>
+<tr>
+<td>B</td>
+<td>35 ksi</td>
+<td>Uso geral, pressões moderadas</td>
+</tr>
+<tr>
+<td>X42</td>
+<td>42 ksi</td>
+<td>42 ksi yield, especificação moderna</td>
+</tr>
+<tr>
+<td>X52</td>
+<td>52 ksi</td>
+<td>Intermediária, resistência incrementada</td>
+</tr>
+<tr>
+<td>X56</td>
+<td>56 ksi</td>
+<td>Mais resistente que X52</td>
+</tr>
+<tr>
+<td>X60</td>
+<td>60 ksi</td>
+<td>Alta resistência, maior throughput</td>
+</tr>
+<tr>
+<td>X65</td>
+<td>65 ksi</td>
+<td>Dutos de alta pressão</td>
+</tr>
+<tr>
+<td>X70</td>
+<td>70 ksi</td>
+<td>Muito alta pressão, throughput máximo</td>
+</tr>
+<tr>
+<td>X80</td>
+<td>80 ksi</td>
+<td>Ultra-alta pressão (raro, especial)</td>
+</tr>
+</tbody>
+</table>
+<h3 id="relacao-com-roscas">Relação com Roscas</h3>
+<ul>
+<li>Line pipe pode ser <strong>soldado</strong> (mais comum) ou com <strong>conexões roscadas</strong></li>
+<li>Se roscado, remete à <strong>API 5B</strong></li>
+<li>A própria API 5L trata principalmente do <strong>tubo</strong> (não da rosca)</li>
+</ul>
+<hr />
+<h2 id="34-api-7-1-rotary-drill-stem-elements">3.4 API 7-1 — Rotary Drill Stem Elements</h2>
+<h3 id="escopo_3">Escopo</h3>
+<p>Define <strong>propriedades mecânicas, dimensões e tolerâncias</strong> para drill pipe, drill collars, HWDP, kelly, etc.</p>
+<h3 id="componentes">Componentes</h3>
+<table>
+<thead>
+<tr>
+<th>Componente</th>
+<th>Diâmetro Típico</th>
+<th>Uso</th>
+<th>Observação</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Drill Pipe</strong></td>
+<td>2.375" – 5.5"</td>
+<td>Transmissão de torque e carga</td>
+<td>Rosca conexão ombro (API 7-2)</td>
+</tr>
+<tr>
+<td><strong>Drill Collar</strong></td>
+<td>1.5" – 9.5"</td>
+<td>Peso para peso na broca, rigidez</td>
+<td>Rosca conexão ombro (API 7-2)</td>
+</tr>
+<tr>
+<td><strong>HWDP</strong> (Heavy Weight DP)</td>
+<td>3.5" – 5"</td>
+<td>Transição entre pipe e collar</td>
+<td>Rosca conexão ombro (API 7-2)</td>
+</tr>
+</tbody>
+</table>
+<h3 id="conexao-com-api-7-2">Conexão com API 7-2</h3>
+<ul>
+<li><strong>API 7-1:</strong> produto (pipe, collar, propriedades mecânicas, dimensões)</li>
+<li><strong>API 7-2:</strong> roscas e calibração das conexões com ombro</li>
+</ul>
+<hr />
+<h2 id="35-api-7-2-threading-and-gauging-of-rotary-shouldered-connections">3.5 API 7-2 — Threading and Gauging of Rotary Shouldered Connections</h2>
+<h3 id="escopo_4">Escopo</h3>
+<p>Define <strong>geometria, tolerâncias, rosqueamento e calibração</strong> de conexões com ombro para perfuração.</p>
+<h3 id="tipos-de-conexao-com-ombro">Tipos de Conexão com Ombro</h3>
+<table>
+<thead>
+<tr>
+<th>Tipo</th>
+<th>Sigla</th>
+<th>Descrição</th>
+<th>Aplicação</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Numeric Connection</strong></td>
+<td>NC26, NC31, NC38, NC50, etc.</td>
+<td>Designação numérica, geometria padronizada</td>
+<td>Drill pipe, drill collar, HWDP moderno</td>
+</tr>
+<tr>
+<td><strong>Regular</strong></td>
+<td>REG</td>
+<td>Estilo tradicional, compatibilidade histórica</td>
+<td>Componentes mais antigos ou específicos</td>
+</tr>
+<tr>
+<td><strong>Internal Flush</strong></td>
+<td>IF</td>
+<td>Diâmetro interno mantido, reduces restrição</td>
+<td>Aplicações de fluxo crítico</td>
+</tr>
+<tr>
+<td><strong>Full Hole</strong></td>
+<td>FH</td>
+<td>Passagem interna ampla, máximo fluxo</td>
+<td>Poços com MWD, ferramentas de downhole</td>
+</tr>
+</tbody>
+</table>
+<h3 id="parametros-de-conexao-com-ombro">Parâmetros de Conexão com Ombro</h3>
+<ul>
+<li><strong>TPI (Threads per inch):</strong> número de filetes em 1 polegada</li>
+<li><strong>Taper:</strong> conicidade da rosca (ex: 1 em 16)</li>
+<li><strong>Diâmetros de pino e caixa:</strong> críticos para interferência</li>
+<li><strong>Comprimento de engate:</strong> profundidade da rosca na caixa</li>
+<li><strong>Ombro de contato:</strong> superfície plana que transmite torque e carga</li>
+<li><strong>Stand-off:</strong> espaço entre ombros quando a conexão está travada</li>
+</ul>
+<h3 id="compatibilidade">Compatibilidade</h3>
+<p><strong>REGRA CRÍTICA:</strong></p>
+<blockquote>
+<p>Compatibilidade entre conexões (ex: NC38 vs 3 1/2 REG) depende de perfil, passo, conicidade, diâmetros, comprimento de engate e requisitos do fabricante. Nunca confirme compatibilidade apenas pelo nome ou diâmetro nominal.</p>
+</blockquote>
+<hr />
+<h2 id="36-api-7g-2-inspection-procedures-for-drill-stem-elements-in-service">3.6 API 7G-2 — Inspection Procedures for Drill Stem Elements in Service</h2>
+<h3 id="escopo_5">Escopo</h3>
+<p>Define <strong>critérios de inspeção para componentes de perfuração usados</strong> (em serviço, retirados do poço).</p>
+<h3 id="distincao-critica">Distinção Crítica</h3>
+<ul>
+<li><strong>API 7-1 e 7-2:</strong> requisitos para <strong>produtos NOVOS</strong> fabricados</li>
+<li><strong>API 7G-2:</strong> critérios de inspeção e aceitação para <strong>componentes USADOS</strong> (já passaram por poços)</li>
+</ul>
+<h3 id="criterios-de-inspecao-exemplos">Critérios de Inspeção (Exemplos)</h3>
+<ul>
+<li>Desgaste de rosca (medição de passo, diâmetros)</li>
+<li>Danos mecânicos (trincas, deformações, galling)</li>
+<li>Corrosão (pitting, sulfide stress cracking)</li>
+<li>Wear de ombro (redução de diâmetro, erosão)</li>
+</ul>
+<hr />
+<h2 id="37-api-11b-sucker-rods-and-rod-related-products">3.7 API 11B — Sucker Rods and Rod-Related Products</h2>
+<h3 id="escopo_6">Escopo</h3>
+<p>Define <strong>hastes de bombeio mecânico, acoplamentos e componentes associados</strong>.</p>
+<h3 id="classificacao-de-hastes">Classificação de Hastes</h3>
+<p>Hastes são classificadas por:
+- <strong>Diâmetro nominal:</strong> 5/8", 3/4", 7/8", 1", 1 1/8", 1 1/4", etc.
+- <strong>Comprimento:</strong> disponíveis em múltiplas bitolas
+- <strong>Classe/Grau:</strong> define capacidade de carga (C, D, A, B, C, D classes)
+- <strong>Propriedades mecânicas:</strong> resistência à fadiga crítica para aplicações cíclicas</p>
+<h3 id="acoplamentos-e-roscas">Acoplamentos e Roscas</h3>
+<ul>
+<li>Hastes são conectadas por <strong>acoplamentos roscados</strong> (torcidos ou filetados)</li>
+<li>Roscas de haste de bombeio seguem padrões API específicos (diferentes de API 5B e 7-2)</li>
+<li>Torque de aperto é crítico para transferência de carga e fadiga</li>
+</ul>
+<hr />
+<h1 id="4-glossario-tecnico-integrado">4. GLOSSÁRIO TÉCNICO INTEGRADO</h1>
+<h2 id="termos-de-roscas-alphabetical">Termos de Roscas (Alphabetical)</h2>
+<p><strong>Ângulo do filete:</strong> Ângulo total entre os flancos inclinados de uma rosca (ex: 60° para perfil triangular).</p>
+<p><strong>Calibre (Gauge):</strong> Instrumento para verificar conformidade dimensional de roscas. Tipos: anel (para pinos), tampão (para caixas), go/no-go.</p>
+<p><strong>Caixa (Box):</strong> Parte interna fêmea da conexão roscada; recebe o pino.</p>
+<p><strong>Crista/Topo da rosca (Crest):</strong> Ponto mais externo do filete; define diâmetro externo em pinos.</p>
+<p><strong>Conicidade (Taper):</strong> Variação de diâmetro ao longo do comprimento da rosca. Expresso como "1 em X" (ex: 1 em 16 = -1/16" por polegada de comprimento).</p>
+<p><strong>Diâmetro de passo (Pitch diameter):</strong> Diâmetro teórico onde largura do filete = espaço entre filetes; referência para medição com calibre.</p>
+<p><strong>Diâmetro externo (OD):</strong> Maior diâmetro da peça; em roscas de pino, medido nos topos dos filetes.</p>
+<p><strong>Diâmetro interno (ID):</strong> Menor diâmetro da peça; em caixas, medido nos topos internos dos filetes.</p>
+<p><strong>Desmontagem (Break-out):</strong> Aplicação de torque para desmontar conexão roscada.</p>
+<p><strong>Engagement length (Comprimento de engate):</strong> Profundidade de contato entre filetes do pino e caixa; responsável pela transmissão de carga.</p>
+<p><strong>Filete (Thread flank):</strong> Superfície inclinada que forma o "dente" da rosca entre crista e raiz.</p>
+<p><strong>Galling (Gripagem):</strong> Dano superficial por atrito, pressão de contato, lubrificação inadequada; causa transferência de material entre filetes.</p>
+<p><strong>Interferência de rosca:</strong> Ajuste controlado entre filetes do pino e caixa; contribui ao comportamento mecânico e vedação.</p>
+<p><strong>Make-up torque (Torque de aperto):</strong> Torque aplicado durante montagem de conexão; em conexões com ombro, estabelece contato metálico e transmissão de carga.</p>
+<p><strong>Ombro (Shoulder):</strong> Superfície plana presente em pino e caixa de conexões com ombro; contato metálico que transmite torque e carga.</p>
+<p><strong>Passo (Pitch):</strong> Distância axial entre um ponto em um filete e o ponto correspondente no filete adjacente.</p>
+<p><strong>Pino (Pin):</strong> Parte externa macho da conexão roscada; enrosca dentro da caixa.</p>
+<p><strong>Raiz da rosca (Root):</strong> Região mais interna entre dois filetes adjacentes; o "vale" da forma da rosca.</p>
+<p><strong>Relief section (Seção de alívio):</strong> Trecho usinado após rosca com diâmetro reduzido; diminui concentração de tensão.</p>
+<p><strong>Roscas por polegada (TPI):</strong> Número de filetes completos em 1 polegada de comprimento axial; inverso do passo.</p>
+<p><strong>Rosca (Thread):</strong> Superfície helicoidal usinada em extremidade de componente cilíndrico; permite união por torque.</p>
+<p><strong>Stand-off:</strong> Espaço entre ombros quando conexão com ombro está totalmente montada; indica transmissão de carga correta.</p>
+<p><strong>Altura do filete (Thread height):</strong> Distância radial entre crista e raiz; influencia capacidade de carga.</p>
+<hr />
+<h2 id="termos-de-conexoes-casingtubing">Termos de Conexões (Casing/Tubing)</h2>
+<p><strong>BTC</strong> (Buttress Thread and Coupled): Rosca buttress (padrão assimétrico) + acoplamento separado; excelente para transmissão axial.</p>
+<p><strong>EUE</strong> (External Upset End): Extremidade com ressalto externo (upset); rosca usinada em seção engrossada; área resistente aumentada.</p>
+<p><strong>LTC</strong> (Long Threaded and Coupled): Rosca longa + acoplamento separado; comprimento de engate maior.</p>
+<p><strong>NUE</strong> (Non-Upset End): Extremidade sem ressalto; rosca usinada diretamente no corpo do tubo.</p>
+<p><strong>STC</strong> (Short Threaded and Coupled): Rosca curta + acoplamento separado; mais compacta que LTC.</p>
+<hr />
+<h2 id="termos-de-conexoes-com-ombro-perfuracao">Termos de Conexões com Ombro (Perfuração)</h2>
+<p><strong>Conexão com ombro (Shouldered connection):</strong> Roscada com superfície de ombro de contato além da rosca; torque e carga transmitidos pelo ombro + rosca.</p>
+<p><strong>FH</strong> (Full Hole): Conexão com diâmetro interno amplo; máximo fluxo de fluido de perfuração.</p>
+<p><strong>IF</strong> (Internal Flush): Diâmetro interno mantido próximo ao componente; reduz restrição ao fluxo.</p>
+<p><strong>NC</strong> (Numeric Connection): Série designada por números (NC26, NC31, NC38, NC50, etc.); cada número = geometria específica padronizada.</p>
+<p><strong>REG</strong> (Regular): Estilo tradicional de conexão com ombro; compatibilidade histórica com algumas conexões NC (dependente do diâmetro e série).</p>
+<hr />
+<h2 id="termos-de-medicao-e-inspecao">Termos de Medição e Inspeção</h2>
+<p><strong>Calibre go / no-go:</strong> Sistema de calibração com dois limites:
+- <strong>Go:</strong> deve atingir posição de referência.
+- <strong>No-go:</strong> não deve ultrapassar limite máximo.
+- Interpretação depende do tipo de conexão, calibre e procedimento.</p>
+<p><strong>Inspeção de roscas:</strong> Conjunto de procedimentos para avaliar conformidade. Inclui: visual, dimensional, calibração, avaliação de danos, desgaste, deformação.</p>
+<p><strong>Medição de passo:</strong> Procedimento para verificar TPI ou passo; usado com ferramentas específicas, comparadores, réguas de passo ou óptica.</p>
+<hr />
+<h2 id="termos-de-normas">Termos de Normas</h2>
+<p><strong>Shall:</strong> Requisito obrigatório para conformidade com a norma.</p>
+<p><strong>Should:</strong> Recomendação desejável, normalmente não obrigatória.</p>
+<p><strong>May:</strong> Opção ou permissão dentro das condições estabelecidas.</p>
+<p><strong>Can:</strong> Possibilidade ou capacidade; não representa requisito obrigatório direto.</p>
+<hr />
+<h1 id="5-roteamento-de-perguntas-normas">5. ROTEAMENTO DE PERGUNTAS → NORMAS</h1>
+<h2 id="estrategia-de-roteamento-passo-a-passo">Estratégia de Roteamento (Passo a Passo)</h2>
+<ol>
+<li>
+<p><strong>Identifique o tipo de componente:</strong>
+   - Casing ou tubing de poço
+   - Line pipe, oleoduto ou gasoduto
+   - Drill pipe, drill collar ou HWDP
+   - Haste de bombeio (sucker rod)
+   - Cabeça de poço, árvore de natal ou válvulas de wellhead</p>
+</li>
+<li>
+<p><strong>Identifique o foco principal:</strong>
+   - Geometria da rosca, perfil, passo, conicidade
+   - Produto, grau de aço, propriedades mecânicas, esforços
+   - Compatibilidade entre conexões
+   - Torque, montagem ou desmontagem
+   - Inspeção em serviço ou aceitação de componentes
+   - Quality Management System, QMS, conformidade, documentação</p>
+</li>
+<li>
+<p><strong>Selecione norma(s) primária e complementar(es)</strong></p>
+</li>
+<li>
+<p><strong>Responda com a norma como referência</strong></p>
+</li>
+</ol>
+<hr />
+<h2 id="roteamento-por-componente">Roteamento por Componente</h2>
+<h3 id="casing-e-tubing-roscas-e-perfis">Casing e Tubing — Roscas e Perfis</h3>
+<p><strong>Perguntas típicas:</strong>
+- "Que tipo de rosca usa casing de X polegadas?"
+- "Qual diferença entre LTC, STC e BTC?"
+- "O que significa EUE ou NUE?"
+- "Essa rosca atende API para casing?"</p>
+<p><strong>Normas:</strong>
+- Primária: <strong>API 5B</strong>
+- Complementar: <strong>API 5CT</strong></p>
+<hr />
+<h3 id="casing-e-tubing-graus-resistencia-produto">Casing e Tubing — Graus, Resistência, Produto</h3>
+<p><strong>Perguntas típicas:</strong>
+- "Qual grau para casing profundo?"
+- "Diferença entre J55, L80 e P110?"
+- "Qual resistência ao colapso?"</p>
+<p><strong>Normas:</strong>
+- Primária: <strong>API 5CT</strong>
+- Complementar: <strong>API 5B</strong> (se houver dúvida sobre rosca)</p>
+<hr />
+<h3 id="casing-e-tubing-compatibilidade">Casing e Tubing — Compatibilidade</h3>
+<p><strong>Perguntas típicas:</strong>
+- "EUE é compatível com NUE?"
+- "BTC e LTC podem ser montadas juntas?"
+- "Conexão premium é equivalente a API BTC?"</p>
+<p><strong>Normas:</strong>
+- Primária: <strong>API 5B + API 5CT</strong>
+- Complementar: Documentação do fabricante</p>
+<p><strong>REGRA DO AGENTE:</strong>
+Nunca declare compatibilidade apenas por semelhança de nome. Remeta à norma e ao fabricante.</p>
+<hr />
+<h3 id="line-pipe-classificacao-e-requisitos">Line Pipe — Classificação e Requisitos</h3>
+<p><strong>Perguntas típicas:</strong>
+- "Qual norma se aplica a oleodutos?"
+- "O que significa API 5L X52?"
+- "Diferença entre X65 e X70?"</p>
+<p><strong>Normas:</strong>
+- Primária: <strong>API 5L</strong></p>
+<hr />
+<h3 id="coluna-de-perfuracao-conexoes-nc-reg-if-fh">Coluna de Perfuração — Conexões NC, REG, IF, FH</h3>
+<p><strong>Perguntas típicas:</strong>
+- "O que é NC38?"
+- "Diferença entre NC e REG?"
+- "NC38 é compatível com 3 1/2 REG?"
+- "Qual norma define roscas de drill pipe?"</p>
+<p><strong>Normas:</strong>
+- Primária: <strong>API 7-2</strong>
+- Complementar: <strong>API 7-1</strong> (se sobre o componente)</p>
+<p><strong>REGRA DO AGENTE:</strong>
+Compatibilidade depende de perfil, passo, conicidade, diâmetros, comprimento de engate. Nunca confirme só pelo nome.</p>
+<hr />
+<h3 id="coluna-de-perfuracao-drill-pipecollar-como-produto">Coluna de Perfuração — Drill Pipe/Collar como Produto</h3>
+<p><strong>Perguntas típicas:</strong>
+- "Qual norma trata drill collars?"
+- "Requisitos de HWDP?"
+- "Como especificar componente de perfuração?"</p>
+<p><strong>Normas:</strong>
+- Primária: <strong>API 7-1</strong>
+- Complementar: <strong>API 7-2</strong> (se sobre conexão)</p>
+<hr />
+<h3 id="coluna-de-perfuracao-torque-e-make-up">Coluna de Perfuração — Torque e Make-up</h3>
+<p><strong>Perguntas típicas:</strong>
+- "Qual torque de NC38?"
+- "Como fazer make-up correto?"
+- "Qual torque de break-out?"</p>
+<p><strong>Normas:</strong>
+- Primária: <strong>API 7-2</strong>
+- Complementar: Manual do fabricante, procedimento operacional</p>
+<p><strong>REGRA DO AGENTE:</strong>
+Nunca invente valores de torque. Depende de material, composto de rosca, aplicação. Explique o critério e remeta à API 7-2 + manual do fabricante.</p>
+<hr />
+<h3 id="coluna-de-perfuracao-inspecao-em-servico">Coluna de Perfuração — Inspeção em Serviço</h3>
+<p><strong>Perguntas típicas:</strong>
+- "Qual norma de inspeção de drill pipe usado?"
+- "Como classificar desgaste em drill pipe?"
+- "Critérios de inspeção de conexões usadas?"</p>
+<p><strong>Normas:</strong>
+- Primária: <strong>API 7G-2</strong>
+- Complementar: <strong>API 7-2</strong> (geometria), <strong>API 7-1</strong> (produto novo)</p>
+<hr />
+<h3 id="hastes-de-bombeio">Hastes de Bombeio</h3>
+<p><strong>Perguntas típicas:</strong>
+- "Qual norma cobre sucker rods?"
+- "Como classificar haste de bombeio?"
+- "Como especificar acoplamento?"</p>
+<p><strong>Normas:</strong>
+- Primária: <strong>API 11B</strong></p>
+<hr />
+<h3 id="wellhead-e-equipamentos-de-cabeca-de-poco">Wellhead e Equipamentos de Cabeça de Poço</h3>
+<p><strong>Perguntas típicas:</strong>
+- "Qual norma regula cabeça de poço?"
+- "Qual API para árvore de natal?"
+- "Requisitos de pressão para wellhead?"</p>
+<p><strong>Normas:</strong>
+- Primária: <strong>API 6A</strong>
+- Complementar: Documentação do fabricante</p>
+<hr />
+<h3 id="quality-management-system-qms">Quality Management System (QMS)</h3>
+<p><strong>Perguntas típicas:</strong>
+- "Qual norma de QMS para fornecedor de petróleo e gás?"
+- "Quais requisitos de documentação?"
+- "Como estruturar auditorias internas?"
+- "Qual período de retenção de registros?"</p>
+<p><strong>Normas:</strong>
+- Primária: <strong>API Specification Q1</strong>
+- Complementar: ISO 9001 (alinhamento), requisitos do cliente</p>
+<hr />
+<h1 id="6-tabelas-de-roteamento-rapido">6. TABELAS DE ROTEAMENTO RÁPIDO</h1>
+<h2 id="61-mapa-por-palavra-chave">6.1 Mapa por Palavra-Chave</h2>
+<table>
+<thead>
+<tr>
+<th>Palavra-Chave</th>
+<th>Norma Primária</th>
+<th>Norma Complementar</th>
+<th>Observação</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>LTC, STC, BTC</td>
+<td>API 5B</td>
+<td>API 5CT</td>
+<td>Tipos de extremidade casing</td>
+</tr>
+<tr>
+<td>EUE, NUE</td>
+<td>API 5B</td>
+<td>API 5CT</td>
+<td>Tipos de extremidade tubing</td>
+</tr>
+<tr>
+<td>Casing, tubing (produto)</td>
+<td>API 5CT</td>
+<td>API 5B</td>
+<td>Graus, resistência</td>
+</tr>
+<tr>
+<td>H40, J55, L80, P110</td>
+<td>API 5CT</td>
+<td>API 5B</td>
+<td>Graus de aço casing/tubing</td>
+</tr>
+<tr>
+<td>Line pipe, X52, X65, X70</td>
+<td>API 5L</td>
+<td>API 5B</td>
+<td>Dutos, graus</td>
+</tr>
+<tr>
+<td>Drill pipe, drill collar, HWDP</td>
+<td>API 7-1</td>
+<td>API 7-2</td>
+<td>Produtos de perfuração</td>
+</tr>
+<tr>
+<td>NC26, NC31, NC38, NC50</td>
+<td>API 7-2</td>
+<td>API 7-1</td>
+<td>Conexões com ombro</td>
+</tr>
+<tr>
+<td>REG, IF, FH</td>
+<td>API 7-2</td>
+<td>API 7-1</td>
+<td>Estilos de conexão</td>
+</tr>
+<tr>
+<td>Inspeção drill pipe usado</td>
+<td>API 7G-2</td>
+<td>API 7-2</td>
+<td>Serviço, não novo</td>
+</tr>
+<tr>
+<td>Sucker rod, haste bombeio</td>
+<td>API 11B</td>
+<td>—</td>
+<td>Hastes de bombeio</td>
+</tr>
+<tr>
+<td>Wellhead, árvore natal</td>
+<td>API 6A</td>
+<td>Fabricante</td>
+<td>Equipamentos cabeça de poço</td>
+</tr>
+<tr>
+<td>Gauge, gage, calibre casing</td>
+<td>API 5B</td>
+<td>API 5CT</td>
+<td>Medição roscas</td>
+</tr>
+<tr>
+<td>Gauge conexão NC ou REG</td>
+<td>API 7-2</td>
+<td>API 7G-2</td>
+<td>Medição perfuração</td>
+</tr>
+<tr>
+<td>Make-up torque NC, REG</td>
+<td>API 7-2</td>
+<td>Manual fabricante</td>
+<td>Torque montagem</td>
+</tr>
+<tr>
+<td>QMS, Quality Management</td>
+<td>API Q1</td>
+<td>ISO 9001</td>
+<td>Requisitos de sistema</td>
+</tr>
+<tr>
+<td>Documentação, auditoria, registros</td>
+<td>API Q1</td>
+<td>ISO 9001</td>
+<td>Procedures QMS</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h2 id="62-matriz-de-decisao">6.2 Matriz de Decisão</h2>
+<p><code>┌─ É rosca ou produto?
+│
+├─ ROSCA GEOMÉTRICA
+│  │
+│  ├─ Casing/tubing? → API 5B (primária) + API 5CT (complementar)
+│  ├─ Drill pipe/collar/HWDP? → API 7-2 (primária) + API 7-1 (complementar)
+│  └─ Haste bombeio? → API 11B
+│
+├─ PRODUTO (Tubo/Componente)
+│  │
+│  ├─ Casing/tubing? → API 5CT (primária) + API 5B (se rosca)
+│  ├─ Line pipe/duto? → API 5L (primária) + API 5B (se roscado)
+│  ├─ Drill pipe/collar/HWDP? → API 7-1 (primária) + API 7-2 (se conexão)
+│  ├─ Haste bombeio? → API 11B
+│  └─ Wellhead/árvore? → API 6A + Fabricante
+│
+└─ INSPEÇÃO/QMS
+   │
+   ├─ Componente novo fabricação? → API 5B/7-1/etc + API Q1 (QMS)
+   ├─ Componente usado em serviço? → API 7G-2 (drill stem) ou padrão de serviço
+   ├─ Sistema QMS? → API Q1 (primária) + ISO 9001 (complementar)
+   └─ Documentação/Auditoria/Registros? → API Q1 (seções 4-6)</code></p>
+<hr />
+<h2 id="63-exemplos-de-roteamento">6.3 Exemplos de Roteamento</h2>
+<p><strong>Exemplo 1:</strong> "NC38 é compatível com 3 1/2 REG?"
+→ API 7-2 primária
+→ Resposta: "Compatibilidade depende de perfil, passo, conicidade, diâmetros e comprimento de engate. Essas informações estão na tabela de compatibilidade da API 7-2 e no manual do fabricante. Qual é o fabricante dessas conexões?"</p>
+<p><strong>Exemplo 2:</strong> "Qual torque para aperto de NC50?"
+→ API 7-2 primária + Manual do fabricante
+→ Resposta: "Torque de make-up é especificado na API 7-2 e no manual do fabricante da conexão. Depende de material, condição superficial, composto de rosca e aplicação. Qual é o fabricante?"</p>
+<p><strong>Exemplo 3:</strong> "Qual grau de casing para profundidade de 5.000m?"
+→ API 5CT primária
+→ Resposta: "A seleção de grau depende de pressão, temperatura, agressividade química e requisitos de cliente. Os graus disponíveis estão na tabela da API 5CT (H40 a Q125). Qual é a pressão esperada no fundo do poço?"</p>
+<p><strong>Exemplo 4:</strong> "Como estruturar QMS?"
+→ API Q1 primária
+→ Resposta: "API Specification Q1 define requisitos de Quality Management System. Principais seções: 4.1-4.5 (estrutura QMS), 5.1-5.10 (realização de produto), 6.1-6.5 (monitoramento, medição, melhoria). Você quer focar em qual área?"</p>
+<hr />
+<h2 id="avisos-de-seguranca-tecnica">Avisos de Segurança Técnica</h2>
+<p>Esta base de conhecimento é um <strong>resumo original</strong> de normas API.</p>
+<p><strong>NÃO substitui:</strong>
+- Texto oficial das normas
+- Procedimentos de fabricante
+- Avaliação de profissional qualificado
+- Tabelas oficiais de dimensões, tolerâncias, torques
+- Documentação do cliente e requisitos específicos</p>
+<p><strong>Sempre:</strong>
+- Consulte a edição mais recente da norma aplicável
+- Valide com o fabricante do componente
+- Envolva engenharia para decisões críticas de fabricação/inspeção/aceitação</p>
+<hr />
+      </article>
+      <p id="docs-empty-state" class="docs-empty-state">Nenhum resultado encontrado pra essa busca.</p>
+    </div>
+  </main>
+</div>
+
+<script src="js/knowledge.js"></script>
+</body>
+</html>
