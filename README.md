@@ -2,13 +2,13 @@
 
 Assistente técnico especializado em normas API de roscas, tubos, conexões e Quality Management System para a indústria de petróleo e gás.
 
-Interface de chat minimalista sobre uma base de conhecimento consolidada (API 5B, 5CT, 5L, 7-1, 7-2, 7G-2, 11B, 6A, Q1), servida por uma função serverless que conversa com Claude 3.5 Haiku via OpenRouter.
+Interface de chat minimalista sobre uma base de conhecimento consolidada (API 5B, 5CT, 5L, 7-1, 7-2, 7G-2, 11B, 6A, Q1 + curso de roscas), servida por uma função serverless que conversa com Claude Haiku 4.5 via OpenRouter.
 
 ---
 
 ## Por que não tem RAG
 
-A base inteira tem cerca de **10.9 mil tokens**. A janela de contexto do Claude 3.5 Haiku tem **200 mil**. Cabe tudo no prompt com folga de mais de 95%.
+A base inteira (persona + as duas bases de `knowledge/`) tem cerca de **115 mil caracteres**, algo como **30 mil tokens** (estimativa). A janela de contexto do Claude Haiku 4.5 tem **200 mil**. Cabe tudo no prompt com folga de mais de 80%.
 
 Construir retrieval aqui traria só desvantagens:
 
@@ -25,22 +25,31 @@ Se um dia a base crescer para megabytes (normas completas, catálogos de fabrica
 ```
 o-mister/
 ├── api/
-│   └── chat.js                    Endpoint serverless: recebe a pergunta, chama OpenRouter, devolve streaming
+│   ├── chat.js                        Endpoint serverless: recebe a pergunta, chama OpenRouter, devolve streaming
+│   ├── text-to-speech.js              Converte a resposta em áudio
+│   └── admin-*.js, delete-account.js, is-admin.js, notify-account-event.js
 ├── lib/
-│   ├── persona.md                 Persona do Mister: tom, regras de segurança, casos de teste
-│   └── system-prompt.js           Junta persona + base de conhecimento consolidada
+│   ├── persona.md                     Persona do Mister: tom, regras de segurança, casos de teste
+│   ├── system-prompt.js               Junta persona + as bases de conhecimento (KNOWLEDGE_FILES)
+│   └── http.js, rate-limit.js, notify.js, supabase-admin.js
 ├── knowledge/
-│   └── api-normas-completas.md    BASE ÚNICA: normas API + QMS + glossário + roteamento integrados
+│   ├── api-normas-completas.md            Normas API + QMS (Q1) + glossário + roteamento
+│   └── curso-roscas-api-iq-engenharia.md  Curso de roscas: dimensões de conexões API
 ├── public/
-│   ├── index.html                 Interface minimalista (HTML + CSS + JS)
-│   ├── style.css                  Estilos Apple-minimalist, dark/light mode
-│   └── app.js                     Frontend: chat, streaming, markdown renderer
-├── vercel.json                    Config Vercel: maxDuration, includeFiles
-├── package.json                   Scripts: dev, deploy
-└── README.md                       Este arquivo
+│   ├── index.html                     Chat (interface principal)
+│   ├── normas-api.html                Consulta navegável da base "Normas API"
+│   ├── curso-roscas.html              Consulta navegável da base "Rosca API" (curso)
+│   ├── login.html, admin.html         Login e painel de admin
+│   ├── css/                           style.css (app) · knowledge.css (páginas de consulta) · admin.css
+│   └── js/                            app.js, auth.js, config.js · knowledge.js (páginas de consulta)
+├── db/                                 Scripts SQL do Supabase (schema, admin, notificações)
+├── .env.example                       Modelo das variáveis de ambiente (copie para .env)
+├── vercel.json                        Config Vercel: maxDuration, includeFiles, headers de segurança
+├── package.json                       Scripts: dev, deploy
+└── README.md                          Este arquivo
 ```
 
-Sem build step, sem dependências. Node 18+ já tem tudo que o projeto usa.
+Sem build step, sem dependências de frontend. Node 18+ já tem tudo que o projeto usa no back-end.
 
 ---
 
@@ -80,6 +89,8 @@ Depois cadastre as variáveis de ambiente no painel da Vercel, em **Settings →
 | `RESEND_API_KEY` | para notificação de cadastro/exclusão por e-mail | Chave da API do [Resend](https://resend.com) |
 | `NOTIFY_FROM_EMAIL` | não | Remetente do e-mail de notificação. Padrão: `O Mister <onboarding@resend.dev>` |
 | `DAILY_TOKEN_LIMIT` | não | Se configurada, manda um e-mail pro admin quando o consumo de tokens do dia passa desse número |
+| `ELEVENLABS_API_KEY` | para o botão de ouvir a resposta (`/api/text-to-speech`) | Chave da API da [ElevenLabs](https://elevenlabs.io). Sem ela, o botão de áudio fica indisponível |
+| `UPSTASH_REDIS_REST_URL` / `UPSTASH_REDIS_REST_TOKEN` | não | Rate limiting compartilhado entre instâncias serverless (Upstash Redis, também aceita as variáveis equivalentes do Vercel KV: `KV_REST_API_URL` / `KV_REST_API_TOKEN`). Sem elas, cai para um limitador em memória por instância |
 
 O `.env` está no `.gitignore`. A chave nunca chega ao navegador — todas as chamadas passam pela função serverless.
 
@@ -138,19 +149,21 @@ Sem `DAILY_TOKEN_LIMIT` configurada, essa checagem fica desligada e não tem cus
 
 ## Editar a base de conhecimento
 
-A base está consolidada em um único arquivo: `knowledge/api-normas-completas.md`.
+Hoje tem **duas bases**, cada uma em um `.md` dentro de `knowledge/`, listadas em `KNOWLEDGE_FILES` (`lib/system-prompt.js`) e incluídas inteiras no system prompt do chat. Cada uma também tem uma página HTML navegável (sidebar do chat → "Normas API" / "Rosca API"), com índice, busca e destaque de termo — pra quem quer só consultar um valor sem precisar perguntar ao Mister.
 
-Para atualizar: edite este arquivo e faça deploy. Nada de reindexar, nada de reprocessar.
+| Arquivo em `knowledge/` | Conteúdo | Página de consulta |
+|---|---|---|
+| `api-normas-completas.md` | Visão geral das normas API · API Specification Q1 (QMS) · normas de roscas e tubos (5B, 5CT, 5L, 7-1, 7-2, 7G-2, 11B) · glossário · roteamento de perguntas | `public/normas-api.html` |
+| `curso-roscas-api-iq-engenharia.md` | Curso de roscas (Imídio Queiroz Engenharia): fundamentos, REG/IF/FH, Buttress, rosca redonda casing, Extreme Line, tubing NU/EU, Line Pipe, NPT/BSP, haste de bombeio | `public/curso-roscas.html` |
 
-**Estrutura do arquivo:**
-- Seção 1: Visão geral das normas API
-- Seção 2: API Specification Q1 (Quality Management System)
-- Seção 3: Normas de roscas e tubos (5B, 5CT, 5L, 7-1, 7-2, 7G-2, 11B)
-- Seção 4: Glossário técnico integrado
-- Seção 5: Roteamento de perguntas → normas
-- Seção 6: Tabelas de roteamento rápido
+**Para atualizar uma base existente:** edite o `.md` e faça deploy — o chat usa a versão mais recente automaticamente (lido em runtime). A **página HTML de consulta não atualiza sozinha**: ela é gerada a partir do markdown, então uma edição no `.md` exige regenerar o HTML correspondente pra refletir na página (mas já vale pro chat imediatamente, mesmo sem regenerar).
 
-**Tamanho atual:** ~33KB (~10.9k tokens). Até uns 30 mil tokens a coisa segue confortável na janela de contexto do Claude 3.5 Haiku (200k). Passando disso, considere splitting novamente.
+**Para adicionar uma base nova:**
+1. Crie o `.md` em `knowledge/`.
+2. Adicione uma entrada em `KNOWLEDGE_FILES` (`lib/system-prompt.js`) — o chat já passa a usá-la.
+3. Gere a página de consulta seguindo o padrão de `normas-api.html`/`curso-roscas.html` (usa `public/css/knowledge.css` + `public/js/knowledge.js`, que cuidam de índice, busca, tema e responsivo automaticamente) e adicione o link no sidebar (`public/index.html`, seção "Base de conhecimento").
+
+Nada de reindexar, nada de reprocessar — é tudo texto puro incluído no prompt.
 
 ---
 
@@ -179,14 +192,14 @@ Se a pergunta exige um número que está em tabela, o Mister explica o conceito,
 
 **Markdown.** Renderizado por uma função mínima que escapa o HTML antes de formatar — nada vindo do modelo consegue injetar marcação na página.
 
-**Modelo:** Claude 3.5 Haiku via OpenRouter. Rápido, preciso para roteamento técnico, 40% mais barato que Sonnet 4.6.
+**Modelo:** Claude Haiku 4.5 via OpenRouter (padrão) — rápido e o mais barato das opções listadas em [Trocar de modelo](#trocar-de-modelo).
 
-**Cache de prompt.** O system prompt (~10.9k tokens) é idêntico em toda requisição. Modelos da Anthropic (como Claude 3.5 Haiku) suportam prompt caching que reduz custos de input em ~90% para requisições repetidas.
+**Cache de prompt.** O system prompt (persona + bases de conhecimento) é idêntico em toda requisição. Modelos da Anthropic (como Claude Haiku 4.5) suportam prompt caching, que reduz custos de input em ~90% para requisições repetidas.
 
 ---
 
 ## Limitações
 
-- A base são **resumos originais**, não o texto oficial das normas API. Serve para orientar e explicar conceitos, não para substituir a norma.
+- As bases são **resumos/material didático originais**, não o texto oficial das normas API. Servem para orientar e explicar conceitos, não para substituir a norma.
 - Nenhuma decisão de fabricação, inspeção, aceitação ou rejeição deve se apoiar só no que o Mister diz.
 - O histórico não persiste entre sessões.
